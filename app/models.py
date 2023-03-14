@@ -25,4 +25,28 @@ class User(UserMixin, db.Model):
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
 
+class Multiplechoice(db.Model):
+    id = db.Column(db.Integer, primary_key = True)
+    user_id=db.Column(db.Integer, db.ForeignKey('user.id'))
+    # add foreignkey to summative and formative or vice versa
+    question= db.Column(db.Text, default="")
+    answer_1= db.Column(db.Text, default="")
+    ans_choice_1 = db.Column(db.Integer, default=False)
+    answer_2= db.Column(db.Text, default="")
+    ans_choice_2 = db.Column(db.Integer, default=False)
+    answer_3= db.Column(db.Text, nullable=True)
+    ans_choice_3 = db.Column(db.Integer, default=False)
+    answer_4= db.Column(db.Text, nullable=True)
+    ans_choice_4 = db.Column(db.Integer, default=False)
+    #add difficulty column
+    #add tag column
+    #add student answer foreignkey
+    marks=db.Column(db.Integer, default=False)
+    feedback = db.Column(db.Text, default="")
+   
+
+    def __repr__(self):
+        
+        return '{}'.format(self.id)
+
 
