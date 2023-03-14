@@ -1,0 +1,47 @@
+<!-- adapted from bootstrap docs   https://getbootstrap.com/docs/5.3/components/navbar/  accessed 03-01-2023-->
+
+<!-- NavBar -->
+
+<nav class="navbar navbar-expand-lg bg-body-tertiary navbar bg-dark" data-bs-theme="dark">
+    <div class="container-fluid">
+        <a class="navbar-brand " href="{{ url_for('index') }}">
+        <img src="{{ url_for('static', filename='eight.jpg' ) }}" alt="Logo" width="30" height="24" class="d-inline-block align-text-top">  Home</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+      
+        <div class="collapse navbar-collapse" id="navbarNavDropdown">
+            <!-- <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('login') }}">login</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="">placeholder</a>
+                </li>
+            </ul> -->
+            <ul class="navbar-nav">
+                {% if current_user.is_authenticated %}
+                    
+                    <li class="nav-item">
+                        <a class="nav-link" href="">placeholder (e.g. take test)</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="">placeholder</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('logout') }}">Logout</a>
+                    </li>
+                {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="">placeholder</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('login') }}">Login</a>
+                    </li>
+                {% endif %}
+
+            </ul>
+        </div>
+    </div>
+</nav>
