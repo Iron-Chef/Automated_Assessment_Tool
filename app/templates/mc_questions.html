@@ -1,13 +1,13 @@
 {% extends "base.html" %} 
 
 {% block content %}
-    <h1>Questions</h1>
+    <h1>Add Multiple Choice Questions</h1>
     <div> <p>Add Multiple Choice Questions</p>
         <form action="", method="post" novalidate>
             {{ form.hidden_tag() }}
 
             <p> Question: 
-                {{ form.question(size=100) }}
+                {{ form.question(class="form-control form-control-lg")}}
                 {% for error in form.question.errors %} 
                <span style="color: red;">[{{ error }}]</span>
                {% endfor %}
@@ -15,8 +15,8 @@
             
             <p>
                 {{ form.ans_multi_select_1.label }}
-                {{ form.answer1 }}
-                {{ form.ans_multi_select_1}}
+                {{ form.answer1  }}
+                {{ form.ans_multi_select_1 }}
                 {% for error in form.answer1.errors %} 
                 <span style="color: red;">[{{ error }}]</span>
                 {% endfor %}
@@ -54,10 +54,11 @@
             </p>
         </div>
             <p>
-                {{ form.submit() }}
+                
+                {{ form.submit(class="btn btn-info ")}}
             </p>
             <!--Clear button-->
-            <input type="reset">
+            <input type="reset", class="btn btn-info ">
         </form>
 
 

@@ -1,4 +1,4 @@
-from flask import render_template, flash, redirect, url_for, request
+from flask import render_template, flash, redirect, url_for, request, g,session
 from flask_login import current_user, login_user, logout_user, login_required
 from werkzeug.urls import url_parse
 from app.models import User, Multiplechoice
@@ -11,6 +11,7 @@ def login():
     form = LoginForm()
 
     if current_user.is_authenticated:
+        
         return redirect(url_for('index'))
 
     if form.validate_on_submit():
@@ -47,8 +48,10 @@ def index():
 @login_required
 def question():
     form=QuestionForm()
+    
     if form.validate_on_submit():
         multi= Multiplechoice(
+        user_id=current_user.id,
         question=form.question.data, 
         answer_1=form.answer1.data,ans_choice_1=form.ans_multi_select_1.data, 
         answer_2=form.answer2.data,ans_choice_2=form.ans_multi_select_2.data, 
@@ -62,4 +65,12 @@ def question():
         flash('Your question is added!')
         return redirect('/mc_questions')
     return render_template("mc_questions.html", title="Add Multiple Choice Questions", form=form)
+
+@app.route("/question_list",methods=['GET'])
+def result():
+    
+    questions=Multiplechoice.query.all()
+    
+        
+    return render_template('question_list.html',questions=questions)
 
