@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+
+{% block content %}
+<div class="form">
+<form method="POST" action="" enctype="multipart/form-data">
+  {{ form.csrf_token }}
+  <p>{{ form.test_type.label }} {{ form.test_type (size=50) }}</p>
+  <div class="form-group">
+  {{ form.submit(class="btn btn-outline-info") }}
+</div>
+</div>
+
+</form>
+</div>
+{% endblock content %}

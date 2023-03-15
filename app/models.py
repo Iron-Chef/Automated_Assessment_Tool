@@ -25,6 +25,11 @@ class User(UserMixin, db.Model):
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
 
+class Test(db.Model):
+    test_id=db.Column(db.Integer,primary_key=True)
+    creator_id= db.Column(db.Integer,db.ForeignKey('user.id'), nullable=False)
+    test_type = db.Column(db.Boolean, nullable = False)# 0=formative;1=summative
+
 class Multiplechoice(db.Model):
     id = db.Column(db.Integer, primary_key = True)
     user_id=db.Column(db.Text, db.ForeignKey('user.id'))
@@ -49,4 +54,5 @@ class Multiplechoice(db.Model):
         
         return '{}'.format(self.id)
 
+>>>>>>> app/models.py
 

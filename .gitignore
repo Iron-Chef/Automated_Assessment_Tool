@@ -3,3 +3,5 @@ __pycache__
 .pyc
 instructions.txt
 .db
+project.db
+config.py

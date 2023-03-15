@@ -22,3 +22,7 @@ class QuestionForm(FlaskForm):
     marks=IntegerField(validators=[DataRequired(message="Please enter mark")]) 
     feedback=StringField("Feedback:")
     submit = SubmitField("Form Complete")
+
+class CreateTestForm(FlaskForm):
+    test_type= BooleanField('Test Type', validators=[DataRequired()])
+    submit= SubmitField('Create Test')
