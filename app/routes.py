@@ -1,9 +1,9 @@
 from flask import render_template, flash, redirect, url_for, request
 from flask_login import current_user, login_user, logout_user, login_required
 from werkzeug.urls import url_parse
-from app.models import User
-from app.forms import LoginForm
-from app import app
+from app.models import User,Test
+from app.forms import LoginForm, CreateTestForm
+from app import app,db
 
 @app.route('/login', methods = ['GET', 'POST'])
 def login():
@@ -41,4 +41,16 @@ def logout():
 @login_required
 def index():
     return render_template('index.html', title = 'Home')
+
+@app.route("/create_test",methods=['GET','POST'])
+@login_required
+def create_test():
+  form = CreateTestForm()
+  if form.validate_on_submit():
+    test=Test(test_type=form.test_type.data,creator_id=current_user.id)
+    db.session.add(test)
+    db.session.commit()
+    flash('Test Creation Succesful!')
+    return redirect(url_for('index'))
+  return render_template('create_test.html',title='Create Test',form=form)
 
