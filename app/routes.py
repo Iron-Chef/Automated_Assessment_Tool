@@ -1,7 +1,6 @@
 from flask import render_template, flash, redirect, url_for, request, g,session
 from flask_login import current_user, login_user, logout_user, login_required
 from werkzeug.urls import url_parse
-<<<<<<< app/routes.py
 from app.models import User,Test, Multiplechoice
 from app.forms import LoginForm, CreateTestForm, QuestionForm
 from app import app,db
@@ -48,13 +47,19 @@ def index():
 @login_required
 def create_test():
   form = CreateTestForm()
+  questions=Multiplechoice.query.all()
+  form.question_id_1.choices = [(question.id,question.id) for question in questions]
+  form.question_id_2.choices = [(question.id,question.id) for question in questions]
+  form.question_id_3.choices = [(question.id,question.id) for question in questions]
+  form.question_id_4.choices = [(question.id,question.id) for question in questions]
+  form.question_id_5.choices = [(question.id,question.id) for question in questions]
   if form.validate_on_submit():
-    test=Test(test_type=form.test_type.data,creator_id=current_user.id)
+    test=Test(test_type=form.test_type.data,creator_id=current_user.id,question_id_1=form.question_id_1.data,question_id_2=form.question_id_2.data,question_id_3=form.question_id_3.data,question_id_4=form.question_id_4.data,question_id_5=form.question_id_5.data)
     db.session.add(test)
     db.session.commit()
     flash('Test Creation Succesful!')
     return redirect(url_for('index'))
-  return render_template('create_test.html',title='Create Test',form=form)
+  return render_template('create_test.html',title='Create Test',form=form,questions=questions)
 
 # Add multiple choice questions
 @app.route('/mc_questions', methods=['GET', 'POST'])
@@ -86,5 +91,5 @@ def result():
     
         
     return render_template('question_list.html',questions=questions)
->>>>>>> app/routes.py
+
 

@@ -28,7 +28,13 @@ class User(UserMixin, db.Model):
 class Test(db.Model):
     test_id=db.Column(db.Integer,primary_key=True)
     creator_id= db.Column(db.Integer,db.ForeignKey('user.id'), nullable=False)
-    test_type = db.Column(db.Boolean, nullable = False)# 0=formative;1=summative
+    test_type = db.Column(db.Integer, nullable = False)# 0=formative;1=summative
+    question_id_1=db.Column(db.Integer,db.ForeignKey('multiplechoice.id'), nullable=True)
+    question_id_2=db.Column(db.Integer,db.ForeignKey('multiplechoice.id'), nullable=True)
+    question_id_3=db.Column(db.Integer,db.ForeignKey('multiplechoice.id'), nullable=True)
+    question_id_4=db.Column(db.Integer,db.ForeignKey('multiplechoice.id'), nullable=True)
+    question_id_5=db.Column(db.Integer,db.ForeignKey('multiplechoice.id'), nullable=True)
+
 
 class Multiplechoice(db.Model):
     id = db.Column(db.Integer, primary_key = True)
@@ -54,5 +60,5 @@ class Multiplechoice(db.Model):
         
         return '{}'.format(self.id)
 
->>>>>>> app/models.py
+
 
