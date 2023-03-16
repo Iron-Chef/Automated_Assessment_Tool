@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>List of formative Tests</h1>
+{% for formtest in formtests %}
+<h2>Test number {{ formtest.id}}</h2>
+<h3>Q1</h3>
+{{ formtest.mcquestion_1 }}
+<h3>Q2</h3>
+{{ formtest.mcquestion_2 }}
+<h3>Q3</h3>
+{{ formtest.mcquestion_3 }}
+<h3>Q4</h3>
+{{ formtest.mcquestion_4 }}
+<h3>Q5</h3>
+{{ formtest.mcquestion_5 }}
+{% endfor %}
+{% endblock %}

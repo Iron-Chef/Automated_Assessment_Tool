@@ -16,11 +16,53 @@ class User(UserMixin, db.Model):
     year = db.Column(db.Integer)
     is_lecturer = db.Column(db.Boolean, nullable = False, default = False)
 
+
     def __repr__(self):
-        return "Student ID: {}, First name: {}, Surnam: {}, Email: {}, Year: {}".format(self.student_ID, self.forename, self.surname, self.email, self.year)
+        return "Student ID: {}, First name: {}, Surnam: {}, Email: {}, Year: {}".format(self.id, self.forename, self.surname, self.email, self.year)
 
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
 
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
+
+class Multiplechoice(db.Model):
+    id = db.Column(db.Integer, primary_key = True)
+    user_id=db.Column(db.Text, db.ForeignKey('user.id'))
+    # add foreignkey to summative and formative or vice versa
+    question= db.Column(db.Text, default="")
+    answer_1= db.Column(db.Text, default="")
+    ans_choice_1 = db.Column(db.Integer, default=False)
+    answer_2= db.Column(db.Text, default="")
+    ans_choice_2 = db.Column(db.Integer, default=False)
+    answer_3= db.Column(db.Text, nullable=True)
+    ans_choice_3 = db.Column(db.Integer, default=False)
+    answer_4= db.Column(db.Text, nullable=True)
+    ans_choice_4 = db.Column(db.Integer, default=False)
+    #add difficulty column
+    #add tag column
+    #add student answer foreignkey
+    marks=db.Column(db.Integer, default=False)
+    feedback = db.Column(db.Text, default="")
+    
+   
+
+    def __repr__(self):
+        
+        return '{}'.format(self.id)
+
+class FormativeTest(db.Model):
+    id = db.Column(db.Integer, primary_key = True)
+    author = db.Column(db.Text)
+    mcquestion_1_id = db.Column(db.Integer, nullable=True)
+    mcquestion_1 =  db.Column(db.Text, default="")
+    mcquestion_2_id = db.Column(db.Integer, nullable=True)
+    mcquestion_2 =  db.Column(db.Text, default="")
+    mcquestion_3_id = db.Column(db.Integer, nullable=True)
+    mcquestion_3 =  db.Column(db.Text, default="")
+    mcquestion_4_id = db.Column(db.Integer, nullable=True)
+    mcquestion_4 =  db.Column(db.Text, default="")
+    mcquestion_5_id = db.Column(db.Integer, nullable=True)
+    mcquestion_5 =  db.Column(db.Text, default="")
+
+
