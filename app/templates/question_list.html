@@ -53,6 +53,8 @@
     
     {% endif %}
 </p>
+<a href="{{ url_for('edit_mc_question', mc_question_id=question.id)}}" class="btn btn-outline-secondary btn-sm">Edit Question</a>
+<a href="{{ url_for('delete_mcquestion', mc_question_id=question.id)}}" class="btn btn-outline-danger btn-sm">Delete Question</a>
 <hr>
 {% endfor %}
 

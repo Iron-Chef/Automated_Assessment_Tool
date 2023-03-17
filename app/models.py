@@ -58,7 +58,8 @@ class Multiplechoice(db.Model):
 
     def __repr__(self):
         
-        return '{}'.format(self.id)
+        #return '{}'.format(self.id)
+        return "id: {}, Question: {}, Answer 1: {}, Answer 2: {}, Answer 3: {}, Answer 4: {}".format(self.id, self.question, self.answer_1, self.answer_2, self.answer_3, self.answer_4)
 
 
 
