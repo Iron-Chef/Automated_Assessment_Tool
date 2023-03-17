@@ -41,7 +41,8 @@ def logout():
 @app.route('/index')
 @login_required
 def index():
-    return render_template('index.html', title = 'Home')
+    user = User.query.all()
+    return render_template('index.html',user=user, title = 'Home')
 
 @app.route("/create_test",methods=['GET','POST'])
 @login_required
@@ -62,30 +63,97 @@ def create_test():
   return render_template('create_test.html',title='Create Test',form=form,questions=questions)
 
 # Add multiple choice questions
-@app.route('/mc_questions', methods=['GET', 'POST'])
+@app.route('/add_mc_questions', methods=['GET', 'POST'])
 @login_required
-def question():
+def add_mc_question():
     form=QuestionForm()
     
     if form.validate_on_submit():
         multi= Multiplechoice(
         user_id=current_user.id,
         question=form.question.data, 
-        answer_1=form.answer1.data,ans_choice_1=form.ans_multi_select_1.data, 
-        answer_2=form.answer2.data,ans_choice_2=form.ans_multi_select_2.data, 
-        answer_3=form.answer3.data, ans_choice_3=form.ans_multi_select_3.data,
-        answer_4=form.answer4.data, ans_choice_4=form.ans_multi_select_4.data,
+        answer_1=form.answer1.data,
+        ans_choice_1=form.ans_multi_select_1.data, 
+        answer_2=form.answer2.data,
+        ans_choice_2=form.ans_multi_select_2.data, 
+        answer_3=form.answer3.data, 
+        ans_choice_3=form.ans_multi_select_3.data,
+        answer_4=form.answer4.data, 
+        ans_choice_4=form.ans_multi_select_4.data,
         marks=form.marks.data, 
         feedback=form.feedback.data
         )
         db.session.add(multi)
         db.session.commit()
         flash('Your question is added!')
-        return redirect('/mc_questions')
-    return render_template("mc_questions.html", title="Add Multiple Choice Questions", form=form)
+        return redirect('/question_list')
+    return render_template("add_mc_questions.html", title="Add Multiple Choice Questions", form=form)
+
+@app.route("/mc_question/delete/<int:mc_question_id>")
+def delete_mcquestion(mc_question_id):
+    mcquestion_to_delete=Multiplechoice.query.get_or_404(mc_question_id)
+
+    try:
+        db.session.delete (mcquestion_to_delete)
+        db.session.commit()
+        flash("Question deleted!")
+
+        questions=Multiplechoice.query.all()
+        return redirect('question_list',questions=questions)
+
+    except:
+        flash("Problem deleting question, please check with Admin!")
+
+        questions=Multiplechoice.query.all()
+        return render_template('question_list.html',questions=questions)
+
+@app.route("/mc_question/<int:mc_question_id>", methods=['GET'])
+def mcquestion(mc_question_id):
+    mcquestion=Multiplechoice.query.get_or_404(mc_question_id)
+
+    return render_template('mc_question.html', mcquestion=mcquestion, title=mcquestion.question, mc_question_id=mcquestion.id)
+
+
+@app.route("/mc_question/edit/<int:mc_question_id>", methods=['GET', 'POST'])
+def edit_mc_question(mc_question_id):
+    mcquestion=Multiplechoice.query.get_or_404(mc_question_id)
+    form=QuestionForm()
+    if form.validate_on_submit():
+        mcquestion.question=form.question.data
+        mcquestion.answer_1=form.answer1.data
+        mcquestion.ans_choice_1=form.ans_multi_select_1.data
+        mcquestion.answer_2=form.answer2.data
+        mcquestion.ans_choice_2=form.ans_multi_select_2.data
+        mcquestion.answer_3=form.answer3.data
+        mcquestion.ans_choice_3=form.ans_multi_select_3.data
+        mcquestion.answer_4=form.answer4.data 
+        mcquestion.ans_choice_4=form.ans_multi_select_4.data
+        mcquestion.marks=form.marks.data
+        mcquestion.feedback=form.feedback.data
+        db.session.add(mcquestion)
+        db.session.commit()
+        flash("Multiple Choice Question amended")
+        return redirect('/question_list')
+
+    form.question.data=mcquestion.question
+    form.answer1.data=mcquestion.answer_1
+    form.ans_multi_select_1.data=mcquestion.ans_choice_1
+    form.answer2.data=mcquestion.answer_2
+    form.ans_multi_select_2.data=mcquestion.ans_choice_2
+    form.answer3.data=mcquestion.answer_3
+    form.ans_multi_select_3.data=mcquestion.ans_choice_3
+    form.answer4.data=mcquestion.answer_4
+    form.ans_multi_select_4.data=mcquestion.ans_choice_4
+    form.marks.data=mcquestion.marks
+    form.feedback.data=mcquestion.feedback
+    return render_template('edit_mc_question.html', mcquestion=mcquestion,form=form)
+
+
+
+
 
 @app.route("/question_list",methods=['GET'])
-def result():
+def question_list():
     
     questions=Multiplechoice.query.all()
     
