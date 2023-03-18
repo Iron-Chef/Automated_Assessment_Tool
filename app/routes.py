@@ -47,7 +47,7 @@ def index():
 @app.route("/create_test",methods=['GET','POST'])
 @login_required
 def create_test():
-  form = CreateTestForm()
+  form = CreateTestForm() 
   questions=Multiplechoice.query.all()
   form.question_id_1.choices = [(question.id,question.id) for question in questions]
   form.question_id_2.choices = [(question.id,question.id) for question in questions]
@@ -159,5 +159,71 @@ def question_list():
     
         
     return render_template('question_list.html',questions=questions)
+
+@app.route("/test_list",methods=['GET'])
+def test_list():
+    tests=Test.query.all() 
+    return render_template('test_list.html',tests=tests)
+
+#Generate page for individual tests-DD
+@app.route("/test/<int:test_id>")
+def test(test_id):
+  tests=Test.query.get_or_404(test_id)
+  question_1 = Multiplechoice.query.filter_by(id=tests.question_id_1).first()
+  question_2 = Multiplechoice.query.filter_by(id=tests.question_id_2).first()
+  question_3 = Multiplechoice.query.filter_by(id=tests.question_id_3).first()
+  question_4 = Multiplechoice.query.filter_by(id=tests.question_id_4).first()
+  question_5 = Multiplechoice.query.filter_by(id=tests.question_id_5).first()
+  return render_template('test.html',tests=tests,question_1=question_1,question_2=question_2,question_3=question_3,question_4=question_4,question_5=question_5)
+
+## Adapted this from anthonys code above-DD
+@app.route("/test/delete/<int:test_id>")
+def delete_test(test_id):
+    delete_test=Test.query.get_or_404(test_id)
+
+    try:
+        db.session.delete (delete_test)
+        db.session.commit()
+        flash("Test deleted!")
+
+        tests=Test.query.all()
+        return redirect('test_list',tests=tests)
+
+    except:
+        flash("Problem deleting test, please check with Admin!")
+
+        tests=Test.query.all()
+        return render_template('test_list.html',tests=tests)
+
+@app.route("/test/edit/<int:test_id>", methods=['GET', 'POST'])
+def edit_test(test_id):
+    form=CreateTestForm()
+    test=Test.query.get_or_404(test_id)
+    questions=Multiplechoice.query.all()
+    form.question_id_1.choices = [(question.id,question.id) for question in questions]
+    form.question_id_2.choices = [(question.id,question.id) for question in questions]
+    form.question_id_3.choices = [(question.id,question.id) for question in questions]
+    form.question_id_4.choices = [(question.id,question.id) for question in questions]
+    form.question_id_5.choices = [(question.id,question.id) for question in questions]
+
+    if form.validate_on_submit():
+        test.test_type=form.test_type.data
+        test.question_id_1=form.question_id_1.data
+        test.question_id_2=form.question_id_2.data
+        test.question_id_3=form.question_id_3.data
+        test.question_id_4=form.question_id_4.data
+        test.question_id_5=form.question_id_5.data
+        db.session.add(test)
+        db.session.commit()
+        flash("Test amended")
+        return redirect('/test_list')
+
+    form.test_type.data=test.test_type
+    form.question_id_1.data=test.question_id_1
+    form.question_id_2.data=test.question_id_2
+    form.question_id_3.data=test.question_id_3
+    form.question_id_4.data=test.question_id_4
+    form.question_id_5.data=test.question_id_5
+    return render_template('edit_test.html', test=test,form=form,questions=questions)
 
 
