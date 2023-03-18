@@ -2,7 +2,3 @@ venv
 __pycache__
 .pyc
 instructions.txt
-.db
-project.db
-config.py
-.ds
