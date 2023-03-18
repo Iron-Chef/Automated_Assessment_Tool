@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="post_date_form">
+
+
+</div>
+<h1>Hi {{ current_user.forename }}, this is question No. {{mcquestion.id}}</h1>
+    
+
+
+<h2 class="question_title"> {{ mcquestion.question }}</h2>
+{% if mcquestion.marks == 1 %}
+
+<p>This Question is worth {{ mcquestion.marks}} mark.</p>
+{% else %} 
+<p>This Question is worth {{ mcquestion.marks}} marks.</p>
+{% endif %}
+
+<p>(a) {{ mcquestion.answer_1}} {% if mcquestion.ans_choice_1==1 %}
+    <p id="correct"><b>Correct Answer</b></p>
+    {% else %} 
+    <p id="incorrect">Incorrect Answer</p>
+    {% endif %}
+</p>
+
+<p>(b) {{ mcquestion.answer_2}} {% if mcquestion.ans_choice_2==1 %}
+    <p id="correct"><b>Correct Answer</b></p>
+    {% else %} 
+    <p id="incorrect">Incorrect Answer</p>
+    {% endif %}
+</p>
+
+{% if mcquestion.answer_3 %}
+<p>(c) {{ mcquestion.answer_3}} {% if mcquestion.ans_choice_3==1 %}
+    <p id="correct"><b>Correct Answer</b></p>
+    {% else %} 
+    <p id="incorrect">Incorrect Answer</p>
+    {% endif %}
+</p>
+{% endif %}
+
+{% if mcquestion.answer_4 %}
+<p>(d) {{ mcquestion.answer_4}} {% if mcquestion.ans_choice_4==1 %}
+    <p id="correct"><b>Correct Answer</b></p>
+    {% else %} 
+    <p id="incorrect">Incorrect Answer</p>
+    {% endif %}
+</p>
+{% endif %}
+
+</h3>  {% if mcquestion.feedback%}
+    <h3>Feedback:</h3> <p id="feedback">{{ mcquestion.feedback}}</p>
+    
+    {% endif %}
+</p>
+<a href="{{ url_for('edit_mc_question', mc_question_id=mcquestion.id)}}" class="btn btn-outline-secondary btn-sm">Edit Question</a>
+<hr>
+
+</p>
+<a href="{{ url_for('delete_mcquestion', mc_question_id=mcquestion.id)}}" class="btn btn-outline-danger btn-sm">Delete Question</a>
+<hr>
+
+    
+
+
+{% endblock %}
