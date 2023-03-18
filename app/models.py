@@ -34,6 +34,10 @@ class Test(db.Model):
     question_id_3=db.Column(db.Integer,db.ForeignKey('multiplechoice.id'), nullable=True)
     question_id_4=db.Column(db.Integer,db.ForeignKey('multiplechoice.id'), nullable=True)
     question_id_5=db.Column(db.Integer,db.ForeignKey('multiplechoice.id'), nullable=True)
+    
+    
+    def __repr__(self):
+        return f"Test('{self.test_id}', '{self.creator_id}', '{self.test_type}', '{self.question_id_1}', '{self.question_id_2}', '{self.question_id_3}', '{self.question_id_4}', '{self.question_id_5}')"
 
 
 class Multiplechoice(db.Model):
