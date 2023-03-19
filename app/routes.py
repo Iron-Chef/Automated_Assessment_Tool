@@ -99,7 +99,7 @@ def delete_mcquestion(mc_question_id):
         flash("Question deleted!")
 
         questions=Multiplechoice.query.all()
-        return redirect('question_list',questions=questions)
+        return render_template('question_list.html',questions=questions)
 
     except:
         flash("Problem deleting question, please check with Admin!")
@@ -150,14 +150,11 @@ def edit_mc_question(mc_question_id):
 
 
 
-
-
 @app.route("/question_list",methods=['GET'])
 def question_list():
     
     questions=Multiplechoice.query.all()
     
-        
     return render_template('question_list.html',questions=questions)
 
 @app.route("/test_list",methods=['GET'])
