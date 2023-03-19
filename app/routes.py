@@ -150,14 +150,11 @@ def edit_mc_question(mc_question_id):
 
 
 
-
-
 @app.route("/question_list",methods=['GET'])
 def question_list():
     
     questions=Multiplechoice.query.all()
     
-        
     return render_template('question_list.html',questions=questions)
 
 
