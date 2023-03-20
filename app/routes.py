@@ -1,8 +1,8 @@
 from flask import render_template, flash, redirect, url_for, request, g,session
 from flask_login import current_user, login_user, logout_user, login_required
 from werkzeug.urls import url_parse
-from app.models import User,Test, Multiplechoice
-from app.forms import LoginForm, CreateTestForm, QuestionForm
+from app.models import User,Test, Multiplechoice, FormativeAttempt
+from app.forms import LoginForm, CreateTestForm, QuestionForm,SubmitAttemptForm
 from app import app,db
 
 @app.route('/login', methods = ['GET', 'POST'])
@@ -226,4 +226,28 @@ def edit_test(test_id):
     form.question_id_5.data=test.question_id_5
     return render_template('edit_test.html', test=test,form=form,questions=questions)
 
+@app.route("/attempt_test/<int:test_id>",methods=['GET','POST'])
+@login_required
+def attempt_test(test_id):
+  form = SubmitAttemptForm()
+  test=Test.query.get_or_404(test_id)
+  question_1 = Multiplechoice.query.filter_by(id=test.question_id_1).first()
+  question_2 = Multiplechoice.query.filter_by(id=test.question_id_2).first()
+  question_3 = Multiplechoice.query.filter_by(id=test.question_id_3).first()
+  question_4 = Multiplechoice.query.filter_by(id=test.question_id_4).first()
+  question_5 = Multiplechoice.query.filter_by(id=test.question_id_5).first()
+  form.answer_1.choices = [(question_1.ans_choice_1,question_1.answer_1),(question_1.ans_choice_2,question_1.answer_2),(question_1.ans_choice_3,question_1.answer_3),(question_1.ans_choice_4,question_1.answer_4)]
+  form.answer_2.choices = [(question_2.ans_choice_1,question_2.answer_1),(question_2.ans_choice_2,question_2.answer_2),(question_2.ans_choice_3,question_2.answer_3),(question_2.ans_choice_4,question_2.answer_4)]
+  form.answer_3.choices = [(question_3.ans_choice_1,question_3.answer_1),(question_3.ans_choice_2,question_3.answer_2),(question_3.ans_choice_3,question_3.answer_3),(question_3.ans_choice_4,question_3.answer_4)]
+  form.answer_4.choices = [(question_4.ans_choice_1,question_4.answer_1),(question_4.ans_choice_2,question_4.answer_2),(question_4.ans_choice_3,question_4.answer_3),(question_4.ans_choice_4,question_4.answer_4)]
+  form.answer_5.choices = [(question_5.ans_choice_1,question_5.answer_1),(question_5.ans_choice_2,question_5.answer_2),(question_5.ans_choice_3,question_5.answer_3),(question_5.ans_choice_4,question_5.answer_4)]
+
+
+  if form.validate_on_submit():
+    formative_attempt=FormativeAttempt(test_id=test.test_id,user_id=current_user.id,answer_1=form.answer_1.data,answer_2=form.answer_2.data,answer_3=form.answer_3.data,answer_4=form.answer_4.data,answer_5=form.answer_5.data,answer_1_correct=form.answer_1_correct.data,answer_2_correct=form.answer_2_correct.data,answer_3_correct=form.answer_3_correct.data,answer_4_correct=form.answer_4_correct.data,answer_5_correct=form.answer_5_correct.data,score=form.score.data)
+    db.session.add(formative_attempt)
+    db.session.commit()
+    flash('Test Submit Succesful!')
+    return redirect(url_for('index'))
+  return render_template('attempt_test.html',title='Attempt Test',form=form,test=test,question_1=question_1,question_2=question_2,question_3=question_3,question_4=question_4,question_5=question_5)
 

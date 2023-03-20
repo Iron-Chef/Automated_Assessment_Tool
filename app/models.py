@@ -34,6 +34,7 @@ class Test(db.Model):
     question_id_3=db.Column(db.Integer,db.ForeignKey('multiplechoice.id'), nullable=True)
     question_id_4=db.Column(db.Integer,db.ForeignKey('multiplechoice.id'), nullable=True)
     question_id_5=db.Column(db.Integer,db.ForeignKey('multiplechoice.id'), nullable=True)
+    attempt = db.relationship('FormativeAttempt', backref='test_to_attempt', lazy=True)
     
     
     def __repr__(self):
@@ -66,4 +67,22 @@ class Multiplechoice(db.Model):
         return "id: {}, Question: {}, Answer 1: {}, Answer 2: {}, Answer 3: {}, Answer 4: {}".format(self.id, self.question, self.answer_1, self.answer_2, self.answer_3, self.answer_4)
 
 
-
+class FormativeAttempt(db.Model):
+    attempt_id=db.Column(db.Integer(),primary_key=True)
+    test_id=db.Column(db.Integer(),db.ForeignKey('test.test_id'),nullable=False)
+    user_id= db.Column(db.Integer,db.ForeignKey('user.id'), nullable=False)
+    answer_1=db.Column(db.Integer,nullable=True)
+    answer_2=db.Column(db.Integer,nullable=True)
+    answer_3=db.Column(db.Integer,nullable=True)
+    answer_4=db.Column(db.Integer,nullable=True)
+    answer_5=db.Column(db.Integer,nullable=True)
+    answer_1_correct=db.Column(db.Integer,nullable=True,default=0)
+    answer_2_correct=db.Column(db.Integer,nullable=True,default=0)
+    answer_3_correct=db.Column(db.Integer,nullable=True,default=0)
+    answer_4_correct=db.Column(db.Integer,nullable=True,default=0)
+    answer_5_correct=db.Column(db.Integer,nullable=True,default=0)
+    score=db.Column(db.Integer,nullable=True,default=0)##Fix the column
+    
+    
+    
+    

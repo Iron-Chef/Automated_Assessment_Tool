@@ -32,3 +32,17 @@ class CreateTestForm(FlaskForm):
     question_id_4=SelectField('question',choices=[])
     question_id_5=SelectField('question',choices=[])
     submit= SubmitField('Create Test')
+
+class SubmitAttemptForm(FlaskForm):
+    answer_1=SelectField('question',choices=[])
+    answer_2=SelectField('question',choices=[])
+    answer_3=SelectField('question',choices=[])
+    answer_4=SelectField('question',choices=[])
+    answer_5=SelectField('question',choices=[])
+    answer_1_correct=IntegerField('correct')
+    answer_2_correct=IntegerField('correct')
+    answer_3_correct=IntegerField('correct')
+    answer_4_correct=IntegerField('correct')
+    answer_5_correct=IntegerField('correct')
+    score=IntegerField('score')
+    submit= SubmitField('Submit Test Attempt')
