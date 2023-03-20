@@ -98,10 +98,14 @@ def create_form_test():
         return redirect('/create_form_test')
     return render_template('create_form_test.html', title = 'Create Formative Assesment', form=form)
 
-@app.route("/Formative_test_list",methods=['GET'])
-def formtests():
-    
-    formtests=FormativeTest.query.all()
-    
-        
-    return render_template('Formative_test_list.html',formtests=formtests)
+
+@app.route("/Formative_test_list/<int:test_id>", methods=['GET'])
+def formtests(test_id):
+  tests=FormativeTest.query.get_or_404(test_id)
+  question_1 = Multiplechoice.query.filter_by(id=tests.mcquestion_1_id).first()
+  question_2 = Multiplechoice.query.filter_by(id=tests.mcquestion_2_id).first()
+  question_3 = Multiplechoice.query.filter_by(id=tests.mcquestion_3_id).first()
+  question_4 = Multiplechoice.query.filter_by(id=tests.mcquestion_4_id).first()
+  question_5 = Multiplechoice.query.filter_by(id=tests.mcquestion_5_id).first()
+  return render_template('Formative_test_list.html',tests=tests,question_1=question_1,question_2=question_2,question_3=question_3,question_4=question_4,question_5=question_5)
+
