@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div class="container">
+
+        <div class="row row-cols-1 row-cols-md-2 g-4">
+            <div class="col">
+                <div class="card h-100">
+                    <div class="row g-0">
+                        <div class="col-md-3">
+                            <img src="{{ url_for('static', filename='test.jpg' ) }}"  class="img-fluid rounded-start" width="160" height="100" >
+                        </div>
+                        <div class="col-md-8">
+                            <div class="card-body">
+                                <h5 class="card-title">Summative Assessment</h5>
+                                <p class="card-text">word words words</p>
+                                <p class="card-text"><small class="text-muted">space for small words</small></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card h-100" >
+                    <div class="card-header d-flex justify-content-between">Summary <a href="#" class="btn btn-primary">view</a></div>
+                    <ul class="list-group">
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                        number marked
+                        <span class="list-group-flush"> {{ num_marked }} </span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            total of all marks
+                            <span class="list-group-flush"> {{ total_mark }} </span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            average mark 
+                            <span class="list-group-flush"> {{ average_mark }} </span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            
+        </div>
+        <br>
+
+        <table id="data" class="table">
+            <thead>
+                <tr>
+                    <th>username</th>
+                    <th>forename</th>
+                    <th>surname</th>
+                    <th>mark</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for res in results_sum %}
+                    <tr>
+                        <td><a href="{{ url_for('results_student', user_id=res.user_id) }}">{{ res.username }} </a> </td>
+                        <td>{{ res.forename }}</td>
+                        <td>{{ res.surname }}</td>
+                        <td>{{ res.mark }}</td>
+                        
+                                               
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        
+
+        
+    </div>
+
+{% endblock %}
+
+<!-- adapted from Miguel Grinerg 'Beautiful interactive tables for your Flask Templates' -->
+<!-- accessed 18-03-2023  https://blog.miguelgrinberg.com/post/beautiful-interactive-tables-for-your-flask-templates -->
+
+{% block scripts %}
+  <script>
+    $(document).ready(function () {
+      $('#data').DataTable({
+        columns: [
+          null,
+          null,
+          null,
+          null
+        ],
+      });
+    });
+  </script>
+{% endblock %}
