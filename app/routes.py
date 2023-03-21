@@ -86,10 +86,16 @@ def add_mc_question():
         rating_num= form.rating.data,
         feedback=form.feedback.data
         )
-        db.session.add(multi)
+        if multi.ans_choice_1 + multi.ans_choice_2 + multi.ans_choice_3 + multi.ans_choice_4 == 1:
+            db.session.add(multi)
+        
+            db.session.commit()
+            flash("Question added")
+            return redirect('/question_list')
+        else:
+            flash("Choose one answer choice")
         db.session.commit()
-        flash('Your question is added!')
-        return redirect('/question_list')
+        
     return render_template("add_mc_questions.html", title="Add Multiple Choice Questions", form=form)
 
 @app.route("/mc_question/delete/<int:mc_question_id>")
@@ -136,9 +142,12 @@ def edit_mc_question(mc_question_id):
         mcquestion.rating = dict(DIFFICULTY_RATING).get(form.rating.data)
         mcquestion.rating_num= form.rating.data
         db.session.add(mcquestion)
-        db.session.commit()
-        flash("Multiple Choice Question amended")
-        return redirect('/question_list')
+        if mcquestion.ans_choice_1 + mcquestion.ans_choice_2 + mcquestion.ans_choice_3 + mcquestion.ans_choice_4 == 1:
+            db.session.commit()
+            flash("Multiple Choice Question amended")
+            return redirect('/question_list')
+        else:
+            flash("Choose one answer choice")
 
     form.question.data=mcquestion.question
     form.answer1.data=mcquestion.answer_1
