@@ -3,7 +3,7 @@ from flask_login import current_user, login_user, logout_user, login_required
 from werkzeug.urls import url_parse
 from sqlalchemy import *
 from app.models import User,Test, Multiplechoice, FormativeAttempt,Results_sum
-from app.forms import LoginForm, CreateTestForm, QuestionForm, SubmitAttemptForm
+from app.forms import DIFFICULTY_RATING,LoginForm, CreateTestForm, QuestionForm, SubmitAttemptForm
 from app import app,db
 
 @app.route('/login', methods = ['GET', 'POST'])
@@ -82,6 +82,8 @@ def add_mc_question():
         answer_4=form.answer4.data, 
         ans_choice_4=form.ans_multi_select_4.data,
         marks=form.marks.data, 
+        rating = dict(DIFFICULTY_RATING).get(form.rating.data),
+        rating_num= form.rating.data,
         feedback=form.feedback.data
         )
         db.session.add(multi)
@@ -131,6 +133,8 @@ def edit_mc_question(mc_question_id):
         mcquestion.ans_choice_4=form.ans_multi_select_4.data
         mcquestion.marks=form.marks.data
         mcquestion.feedback=form.feedback.data
+        mcquestion.rating = dict(DIFFICULTY_RATING).get(form.rating.data)
+        mcquestion.rating_num= form.rating.data
         db.session.add(mcquestion)
         db.session.commit()
         flash("Multiple Choice Question amended")
@@ -146,6 +150,7 @@ def edit_mc_question(mc_question_id):
     form.answer4.data=mcquestion.answer_4
     form.ans_multi_select_4.data=mcquestion.ans_choice_4
     form.marks.data=mcquestion.marks
+    form.rating.data=mcquestion.rating
     form.feedback.data=mcquestion.feedback
     return render_template('edit_mc_question.html', mcquestion=mcquestion,form=form)
 
@@ -158,24 +163,8 @@ def question_list():
     
     return render_template('question_list.html',questions=questions)
 
-@app.route("/results_s", methods=['GET'])
-@login_required
-def results_s():
-    results_sum = Results_sum.query.all()
-    num_marked = len(Results_sum.query.all())
-    total_mark = Results_sum.query.with_entities(func.sum(Results_sum.mark).label('total')).first().total
-    average_mark = int(total_mark/num_marked)
 
-    return render_template('results_s.html', title='Results', results_sum=results_sum, num_marked=num_marked, total_mark=total_mark, average_mark=average_mark)
 
-@app.route("/results_s/<int:user_id>", methods=['GET'])
-@login_required
-def results_student(user_id):
-    
-    individ_results = Results_sum.query.filter_by(user_id=user_id).first_or_404()
-    entries = Results_sum.query.filter_by(user_id=user_id).all()
-    count_entries = len(Results_sum.query.filter_by(user_id=user_id).all())
-    return render_template('res_student.html', title='Student results', individ_results=individ_results, entries=entries, count_entries=count_entries)
 
 @app.route("/test_list",methods=['GET'])
 def test_list():
