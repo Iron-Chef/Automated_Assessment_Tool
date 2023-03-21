@@ -3,7 +3,7 @@ from flask_login import current_user, login_user, logout_user, login_required
 from werkzeug.urls import url_parse
 from sqlalchemy import *
 from app.models import User,Test, Multiplechoice, FormativeAttempt,Results_sum
-from app.forms import LoginForm, CreateTestForm, QuestionForm, SubmitAttemptForm
+from app.forms import LoginForm, CreateTestForm, QuestionForm, SubmitAttemptForm, ResultsForm
 from app import app,db
 
 @app.route('/login', methods = ['GET', 'POST'])
@@ -161,25 +161,6 @@ def question_list():
         
     return render_template('question_list.html',questions=questions)
 
-@app.route("/results_s", methods=['GET'])
-@login_required
-def results_s():
-    results_sum = Results_sum.query.all()
-    num_marked = len(Results_sum.query.all())
-    total_mark = Results_sum.query.with_entities(func.sum(Results_sum.mark).label('total')).first().total
-    average_mark = int(total_mark/num_marked)
-
-    return render_template('results_s.html', title='Results', results_sum=results_sum, num_marked=num_marked, total_mark=total_mark, average_mark=average_mark)
-
-@app.route("/results_s/<int:user_id>", methods=['GET'])
-@login_required
-def results_student(user_id):
-    
-    individ_results = Results_sum.query.filter_by(user_id=user_id).first_or_404()
-    entries = Results_sum.query.filter_by(user_id=user_id).all()
-    count_entries = len(Results_sum.query.filter_by(user_id=user_id).all())
-    return render_template('res_student.html', title='Student results', individ_results=individ_results, entries=entries, count_entries=count_entries)
-
 @app.route("/test_list",methods=['GET'])
 def test_list():
     tests=Test.query.all() 
@@ -261,15 +242,27 @@ def attempt_test(test_id):
   form.answer_3.choices = [(question_3.ans_choice_1,question_3.answer_1),(question_3.ans_choice_2,question_3.answer_2),(question_3.ans_choice_3,question_3.answer_3),(question_3.ans_choice_4,question_3.answer_4)]
   form.answer_4.choices = [(question_4.ans_choice_1,question_4.answer_1),(question_4.ans_choice_2,question_4.answer_2),(question_4.ans_choice_3,question_4.answer_3),(question_4.ans_choice_4,question_4.answer_4)]
   form.answer_5.choices = [(question_5.ans_choice_1,question_5.answer_1),(question_5.ans_choice_2,question_5.answer_2),(question_5.ans_choice_3,question_5.answer_3),(question_5.ans_choice_4,question_5.answer_4)]
+  marks=0
+
 
 
   if form.validate_on_submit():
-    formative_attempt=FormativeAttempt(test_id=test.test_id,user_id=current_user.id,answer_1=form.answer_1.data,answer_2=form.answer_2.data,answer_3=form.answer_3.data,answer_4=form.answer_4.data,answer_5=form.answer_5.data,answer_1_correct=form.answer_1_correct.data,answer_2_correct=form.answer_2_correct.data,answer_3_correct=form.answer_3_correct.data,answer_4_correct=form.answer_4_correct.data,answer_5_correct=form.answer_5_correct.data,score=form.score.data)
+    if form.answer_1.data =="1":
+        marks+=question_1.marks
+    if form.answer_2.data =="1":
+        marks+=question_2.marks
+    if form.answer_3.data =="1":
+        marks+=question_3.marks
+    if form.answer_4.data =="1":
+        marks+=question_4.marks
+    if form.answer_5.data =="1":
+        marks+=question_5.marks
+    formative_attempt=FormativeAttempt(test_id=test.test_id,user_id=current_user.id,answer_1=form.answer_1.data,answer_2=form.answer_2.data,answer_3=form.answer_3.data,answer_4=form.answer_4.data,answer_5=form.answer_5.data,question_id_1=question_1.id,question_id_2=question_2.id,question_id_3=question_3.id,question_id_4=question_4.id,question_id_5=question_5.id, marks=marks)
     db.session.add(formative_attempt)
     db.session.commit()
     flash('Test Submit Succesful!')
     return redirect(url_for('index'))
-  return render_template('attempt_test.html',title='Attempt Test',form=form,test=test,question_1=question_1,question_2=question_2,question_3=question_3,question_4=question_4,question_5=question_5)
+  return render_template('attempt_test.html',title='Attempt Test',form=form,test=test,question_1=question_1,question_2=question_2,question_3=question_3,question_4=question_4,question_5=question_5, marks=marks)
 
 @app.route("/results_s", methods=['GET'])
 @login_required

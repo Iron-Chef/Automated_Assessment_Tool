@@ -78,22 +78,30 @@ class Results_sum(db.Model):
     def __repr__(self):
         return f"Results_sum('{self.user_id}','{self.username}', '{self.forename}', '{self.surname}', '{self.test_id}','{self.mark}')"
 
+
+
 class FormativeAttempt(db.Model):
     attempt_id=db.Column(db.Integer(),primary_key=True)
     test_id=db.Column(db.Integer(),db.ForeignKey('test.test_id'),nullable=False)
     user_id= db.Column(db.Integer,db.ForeignKey('user.id'), nullable=False)
+    question_id_1=db.Column(db.Integer,db.ForeignKey('multiplechoice.id'), nullable=True)
+    question_id_2=db.Column(db.Integer,db.ForeignKey('multiplechoice.id'), nullable=True)
+    question_id_3=db.Column(db.Integer,db.ForeignKey('multiplechoice.id'), nullable=True)
+    question_id_4=db.Column(db.Integer,db.ForeignKey('multiplechoice.id'), nullable=True)
+    question_id_5=db.Column(db.Integer,db.ForeignKey('multiplechoice.id'), nullable=True)
     answer_1=db.Column(db.Integer,nullable=True)
     answer_2=db.Column(db.Integer,nullable=True)
     answer_3=db.Column(db.Integer,nullable=True)
     answer_4=db.Column(db.Integer,nullable=True)
     answer_5=db.Column(db.Integer,nullable=True)
-    answer_1_correct=db.Column(db.Integer,nullable=True,default=0)
-    answer_2_correct=db.Column(db.Integer,nullable=True,default=0)
-    answer_3_correct=db.Column(db.Integer,nullable=True,default=0)
-    answer_4_correct=db.Column(db.Integer,nullable=True,default=0)
-    answer_5_correct=db.Column(db.Integer,nullable=True,default=0)
-    score=db.Column(db.Integer,nullable=True,default=0)##Fix the column
+    marks=db.Column(db.Integer,nullable=False)
+    
+class Result(db.Model):
+    id=db.Column(db.Integer,primary_key=True)
+    attempt=db.Column(db.Integer,db.ForeignKey('formative_attempt.attempt_id'),nullable=False)
+    marks=db.Column(db.Integer)
     
     
+
     
     
