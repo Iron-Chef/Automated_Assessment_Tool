@@ -1,8 +1,10 @@
 from flask import render_template, flash, redirect, url_for, request, g,session
 from flask_login import current_user, login_user, logout_user, login_required
 from werkzeug.urls import url_parse
-from app.models import User,Test, Multiplechoice, FormativeAttempt
-from app.forms import LoginForm, CreateTestForm, QuestionForm,SubmitAttemptForm
+from sqlalchemy import *
+from app.models import User,Test, Multiplechoice, FormativeAttempt,Results_sum
+from app.forms import LoginForm, CreateTestForm, QuestionForm, SubmitAttemptForm
+
 from app import app,db
 
 @app.route('/login', methods = ['GET', 'POST'])
@@ -160,6 +162,7 @@ def question_list():
         
     return render_template('question_list.html',questions=questions)
 
+
 @app.route("/test_list",methods=['GET'])
 def test_list():
     tests=Test.query.all() 
@@ -250,4 +253,24 @@ def attempt_test(test_id):
     flash('Test Submit Succesful!')
     return redirect(url_for('index'))
   return render_template('attempt_test.html',title='Attempt Test',form=form,test=test,question_1=question_1,question_2=question_2,question_3=question_3,question_4=question_4,question_5=question_5)
+
+@app.route("/results_s", methods=['GET'])
+@login_required
+def results_s():
+    results_sum = Results_sum.query.all()
+    num_marked = len(Results_sum.query.all())
+    total_mark = Results_sum.query.with_entities(func.sum(Results_sum.mark).label('total')).first().total
+    average_mark = int(total_mark/num_marked)
+
+    return render_template('results_s.html', title='Results', results_sum=results_sum, num_marked=num_marked, total_mark=total_mark, average_mark=average_mark)
+
+@app.route("/results_s/<int:user_id>", methods=['GET'])
+@login_required
+def results_student(user_id):
+    
+    individ_results = Results_sum.query.filter_by(user_id=user_id).first_or_404()
+    entries = Results_sum.query.filter_by(user_id=user_id).all()
+    count_entries = len(Results_sum.query.filter_by(user_id=user_id).all())
+    return render_template('res_student.html', title='Student results', individ_results=individ_results, entries=entries, count_entries=count_entries)
+
 

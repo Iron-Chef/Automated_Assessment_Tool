@@ -15,6 +15,7 @@ class User(UserMixin, db.Model):
     email = db.Column(db.String(120), index=True, unique=True)
     year = db.Column(db.Integer)
     is_lecturer = db.Column(db.Boolean, nullable = False, default = False)
+    results_s = db.relationship('Results_sum', backref='user', lazy=True)
 
     def __repr__(self):
         return "Student ID: {}, First name: {}, Surnam: {}, Email: {}, Year: {}".format(self.id, self.forename, self.surname, self.email, self.year)
@@ -63,8 +64,19 @@ class Multiplechoice(db.Model):
 
     def __repr__(self):
         
-        #return '{}'.format(self.id)
         return "id: {}, Question: {}, Answer 1: {}, Answer 2: {}, Answer 3: {}, Answer 4: {}".format(self.id, self.question, self.answer_1, self.answer_2, self.answer_3, self.answer_4)
+
+class Results_sum(db.Model):
+    id = db.Column(db.Integer, primary_key = True)
+    user_id = db.Column(db.Text, db.ForeignKey('user.id'))
+    username = db.Column(db.String(15))
+    forename = db.Column(db.String(128))
+    surname = db.Column(db.String(128))
+    test_id = db.Column(db.Integer)
+    mark = db.Column(db.Integer)
+
+    def __repr__(self):
+        return f"Results_sum('{self.user_id}','{self.username}', '{self.forename}', '{self.surname}', '{self.test_id}','{self.mark}')"
 
 
 class FormativeAttempt(db.Model):
