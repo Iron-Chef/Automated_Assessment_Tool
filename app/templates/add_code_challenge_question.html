@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<link rel="stylesheet" href="https://codemirror.net/lib/codemirror.css">
+<script src="https://codemirror.net/lib/codemirror.js"></script>
+<script src="https://codemirror.net/mode/python/python.js"></script>
+
+<textarea id="code"></textarea>
+
+<script>
+  var editor = CodeMirror.fromTextArea(document.getElementById("code"), {
+    mode: "python",
+    theme: "monokai",
+    lineNumbers: true,
+    tabSize: 4,
+    indentWithTabs: true
+  });
+</script>
+
+{% endblock %}

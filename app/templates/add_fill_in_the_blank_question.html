@@ -1,8 +1,8 @@
 {% extends "base.html" %} 
 
 {% block content %}
-    <h1>Add Multiple Choice Questions</h1>
-    <div> <p>Add Multiple Choice Questions</p>
+    <h1>Add Fill-in-the-blank-questions</h1>
+    <div>
         <form action="", method="post" novalidate>
             {{ form.hidden_tag() }}
 
@@ -14,35 +14,13 @@
             </p>
             
             <p>
-                {{ form.ans_multi_select_1.label }}
-                {{ form.answer1  }}
-                {{ form.ans_multi_select_1 }}
-                {% for error in form.answer1.errors %} 
+                {{ form.answer.label }}
+                {{ form.answer }}
+                {% for error in form.answer.errors %} 
                 <span style="color: red;">[{{ error }}]</span>
                 {% endfor %}
             </p>
             
-            <p>
-                {{ form.ans_multi_select_2.label }}
-                {{ form.answer2 }}
-                {{ form.ans_multi_select_2}} 
-                {% for error in form.answer2.errors %} 
-                <span style="color: red;">[{{ error }}]</span>
-                {% endfor %}
-            </p>
-
-            <p>
-                {{ form.ans_multi_select_3.label }}
-                {{ form.answer3 }}
-                {{ form.ans_multi_select_3}}
-            </p>
-
-            <p>
-                {{ form.ans_multi_select_4.label }}
-                {{ form.answer4 }}
-                {{ form.ans_multi_select_4}}
-            </p>
-
             <p>
                 {{ form.topic.label }}
                 {{ form.topic (size=100) }}
@@ -50,7 +28,7 @@
                 <span style="color: red;">[{{ error }}]</span>
                 {% endfor %}
             </p>
-         
+
             <p> 
                 {{ form.marks.label }}
                 {{ form.marks }}
@@ -58,14 +36,14 @@
                <span style="color: red;">[{{ error }}]</span>
                {% endfor %}
             </p>
+
             <p> 
                 {{ form.feedback.label }}
-                {{ form.feedback(size=100) }}
-                
+                {{ form.feedback(size = 100) }}
             </p>
+
         </div>
             <p>
-                
                 {{ form.submit(class="btn btn-info ")}}
             </p>
             <!--Clear button-->

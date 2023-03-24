@@ -1,9 +1,9 @@
-from flask import render_template, flash, redirect, url_for, request, g,session
+from flask import render_template, flash, redirect, url_for, request, session, jsonify
 from flask_login import current_user, login_user, logout_user, login_required
 from werkzeug.urls import url_parse
 from sqlalchemy import *
 from app.models import User,Test, Multiplechoice, FormativeAttempt,Results_sum
-from app.forms import LoginForm, CreateTestForm, QuestionForm, SubmitAttemptForm, ResultsForm
+from app.forms import LoginForm, CreateTestForm, QuestionForm, SubmitAttemptForm, ResultsForm, FillInTheBlankQuestionForm
 from app import app,db
 
 @app.route('/login', methods = ['GET', 'POST'])
@@ -81,8 +81,10 @@ def add_mc_question():
         ans_choice_3=form.ans_multi_select_3.data,
         answer_4=form.answer4.data, 
         ans_choice_4=form.ans_multi_select_4.data,
+        topic_tag = form.topic.data,
         marks=form.marks.data, 
-        feedback=form.feedback.data
+        feedback=form.feedback.data,
+        question_type = "multiple_choice"
         )
         db.session.add(multi)
         db.session.commit()
@@ -149,14 +151,39 @@ def edit_mc_question(mc_question_id):
     form.feedback.data=mcquestion.feedback
     return render_template('edit_mc_question.html', mcquestion=mcquestion,form=form)
 
+# Add fill-in-the-blank questions
+@app.route("/add_fill_in_the_blank_question", methods = ['GET', 'POST'])
+def add_fill_in_the_blank_question():
 
+    form = FillInTheBlankQuestionForm()
 
-@app.route("/question_list",methods=['GET'])
+    if form.validate_on_submit():
+
+        question = Multiplechoice(
+        user_id = current_user.id,
+        question = form.question.data, 
+        answer_1 = form.answer.data,
+        topic_tag = form.topic.data,
+        marks = form.marks.data, 
+        feedback = form.feedback.data,
+        question_type = "fill_in_the_blank"
+        )
+        db.session.add(question)
+        db.session.commit()
+
+    return render_template('add_fill_in_the_blank_question.html', form = form)
+
+# Add code-challenge questions
+@app.route("/add_code_challenge_question.html", methods = ['GET', 'POST'])
+def add_code_challenge_question():
+    return render_template('add_code_challenge_question.html')
+
+@app.route("/question_list", methods = ['GET'])
 def question_list():
     
-    questions=Multiplechoice.query.all()
+    questions = Multiplechoice.query.all()
     
-    return render_template('question_list.html',questions=questions)
+    return render_template('question_list.html', questions = questions)
 
 @app.route("/test_list",methods=['GET'])
 def test_list():

@@ -56,10 +56,11 @@ class Multiplechoice(db.Model):
     answer_4= db.Column(db.Text, nullable=True)
     ans_choice_4 = db.Column(db.Integer, default=False)
     #add difficulty column
-    #add tag column
+    topic_tag = db.Column(db.Text, default = "")
     #add student answer foreignkey
     marks=db.Column(db.Integer, default=False)
     feedback = db.Column(db.Text, default="")
+    question_type = db.Column(db.Text, nullable = False)
    
 
     def __repr__(self):
