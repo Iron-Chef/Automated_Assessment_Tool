@@ -20,8 +20,18 @@ class QuestionForm(FlaskForm):
     answer4=StringField(FlaskForm)
     ans_multi_select_4 = BooleanField("Option 4")
 
+    topic = StringField(validators = [DataRequired (message = "Please enter the topic of the question: ")])
     marks=IntegerField(validators=[DataRequired(message="Please enter mark")]) 
     feedback=StringField("Feedback:")
+    submit = SubmitField("Form Complete")
+
+class FillInTheBlankQuestionForm(FlaskForm):
+    question = StringField(validators = [DataRequired (message = "Please type your question here: ")])
+    answer = StringField(validators = [DataRequired (message = "Please enter the correct answer")])
+    
+    topic = StringField(validators = [DataRequired (message = "Please enter the topic of the question: ")])
+    marks = IntegerField(validators = [DataRequired (message = "Please type your question here: ")])
+    feedback = StringField ("Feedback: ")
     submit = SubmitField("Form Complete")
 
 class CreateTestForm(FlaskForm):
