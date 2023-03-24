@@ -24,7 +24,7 @@ class QuestionForm(FlaskForm):
     rating = SelectField('Rating:',choices=DIFFICULTY_RATING, coerce=int)
     marks=IntegerField(validators=[DataRequired(message="Please enter mark")]) 
     feedback=StringField("Feedback:")
-    submit = SubmitField("Form Complete")
+    submit = SubmitField("Add Question")
 
 class CreateTestForm(FlaskForm):
     test_type= SelectField('Check to make test summative',choices=[(0,"formative"),(1,"summative")])

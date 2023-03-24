@@ -2,7 +2,7 @@ from flask import render_template, flash, redirect, url_for, request, g,session
 from flask_login import current_user, login_user, logout_user, login_required
 from werkzeug.urls import url_parse
 from sqlalchemy import *
-from app.models import User,Test, Multiplechoice, FormativeAttempt,Results_sum
+from app.models import User,Test, Multiplechoice, FormativeAttempt,Results_sum, Module
 from app.forms import DIFFICULTY_RATING,LoginForm, CreateTestForm, QuestionForm, SubmitAttemptForm
 from app import app,db
 
@@ -98,6 +98,13 @@ def add_mc_question():
         
     return render_template("add_mc_questions.html", title="Add Multiple Choice Questions", form=form)
 
+#List of MSc Computing Modules
+@app.route('/modules', methods=['GET'])
+def modules():
+    modules = Module.query.all()
+    return render_template('modules.html',title='MSc Computing Modules',modules=modules)
+
+#Delete a multiple choice question- may add in warning before
 @app.route("/mc_question/delete/<int:mc_question_id>")
 def delete_mcquestion(mc_question_id):
     mcquestion_to_delete=Multiplechoice.query.get_or_404(mc_question_id)
@@ -116,13 +123,14 @@ def delete_mcquestion(mc_question_id):
         questions=Multiplechoice.query.all()
         return render_template('question_list.html',questions=questions)
 
+#view individual mc question by id
 @app.route("/mc_question/<int:mc_question_id>", methods=['GET'])
 def mcquestion(mc_question_id):
     mcquestion=Multiplechoice.query.get_or_404(mc_question_id)
 
     return render_template('mc_question.html', mcquestion=mcquestion, title=mcquestion.question, mc_question_id=mcquestion.id)
 
-
+# edit mc questions
 @app.route("/mc_question/edit/<int:mc_question_id>", methods=['GET', 'POST'])
 def edit_mc_question(mc_question_id):
     mcquestion=Multiplechoice.query.get_or_404(mc_question_id)
@@ -164,7 +172,7 @@ def edit_mc_question(mc_question_id):
     return render_template('edit_mc_question.html', mcquestion=mcquestion,form=form)
 
 
-
+#view list of questions- opportunity to list by different queries
 @app.route("/question_list",methods=['GET'])
 def question_list():
     
