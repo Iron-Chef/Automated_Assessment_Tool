@@ -1,9 +1,9 @@
-from flask import render_template, flash, redirect, url_for, request, g,session
+from flask import render_template, flash, redirect, url_for, request, session, jsonify
 from flask_login import current_user, login_user, logout_user, login_required
 from werkzeug.urls import url_parse
 from sqlalchemy import *
-from app.models import User,Test, Multiplechoice, FormativeAttempt,Results_sum
-from app.forms import LoginForm, CreateTestForm, QuestionForm, SubmitAttemptForm
+from app.models import User,Test, Multiplechoice, FormativeAttempt,Results_sum, Module, Studentanswer
+from app.forms import DIFFICULTY_RATING,LoginForm, CreateTestForm, QuestionForm, SubmitAttemptForm, StudentAnswerForm, ResultsForm, FillInTheBlankQuestionForm
 from app import app,db
 
 @app.route('/login', methods = ['GET', 'POST'])
@@ -81,16 +81,34 @@ def add_mc_question():
         ans_choice_3=form.ans_multi_select_3.data,
         answer_4=form.answer4.data, 
         ans_choice_4=form.ans_multi_select_4.data,
+        topic_tag = form.topic.data,
         marks=form.marks.data, 
-        feedback=form.feedback.data
+        rating = dict(DIFFICULTY_RATING).get(form.rating.data),
+        rating_num= form.rating.data,
+        feedback=form.feedback.data,
+        question_type = "multiple_choice"
         )
-        db.session.add(multi)
+        if multi.ans_choice_1 + multi.ans_choice_2 + multi.ans_choice_3 + multi.ans_choice_4 == 1:
+            db.session.add(multi)
+        
+            db.session.commit()
+            flash("Question added")
+            return redirect('/question_list')
+        else:
+            flash("Choose one answer choice")
         db.session.commit()
-        flash('Your question is added!')
-        return redirect('/question_list')
+        
     return render_template("add_mc_questions.html", title="Add Multiple Choice Questions", form=form)
 
+#List of MSc Computing Modules
+@app.route('/modules', methods=['GET'])
+def modules():
+    modules = Module.query.all()
+    return render_template('modules.html',title='MSc Computing Modules',modules=modules)
+
+#Delete a multiple choice question- may add in warning before
 @app.route("/mc_question/delete/<int:mc_question_id>")
+@login_required
 def delete_mcquestion(mc_question_id):
     mcquestion_to_delete=Multiplechoice.query.get_or_404(mc_question_id)
 
@@ -108,14 +126,17 @@ def delete_mcquestion(mc_question_id):
         questions=Multiplechoice.query.all()
         return render_template('question_list.html',questions=questions)
 
+#view individual mc question by id
 @app.route("/mc_question/<int:mc_question_id>", methods=['GET'])
+@login_required
 def mcquestion(mc_question_id):
     mcquestion=Multiplechoice.query.get_or_404(mc_question_id)
 
     return render_template('mc_question.html', mcquestion=mcquestion, title=mcquestion.question, mc_question_id=mcquestion.id)
 
-
+# edit mc questions
 @app.route("/mc_question/edit/<int:mc_question_id>", methods=['GET', 'POST'])
+@login_required
 def edit_mc_question(mc_question_id):
     mcquestion=Multiplechoice.query.get_or_404(mc_question_id)
     form=QuestionForm()
@@ -131,10 +152,15 @@ def edit_mc_question(mc_question_id):
         mcquestion.ans_choice_4=form.ans_multi_select_4.data
         mcquestion.marks=form.marks.data
         mcquestion.feedback=form.feedback.data
+        mcquestion.rating = dict(DIFFICULTY_RATING).get(form.rating.data)
+        mcquestion.rating_num= form.rating.data
         db.session.add(mcquestion)
-        db.session.commit()
-        flash("Multiple Choice Question amended")
-        return redirect('/question_list')
+        if mcquestion.ans_choice_1 + mcquestion.ans_choice_2 + mcquestion.ans_choice_3 + mcquestion.ans_choice_4 == 1:
+            db.session.commit()
+            flash("Multiple Choice Question amended")
+            return redirect('/question_list')
+        else:
+            flash("Choose one answer choice")
 
     form.question.data=mcquestion.question
     form.answer1.data=mcquestion.answer_1
@@ -146,36 +172,81 @@ def edit_mc_question(mc_question_id):
     form.answer4.data=mcquestion.answer_4
     form.ans_multi_select_4.data=mcquestion.ans_choice_4
     form.marks.data=mcquestion.marks
+    form.rating.data=mcquestion.rating
     form.feedback.data=mcquestion.feedback
     return render_template('edit_mc_question.html', mcquestion=mcquestion,form=form)
 
+# Add fill-in-the-blank questions
+@app.route("/add_fill_in_the_blank_question", methods = ['GET', 'POST'])
+def add_fill_in_the_blank_question():
 
+    form = FillInTheBlankQuestionForm()
 
-@app.route("/question_list",methods=['GET'])
+    if form.validate_on_submit():
+
+        question = Multiplechoice(
+        user_id = current_user.id,
+        question = form.question.data, 
+        answer_1 = form.answer.data,
+        topic_tag = form.topic.data,
+        marks = form.marks.data, 
+        feedback = form.feedback.data,
+        question_type = "fill_in_the_blank"
+        )
+        db.session.add(question)
+        db.session.commit()
+
+    return render_template('add_fill_in_the_blank_question.html', form = form)
+
+#view list of questions- opportunity to list by different queries# Add code-challenge questions
+@app.route("/add_code_challenge_question.html", methods = ['GET', 'POST'])
+def add_code_challenge_question():
+    return render_template('add_code_challenge_question.html')
+
+@app.route("/question_list", methods = ['GET'])
+@login_required
 def question_list():
     
-    questions=Multiplechoice.query.all()
+    questions = Multiplechoice.query.all()
     
     return render_template('question_list.html',questions=questions)
 
-@app.route("/results_s", methods=['GET'])
+#Individual student answer attempt to test funtionality
+@app.route("/student_answer/<int:question_id>", methods=['GET', 'POST'])
 @login_required
-def results_s():
-    results_sum = Results_sum.query.all()
-    num_marked = len(Results_sum.query.all())
-    total_mark = Results_sum.query.with_entities(func.sum(Results_sum.mark).label('total')).first().total
-    average_mark = int(total_mark/num_marked)
+def student_answer(question_id):
 
-    return render_template('results_s.html', title='Results', results_sum=results_sum, num_marked=num_marked, total_mark=total_mark, average_mark=average_mark)
+    form=StudentAnswerForm()
+    mc_question=Multiplechoice.query.get_or_404(question_id)
+    answers=Studentanswer.query.all()
 
-@app.route("/results_s/<int:user_id>", methods=['GET'])
+    if form.validate_on_submit():
+        if request.method == 'POST':
+            mc =Studentanswer(
+            user_id=current_user.id,
+            question_id=mc_question.id, 
+            ans_choice_1=form.ans_multi_select_1.data, 
+            ans_choice_2=form.ans_multi_select_2.data, 
+            ans_choice_3=form.ans_multi_select_3.data,
+            ans_choice_4=form.ans_multi_select_4.data,
+            
+        )
+        db.session.add(mc)
+        db.session.commit()
+        flash('Your answer is submitted!')
+        return redirect(url_for('index'))
+    return render_template('student_answer.html',mc_question=mc_question, answers=answers, form=form)
+
+#currently working on this-AJ, NOT WORKING
+@app.route("/student_answer_result/<int:question_id>", methods=['GET', 'POST'])
 @login_required
-def results_student(user_id):
+def student_answer_result(question_id):
+    user_id=current_user.id
+    mc_question=Multiplechoice.query.get_or_404(question_id)
+    answers=Studentanswer.query.all()
     
-    individ_results = Results_sum.query.filter_by(user_id=user_id).first_or_404()
-    entries = Results_sum.query.filter_by(user_id=user_id).all()
-    count_entries = len(Results_sum.query.filter_by(user_id=user_id).all())
-    return render_template('res_student.html', title='Student results', individ_results=individ_results, entries=entries, count_entries=count_entries)
+    return render_template('student_answer_result.html', mc_question=mc_question,answers=answers, user_id=user_id)
+
 
 @app.route("/test_list",methods=['GET'])
 def test_list():
@@ -258,15 +329,27 @@ def attempt_test(test_id):
   form.answer_3.choices = [(question_3.ans_choice_1,question_3.answer_1),(question_3.ans_choice_2,question_3.answer_2),(question_3.ans_choice_3,question_3.answer_3),(question_3.ans_choice_4,question_3.answer_4)]
   form.answer_4.choices = [(question_4.ans_choice_1,question_4.answer_1),(question_4.ans_choice_2,question_4.answer_2),(question_4.ans_choice_3,question_4.answer_3),(question_4.ans_choice_4,question_4.answer_4)]
   form.answer_5.choices = [(question_5.ans_choice_1,question_5.answer_1),(question_5.ans_choice_2,question_5.answer_2),(question_5.ans_choice_3,question_5.answer_3),(question_5.ans_choice_4,question_5.answer_4)]
+  marks=0
+
 
 
   if form.validate_on_submit():
-    formative_attempt=FormativeAttempt(test_id=test.test_id,user_id=current_user.id,answer_1=form.answer_1.data,answer_2=form.answer_2.data,answer_3=form.answer_3.data,answer_4=form.answer_4.data,answer_5=form.answer_5.data,answer_1_correct=form.answer_1_correct.data,answer_2_correct=form.answer_2_correct.data,answer_3_correct=form.answer_3_correct.data,answer_4_correct=form.answer_4_correct.data,answer_5_correct=form.answer_5_correct.data,score=form.score.data)
+    if form.answer_1.data =="1":
+        marks+=question_1.marks
+    if form.answer_2.data =="1":
+        marks+=question_2.marks
+    if form.answer_3.data =="1":
+        marks+=question_3.marks
+    if form.answer_4.data =="1":
+        marks+=question_4.marks
+    if form.answer_5.data =="1":
+        marks+=question_5.marks
+    formative_attempt=FormativeAttempt(test_id=test.test_id,user_id=current_user.id,answer_1=form.answer_1.data,answer_2=form.answer_2.data,answer_3=form.answer_3.data,answer_4=form.answer_4.data,answer_5=form.answer_5.data,question_id_1=question_1.id,question_id_2=question_2.id,question_id_3=question_3.id,question_id_4=question_4.id,question_id_5=question_5.id, marks=marks)
     db.session.add(formative_attempt)
     db.session.commit()
     flash('Test Submit Succesful!')
     return redirect(url_for('index'))
-  return render_template('attempt_test.html',title='Attempt Test',form=form,test=test,question_1=question_1,question_2=question_2,question_3=question_3,question_4=question_4,question_5=question_5)
+  return render_template('attempt_test.html',title='Attempt Test',form=form,test=test,question_1=question_1,question_2=question_2,question_3=question_3,question_4=question_4,question_5=question_5, marks=marks)
 
 @app.route("/results_s", methods=['GET'])
 @login_required

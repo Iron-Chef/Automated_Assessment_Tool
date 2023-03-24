@@ -9,6 +9,8 @@ class LoginForm(FlaskForm):
     password = PasswordField('Password', validators = [DataRequired()])
     submit = SubmitField('Sign in')
 
+DIFFICULTY_RATING =[(5,u'★★★★★'), (4,u'★★★★'),(3,u'★★★'),(2,'★★'),(1,u'★')]
+
 class QuestionForm(FlaskForm):
     question=StringField(validators=[DataRequired(message="Question is required")])
     answer1=StringField (validators=[DataRequired(message="Minimum of two answer choices are required")])
@@ -19,9 +21,31 @@ class QuestionForm(FlaskForm):
     ans_multi_select_3 = BooleanField("Option 3")
     answer4=StringField(FlaskForm)
     ans_multi_select_4 = BooleanField("Option 4")
+<<<<<<< HEAD
+    rating = SelectField('Rating:',choices=DIFFICULTY_RATING, coerce=int)
+=======
 
+    topic = StringField(validators = [DataRequired (message = "Please enter the topic of the question: ")])
+>>>>>>> 2658bfa71b1b133938d531bd2552fbb30c3a07b4
     marks=IntegerField(validators=[DataRequired(message="Please enter mark")]) 
     feedback=StringField("Feedback:")
+    submit = SubmitField("Add Question")
+
+class StudentAnswerForm(FlaskForm):
+    ans_multi_select_1 = BooleanField("Option 1")
+    ans_multi_select_2 = BooleanField("Option 2")
+    ans_multi_select_3 = BooleanField("Option 3")
+    ans_multi_select_4 = BooleanField("Option 4")
+        
+    submit = SubmitField("Form Complete")
+
+class FillInTheBlankQuestionForm(FlaskForm):
+    question = StringField(validators = [DataRequired (message = "Please type your question here: ")])
+    answer = StringField(validators = [DataRequired (message = "Please enter the correct answer")])
+    
+    topic = StringField(validators = [DataRequired (message = "Please enter the topic of the question: ")])
+    marks = IntegerField(validators = [DataRequired (message = "Please type your question here: ")])
+    feedback = StringField ("Feedback: ")
     submit = SubmitField("Form Complete")
 
 class CreateTestForm(FlaskForm):
@@ -39,10 +63,9 @@ class SubmitAttemptForm(FlaskForm):
     answer_3=SelectField('question',choices=[])
     answer_4=SelectField('question',choices=[])
     answer_5=SelectField('question',choices=[])
-    answer_1_correct=IntegerField('correct')
-    answer_2_correct=IntegerField('correct')
-    answer_3_correct=IntegerField('correct')
-    answer_4_correct=IntegerField('correct')
-    answer_5_correct=IntegerField('correct')
-    score=IntegerField('score')
+    marks=IntegerField('score')
     submit= SubmitField('Submit Test Attempt')
+
+class ResultsForm(FlaskForm):
+    attempt_id=IntegerField('attempt_id')
+    marks=IntegerField('marks')
