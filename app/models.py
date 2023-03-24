@@ -75,6 +75,21 @@ class Multiplechoice(db.Model):
 
         return "id: {}, Question: {}, Answer 1: {}, Answer 2: {}, Answer 3: {}, Answer 4: {}".format(self.id, self.question, self.answer_1, self.answer_2, self.answer_3, self.answer_4)
 
+class Studentanswer(db.Model):
+    
+    id=db.Column(db.Integer, primary_key=True)
+    question_id=db.Column(db.Integer, db.ForeignKey('multiplechoice.id'),
+    nullable=True)#should be False
+    user_id = db.Column(db.Text, db.ForeignKey('user.id'))
+    ans_choice_1 = db.Column(db.Integer, default=False)
+    ans_choice_2  = db.Column(db.Integer, default=False)
+    ans_choice_3  = db.Column(db.Integer, default=False)
+    ans_choice_4 = db.Column(db.Integer, default=False)
+
+    def get_question(self):
+        return Multiplechoice.query.filter_by(question_id=Multiplechoice.id).order_by(Multiplechoice.id.desc())
+
+
 class Results_sum(db.Model):
     id = db.Column(db.Integer, primary_key = True)
     user_id = db.Column(db.Text, db.ForeignKey('user.id'))

@@ -2,8 +2,8 @@ from flask import render_template, flash, redirect, url_for, request, g,session
 from flask_login import current_user, login_user, logout_user, login_required
 from werkzeug.urls import url_parse
 from sqlalchemy import *
-from app.models import User,Test, Multiplechoice, FormativeAttempt,Results_sum, Module
-from app.forms import DIFFICULTY_RATING,LoginForm, CreateTestForm, QuestionForm, SubmitAttemptForm
+from app.models import User,Test, Multiplechoice, FormativeAttempt,Results_sum, Module, Studentanswer
+from app.forms import DIFFICULTY_RATING,LoginForm, CreateTestForm, QuestionForm, SubmitAttemptForm, StudentAnswerForm
 from app import app,db
 
 @app.route('/login', methods = ['GET', 'POST'])
@@ -106,6 +106,7 @@ def modules():
 
 #Delete a multiple choice question- may add in warning before
 @app.route("/mc_question/delete/<int:mc_question_id>")
+@login_required
 def delete_mcquestion(mc_question_id):
     mcquestion_to_delete=Multiplechoice.query.get_or_404(mc_question_id)
 
@@ -125,6 +126,7 @@ def delete_mcquestion(mc_question_id):
 
 #view individual mc question by id
 @app.route("/mc_question/<int:mc_question_id>", methods=['GET'])
+@login_required
 def mcquestion(mc_question_id):
     mcquestion=Multiplechoice.query.get_or_404(mc_question_id)
 
@@ -132,6 +134,7 @@ def mcquestion(mc_question_id):
 
 # edit mc questions
 @app.route("/mc_question/edit/<int:mc_question_id>", methods=['GET', 'POST'])
+@login_required
 def edit_mc_question(mc_question_id):
     mcquestion=Multiplechoice.query.get_or_404(mc_question_id)
     form=QuestionForm()
@@ -174,13 +177,48 @@ def edit_mc_question(mc_question_id):
 
 #view list of questions- opportunity to list by different queries
 @app.route("/question_list",methods=['GET'])
+@login_required
 def question_list():
     
     questions=Multiplechoice.query.all()
     
     return render_template('question_list.html',questions=questions)
 
+#Individual student answer attempt to test funtionality
+@app.route("/student_answer/<int:question_id>", methods=['GET', 'POST'])
+@login_required
+def student_answer(question_id):
 
+    form=StudentAnswerForm()
+    mc_question=Multiplechoice.query.get_or_404(question_id)
+    answers=Studentanswer.query.all()
+
+    if form.validate_on_submit():
+        if request.method == 'POST':
+            mc =Studentanswer(
+            user_id=current_user.id,
+            question_id=mc_question.id, 
+            ans_choice_1=form.ans_multi_select_1.data, 
+            ans_choice_2=form.ans_multi_select_2.data, 
+            ans_choice_3=form.ans_multi_select_3.data,
+            ans_choice_4=form.ans_multi_select_4.data,
+            
+        )
+        db.session.add(mc)
+        db.session.commit()
+        flash('Your answer is submitted!')
+        return redirect(url_for('index'))
+    return render_template('student_answer.html',mc_question=mc_question, answers=answers, form=form)
+
+#currently working on this-AJ, NOT WORKING
+@app.route("/student_answer_result/<int:question_id>", methods=['GET', 'POST'])
+@login_required
+def student_answer_result(question_id):
+    user_id=current_user.id
+    mc_question=Multiplechoice.query.get_or_404(question_id)
+    answers=Studentanswer.query.all()
+    
+    return render_template('student_answer_result.html', mc_question=mc_question,answers=answers, user_id=user_id)
 
 
 @app.route("/test_list",methods=['GET'])

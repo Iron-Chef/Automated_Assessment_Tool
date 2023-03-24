@@ -26,6 +26,14 @@ class QuestionForm(FlaskForm):
     feedback=StringField("Feedback:")
     submit = SubmitField("Add Question")
 
+class StudentAnswerForm(FlaskForm):
+    ans_multi_select_1 = BooleanField("Option 1")
+    ans_multi_select_2 = BooleanField("Option 2")
+    ans_multi_select_3 = BooleanField("Option 3")
+    ans_multi_select_4 = BooleanField("Option 4")
+        
+    submit = SubmitField("Form Complete")
+
 class CreateTestForm(FlaskForm):
     test_type= SelectField('Check to make test summative',choices=[(0,"formative"),(1,"summative")])
     question_id_1=SelectField('question',choices=[])
