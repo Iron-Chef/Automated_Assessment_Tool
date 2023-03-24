@@ -26,6 +26,14 @@ class User(UserMixin, db.Model):
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
 
+class Module(db.Model):
+    id = db.Column(db.Integer, primary_key = True)
+    code=db.Column(db.Text, default="")
+    name=db.Column(db.Text, default="")
+    credits=db.Column(db.Integer)
+
+
+
 class Test(db.Model):
     test_id=db.Column(db.Integer,primary_key=True)
     creator_id= db.Column(db.Integer,db.ForeignKey('user.id'), nullable=False)
@@ -55,8 +63,14 @@ class Multiplechoice(db.Model):
     ans_choice_3 = db.Column(db.Integer, default=False)
     answer_4= db.Column(db.Text, nullable=True)
     ans_choice_4 = db.Column(db.Integer, default=False)
+<<<<<<< HEAD
+    rating =db.Column(db.Unicode(40))
+    rating_num=db.Column(db.Integer)
+    #add tag column
+=======
     #add difficulty column
     topic_tag = db.Column(db.Text, default = "")
+>>>>>>> 2658bfa71b1b133938d531bd2552fbb30c3a07b4
     #add student answer foreignkey
     marks=db.Column(db.Integer, default=False)
     feedback = db.Column(db.Text, default="")
@@ -66,6 +80,21 @@ class Multiplechoice(db.Model):
     def __repr__(self):
 
         return "id: {}, Question: {}, Answer 1: {}, Answer 2: {}, Answer 3: {}, Answer 4: {}".format(self.id, self.question, self.answer_1, self.answer_2, self.answer_3, self.answer_4)
+
+class Studentanswer(db.Model):
+    
+    id=db.Column(db.Integer, primary_key=True)
+    question_id=db.Column(db.Integer, db.ForeignKey('multiplechoice.id'),
+    nullable=True)#should be False
+    user_id = db.Column(db.Text, db.ForeignKey('user.id'))
+    ans_choice_1 = db.Column(db.Integer, default=False)
+    ans_choice_2  = db.Column(db.Integer, default=False)
+    ans_choice_3  = db.Column(db.Integer, default=False)
+    ans_choice_4 = db.Column(db.Integer, default=False)
+
+    def get_question(self):
+        return Multiplechoice.query.filter_by(question_id=Multiplechoice.id).order_by(Multiplechoice.id.desc())
+
 
 class Results_sum(db.Model):
     id = db.Column(db.Integer, primary_key = True)

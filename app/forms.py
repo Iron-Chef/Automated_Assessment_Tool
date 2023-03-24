@@ -9,6 +9,8 @@ class LoginForm(FlaskForm):
     password = PasswordField('Password', validators = [DataRequired()])
     submit = SubmitField('Sign in')
 
+DIFFICULTY_RATING =[(5,u'★★★★★'), (4,u'★★★★'),(3,u'★★★'),(2,'★★'),(1,u'★')]
+
 class QuestionForm(FlaskForm):
     question=StringField(validators=[DataRequired(message="Question is required")])
     answer1=StringField (validators=[DataRequired(message="Minimum of two answer choices are required")])
@@ -19,10 +21,22 @@ class QuestionForm(FlaskForm):
     ans_multi_select_3 = BooleanField("Option 3")
     answer4=StringField(FlaskForm)
     ans_multi_select_4 = BooleanField("Option 4")
+<<<<<<< HEAD
+    rating = SelectField('Rating:',choices=DIFFICULTY_RATING, coerce=int)
+=======
 
     topic = StringField(validators = [DataRequired (message = "Please enter the topic of the question: ")])
+>>>>>>> 2658bfa71b1b133938d531bd2552fbb30c3a07b4
     marks=IntegerField(validators=[DataRequired(message="Please enter mark")]) 
     feedback=StringField("Feedback:")
+    submit = SubmitField("Add Question")
+
+class StudentAnswerForm(FlaskForm):
+    ans_multi_select_1 = BooleanField("Option 1")
+    ans_multi_select_2 = BooleanField("Option 2")
+    ans_multi_select_3 = BooleanField("Option 3")
+    ans_multi_select_4 = BooleanField("Option 4")
+        
     submit = SubmitField("Form Complete")
 
 class FillInTheBlankQuestionForm(FlaskForm):
