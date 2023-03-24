@@ -1,9 +1,9 @@
-from flask import render_template, flash, redirect, url_for, request, g,session
+from flask import render_template, flash, redirect, url_for, request, session, jsonify
 from flask_login import current_user, login_user, logout_user, login_required
 from werkzeug.urls import url_parse
 from sqlalchemy import *
 from app.models import User,Test, Multiplechoice, FormativeAttempt,Results_sum, Module, Studentanswer
-from app.forms import DIFFICULTY_RATING,LoginForm, CreateTestForm, QuestionForm, SubmitAttemptForm, StudentAnswerForm
+from app.forms import DIFFICULTY_RATING,LoginForm, CreateTestForm, QuestionForm, SubmitAttemptForm, StudentAnswerForm, ResultsForm, FillInTheBlankQuestionForm
 from app import app,db
 
 @app.route('/login', methods = ['GET', 'POST'])
@@ -81,10 +81,12 @@ def add_mc_question():
         ans_choice_3=form.ans_multi_select_3.data,
         answer_4=form.answer4.data, 
         ans_choice_4=form.ans_multi_select_4.data,
+        topic_tag = form.topic.data,
         marks=form.marks.data, 
         rating = dict(DIFFICULTY_RATING).get(form.rating.data),
         rating_num= form.rating.data,
-        feedback=form.feedback.data
+        feedback=form.feedback.data,
+        question_type = "multiple_choice"
         )
         if multi.ans_choice_1 + multi.ans_choice_2 + multi.ans_choice_3 + multi.ans_choice_4 == 1:
             db.session.add(multi)
@@ -174,13 +176,38 @@ def edit_mc_question(mc_question_id):
     form.feedback.data=mcquestion.feedback
     return render_template('edit_mc_question.html', mcquestion=mcquestion,form=form)
 
+# Add fill-in-the-blank questions
+@app.route("/add_fill_in_the_blank_question", methods = ['GET', 'POST'])
+def add_fill_in_the_blank_question():
 
-#view list of questions- opportunity to list by different queries
-@app.route("/question_list",methods=['GET'])
+    form = FillInTheBlankQuestionForm()
+
+    if form.validate_on_submit():
+
+        question = Multiplechoice(
+        user_id = current_user.id,
+        question = form.question.data, 
+        answer_1 = form.answer.data,
+        topic_tag = form.topic.data,
+        marks = form.marks.data, 
+        feedback = form.feedback.data,
+        question_type = "fill_in_the_blank"
+        )
+        db.session.add(question)
+        db.session.commit()
+
+    return render_template('add_fill_in_the_blank_question.html', form = form)
+
+#view list of questions- opportunity to list by different queries# Add code-challenge questions
+@app.route("/add_code_challenge_question.html", methods = ['GET', 'POST'])
+def add_code_challenge_question():
+    return render_template('add_code_challenge_question.html')
+
+@app.route("/question_list", methods = ['GET'])
 @login_required
 def question_list():
     
-    questions=Multiplechoice.query.all()
+    questions = Multiplechoice.query.all()
     
     return render_template('question_list.html',questions=questions)
 
@@ -302,15 +329,27 @@ def attempt_test(test_id):
   form.answer_3.choices = [(question_3.ans_choice_1,question_3.answer_1),(question_3.ans_choice_2,question_3.answer_2),(question_3.ans_choice_3,question_3.answer_3),(question_3.ans_choice_4,question_3.answer_4)]
   form.answer_4.choices = [(question_4.ans_choice_1,question_4.answer_1),(question_4.ans_choice_2,question_4.answer_2),(question_4.ans_choice_3,question_4.answer_3),(question_4.ans_choice_4,question_4.answer_4)]
   form.answer_5.choices = [(question_5.ans_choice_1,question_5.answer_1),(question_5.ans_choice_2,question_5.answer_2),(question_5.ans_choice_3,question_5.answer_3),(question_5.ans_choice_4,question_5.answer_4)]
+  marks=0
+
 
 
   if form.validate_on_submit():
-    formative_attempt=FormativeAttempt(test_id=test.test_id,user_id=current_user.id,answer_1=form.answer_1.data,answer_2=form.answer_2.data,answer_3=form.answer_3.data,answer_4=form.answer_4.data,answer_5=form.answer_5.data,answer_1_correct=form.answer_1_correct.data,answer_2_correct=form.answer_2_correct.data,answer_3_correct=form.answer_3_correct.data,answer_4_correct=form.answer_4_correct.data,answer_5_correct=form.answer_5_correct.data,score=form.score.data)
+    if form.answer_1.data =="1":
+        marks+=question_1.marks
+    if form.answer_2.data =="1":
+        marks+=question_2.marks
+    if form.answer_3.data =="1":
+        marks+=question_3.marks
+    if form.answer_4.data =="1":
+        marks+=question_4.marks
+    if form.answer_5.data =="1":
+        marks+=question_5.marks
+    formative_attempt=FormativeAttempt(test_id=test.test_id,user_id=current_user.id,answer_1=form.answer_1.data,answer_2=form.answer_2.data,answer_3=form.answer_3.data,answer_4=form.answer_4.data,answer_5=form.answer_5.data,question_id_1=question_1.id,question_id_2=question_2.id,question_id_3=question_3.id,question_id_4=question_4.id,question_id_5=question_5.id, marks=marks)
     db.session.add(formative_attempt)
     db.session.commit()
     flash('Test Submit Succesful!')
     return redirect(url_for('index'))
-  return render_template('attempt_test.html',title='Attempt Test',form=form,test=test,question_1=question_1,question_2=question_2,question_3=question_3,question_4=question_4,question_5=question_5)
+  return render_template('attempt_test.html',title='Attempt Test',form=form,test=test,question_1=question_1,question_2=question_2,question_3=question_3,question_4=question_4,question_5=question_5, marks=marks)
 
 @app.route("/results_s", methods=['GET'])
 @login_required

@@ -1,13 +1,87 @@
 {% extends "base.html" %}
 {% block content %}
-<div class="post_date_form">
+<div class="post_date_form"> </div>
 
+<h1>Hi, This is AAT Answer Sheet!</h1>
+
+<script type="text/javascript" src="{{ url_for('static', filename='/js/main.js') }}"></script>
+
+<p>Previous questions</p>
+<button type="button" class="collapsible">Python</button>
+<div class="content">
+  <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+</div>
+
+<!--JAVA COLLAPSIBLE-->
+<button type="button" class="collapsible">Java</button>
+<div class = "content">
+
+    {% for question in questions %} 
+    {% if question.topic_tag == "Java" %}
+    <hr>
+    <h5 class="question_title">{{ question.question }}</h5>
+    
+    {% if question.marks == 1 %}
+    {{ question.question }}
+    <p>This Question is worth {{ question.marks}} mark.</p>
+    {% else %} 
+    <p>This Question is worth {{ question.marks}} marks.</p>
+    {% endif %}
+    
+    {% if question.question_type == "fill_in_the_blank" %}
+    <p class = "correct"><b>Correct Answer: </b></p>{{question.answer_1}}
+    
+    {% else %}
+    <div>
+        {% if question.ans_choice_1==1 %}
+        <p class = "correct"><b>Correct Answer</b></p> (a) {{ question.answer_1}} 
+        {% else %} 
+        <p class = "incorrect"><b>Incorrect Answer</b></p> (a) {{ question.answer_1}} 
+        {% endif %}
+    </div>
+
+    <div>
+        {% if question.ans_choice_2==1 %}
+        <p class = "correct"><b>Correct Answer</b></p> (b) {{ question.answer_2}} 
+        {% else %} 
+        <p class = "incorrect"><b>Incorrect Answer</b></p> (b) {{ question.answer_2}} 
+        {% endif %}
+    </div>
+
+    <div>
+        {% if question.ans_choice_3==1 %}
+        <p class = "correct"><b>Correct Answer</b></p> (c) {{ question.answer_3}} 
+        {% else %} 
+        <p class = "incorrect"><b>Incorrect Answer</b></p> (c) {{ question.answer_3}} 
+        {% endif %}
+    </div>
+
+    <div>
+        {% if question.ans_choice_4==1 %}
+        <p class = "correct"><b>Correct Answer</b></p> (d) {{ question.answer_4}} 
+        {% else %} 
+        <p class = "incorrect"><b>Incorrect Answer</b></p> (d) {{ question.answer_4}} 
+        {% endif %}
+    </div>
+
+    <br>
+    {% if question.feedback%}
+    <p class = "feedback">Feedback:</p> {{ question.feedback}}
+    {% endif %}
+
+    <a href = "{{ url_for('edit_mc_question', mc_question_id=question.id)}}" class = "btn btn-outline-secondary btn-sm">Edit Question</a>
+    <a href = "{{ url_for('delete_mcquestion', mc_question_id=question.id)}}" class = "btn btn-outline-danger btn-sm">Delete Question</a>
+
+    {% endif %} <!--This is for question type-->
+    {% endif %} <!--This is for the topic-->
+    {% endfor %}
 
 </div>
-<h1>Hi, This is AAT Answer Sheet!</h1>
-    
+
 {{ total }}
+
 {% for question in questions %} 
+<<<<<<< HEAD
 
 <style type="text/css">
     .tg  {border-collapse:collapse;border-spacing:0;}
@@ -88,10 +162,86 @@
     </table></div>
 
 
+=======
+
+<h4 class="question_title">{{loop.index}}. {{ question.question }}</h2>
+
+{% if question.marks == 1 %}
+{{ question.question }}
+<p>This Question is worth {{ question.marks}} mark.</p>
+{% else %} 
+<p>This Question is worth {{ question.marks}} marks.</p>
+{% endif %}
+
+{% if question.question_type == "fill_in_the_blank" %}
+<p id="correct"><b>Correct Answer</b></p>
+{{question.answer_1}}
+
+{% else %}
+<p>(a) {{ question.answer_1}} 
+    {% if question.ans_choice_1==1 %}
+    <p id="correct"><b>Correct Answer</b></p>
+    {% else %} 
+    <p id="incorrect">Incorrect Answer</p>
+    {% endif %}
+</p>
+
+<p>(b) {{ question.answer_2}} 
+    {% if question.ans_choice_2==1 %}
+    <p id="correct"><b>Correct Answer</b></p>
+    {% else %} 
+    <p id="incorrect">Incorrect Answer</p>
+    {% endif %}
+</p>
+
+{% if question.answer_3 %}
+<p>(c) {{ question.answer_3}} 
+    {% if question.ans_choice_3==1 %}
+    <p id="correct"><b>Correct Answer</b></p>
+    {% else %} 
+    <p id="incorrect">Incorrect Answer</p>
+    {% endif %}
+</p>
+{% endif %}
+
+{% if question.answer_4 %}
+<p>(d) {{ question.answer_4}} 
+    {% if question.ans_choice_4==1 %}
+    <p id="correct"><b>Correct Answer</b></p>
+    {% else %} 
+    <p id="incorrect">Incorrect Answer</p>
+    {% endif %}
+</p>
+{% endif %}
+{% endif %} <!--This one is for checking question type-->
+
+{% if question.feedback%}
+<h3>Feedback:</h3> <p id="feedback">{{ question.feedback}}</p>
+{% endif %}
+>>>>>>> 2658bfa71b1b133938d531bd2552fbb30c3a07b4
 
 <a href="{{ url_for('edit_mc_question', mc_question_id=question.id)}}" class="btn btn-outline-secondary btn-sm">Edit Question</a>
 <a href="{{ url_for('delete_mcquestion', mc_question_id=question.id)}}" class="btn btn-outline-danger btn-sm">Delete Question</a>
 <hr>
 {% endfor %}
 
+<!--Script for collapsible sections-->
+<script>
+
+    var coll = document.getElementsByClassName("collapsible");
+    var i;
+    
+    for (i = 0; i < coll.length; i++) {
+      coll[i].addEventListener("click", function() {
+        this.classList.toggle("active");
+        var content = this.nextElementSibling;
+        if (content.style.maxHeight){
+          content.style.maxHeight = null;
+        } else {
+          content.style.maxHeight = content.scrollHeight + "px";
+        }
+      });
+    }
+
+</script>
 {% endblock %}
