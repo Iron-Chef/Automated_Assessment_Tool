@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, BooleanField, SubmitField, IntegerField
+from wtforms import StringField, PasswordField, BooleanField, SubmitField, IntegerField, SelectField
 from wtforms.validators import DataRequired
 from wtforms_sqlalchemy.fields import QuerySelectField
 from app.models import Multiplechoice
@@ -25,12 +25,20 @@ class QuestionForm(FlaskForm):
     feedback=StringField("Feedback:")
     submit = SubmitField("Form Complete")
 
-def MC_query():
+class TestChoice(FlaskForm):
+    question_module = SelectField('module', choices=[])
+    test_type = SelectField('Test Type', choices=['Formative','Summative'])
+    test_title = StringField('Test Title', [DataRequired()])
+
+def Q_query():
     return Multiplechoice.query
 
-class MCChoiceForm(FlaskForm):
-    question_1 = QuerySelectField(query_factory=MC_query, allow_blank=True, get_label='question')
-    question_2 = QuerySelectField(query_factory=MC_query, allow_blank=True, get_label='question')
-    question_3 = QuerySelectField(query_factory=MC_query, allow_blank=True, get_label='question')
-    question_4 = QuerySelectField(query_factory=MC_query, allow_blank=True, get_label='question')
-    question_5 = QuerySelectField(query_factory=MC_query, allow_blank=True, get_label='question')
+class QChoiceForm(FlaskForm):
+    question_1 = QuerySelectField(query_factory=Q_query, allow_blank=False, get_label='question')
+    question_2 = QuerySelectField(query_factory=Q_query, allow_blank=False, get_label='question')
+    question_3 = QuerySelectField(query_factory=Q_query, allow_blank=False, get_label='question')
+    question_4 = QuerySelectField(query_factory=Q_query, allow_blank=False, get_label='question')
+    question_5 = QuerySelectField(query_factory=Q_query, allow_blank=False, get_label='question')
+
+class EmptyForm(FlaskForm):
+  submit = SubmitField('Submit')

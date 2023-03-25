@@ -15,10 +15,11 @@ class User(UserMixin, db.Model):
     email = db.Column(db.String(120), index=True, unique=True)
     year = db.Column(db.Integer)
     is_lecturer = db.Column(db.Boolean, nullable = False, default = False)
+    testauthor = db.relationship('Formativetest', backref = 'tstathr', lazy=True)
 
 
     def __repr__(self):
-        return "Student ID: {}, First name: {}, Surnam: {}, Email: {}, Year: {}".format(self.id, self.forename, self.surname, self.email, self.year)
+        return "Student ID: {}, First name: {}, Surname: {}, Email: {}, Year: {}".format(self.id, self.forename, self.surname, self.email, self.year)
 
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
@@ -26,10 +27,26 @@ class User(UserMixin, db.Model):
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
 
+class Module(db.Model):
+    code = db.Column(db.Integer, primary_key = True)
+    name = db.Column(db.Text, nullable = False)
+    formtestref = db.relationship('Formativetest', backref = 'mdls', lazy=True)
+
+Mc_Ft = db.Table('Mc_Ft',
+    db.Column('Mc_id', db.Integer, db.ForeignKey('multiplechoice.id'), primary_key=True),
+    db.Column('Ft_id', db.Integer, db.ForeignKey('formativetest.id'), primary_key=True)    
+)
+
+class Formativetest(db.Model):
+    id = db.Column(db.Integer, primary_key = True)
+    testtitle = db.Column(db.Text,)
+    author = db.Column(db.Text, db.ForeignKey('user.id'))
+    module_code = db.Column(db.Integer, db.ForeignKey('module.code'))
+    linkedquestions = db.relationship('Multiplechoice', secondary = Mc_Ft, backref=db.backref('linkquestions', lazy=True),lazy='subquery')
+
 class Multiplechoice(db.Model):
     id = db.Column(db.Integer, primary_key = True)
     user_id=db.Column(db.Text, db.ForeignKey('user.id'))
-    # add foreignkey to summative and formative or vice versa
     question= db.Column(db.Text, default="")
     answer_1= db.Column(db.Text, default="")
     ans_choice_1 = db.Column(db.Integer, default=False)
@@ -39,30 +56,18 @@ class Multiplechoice(db.Model):
     ans_choice_3 = db.Column(db.Integer, default=False)
     answer_4= db.Column(db.Text, nullable=True)
     ans_choice_4 = db.Column(db.Integer, default=False)
-    #add difficulty column
-    #add tag column
-    #add student answer foreignkey
+    topic_tag = db.Column(db.Text, default = "")
     marks=db.Column(db.Integer, default=False)
     feedback = db.Column(db.Text, default="")
-    
-   
+    question_type = db.Column(db.Text, nullable = False)
 
+    
+    
     def __repr__(self):
         
         return '{}'.format(self.id)
 
-class FormativeTest(db.Model):
-    id = db.Column(db.Integer, primary_key = True)
-    author = db.Column(db.Text)
-    mcquestion_1_id = db.Column(db.Integer, nullable=True)
-    mcquestion_1 =  db.Column(db.Text, default="")
-    mcquestion_2_id = db.Column(db.Integer, nullable=True)
-    mcquestion_2 =  db.Column(db.Text, default="")
-    mcquestion_3_id = db.Column(db.Integer, nullable=True)
-    mcquestion_3 =  db.Column(db.Text, default="")
-    mcquestion_4_id = db.Column(db.Integer, nullable=True)
-    mcquestion_4 =  db.Column(db.Text, default="")
-    mcquestion_5_id = db.Column(db.Integer, nullable=True)
-    mcquestion_5 =  db.Column(db.Text, default="")
+
+
 
 
