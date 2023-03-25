@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, BooleanField, SubmitField, IntegerField,SelectField
-from wtforms.validators import DataRequired
+from wtforms.validators import DataRequired, NumberRange
 from wtforms.widgets import TextArea
 
 
@@ -21,13 +21,13 @@ class QuestionForm(FlaskForm):
     ans_multi_select_3 = BooleanField("Option 3")
     answer4=StringField(FlaskForm)
     ans_multi_select_4 = BooleanField("Option 4")
-<<<<<<< HEAD
+
     rating = SelectField('Rating:',choices=DIFFICULTY_RATING, coerce=int)
-=======
+
 
     topic = StringField(validators = [DataRequired (message = "Please enter the topic of the question: ")])
->>>>>>> 2658bfa71b1b133938d531bd2552fbb30c3a07b4
-    marks=IntegerField(validators=[DataRequired(message="Please enter mark")]) 
+
+    marks=IntegerField(validators=[DataRequired(message="Please enter mark"),  NumberRange(min=0, message='Must enter a number greater than 0')])
     feedback=StringField("Feedback:")
     submit = SubmitField("Add Question")
 

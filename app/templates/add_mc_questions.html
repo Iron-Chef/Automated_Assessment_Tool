@@ -2,7 +2,7 @@
 
 {% block content %}
     <h1>Add Multiple Choice Questions</h1>
-    <div> <p>Add Multiple Choice Questions</p>
+    <div> <p>Instructions: Add a multiple choice question and select correct answer.</p>
         <form action="", method="post" novalidate>
             {{ form.hidden_tag() }}
 
@@ -44,7 +44,7 @@
             </p>
 
             <p>
-                {{ form.topic.label }}
+                {{ form.topic.label }}:
                 {{ form.topic (size=100) }}
                 {% for error in form.topic.errors %} 
                 <span style="color: red;">[{{ error }}]</span>
@@ -64,7 +64,7 @@
                 
             </p>
             <p>
-                {{ form.rating }}
+              Difficulty:  {{ form.rating }}
             </p>
         </div>
             <p>

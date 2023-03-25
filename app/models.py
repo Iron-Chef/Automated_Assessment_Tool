@@ -63,14 +63,14 @@ class Multiplechoice(db.Model):
     ans_choice_3 = db.Column(db.Integer, default=False)
     answer_4= db.Column(db.Text, nullable=True)
     ans_choice_4 = db.Column(db.Integer, default=False)
-<<<<<<< HEAD
+
     rating =db.Column(db.Unicode(40))
     rating_num=db.Column(db.Integer)
     #add tag column
-=======
+
     #add difficulty column
     topic_tag = db.Column(db.Text, default = "")
->>>>>>> 2658bfa71b1b133938d531bd2552fbb30c3a07b4
+
     #add student answer foreignkey
     marks=db.Column(db.Integer, default=False)
     feedback = db.Column(db.Text, default="")

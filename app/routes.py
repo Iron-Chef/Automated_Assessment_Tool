@@ -154,6 +154,7 @@ def edit_mc_question(mc_question_id):
         mcquestion.feedback=form.feedback.data
         mcquestion.rating = dict(DIFFICULTY_RATING).get(form.rating.data)
         mcquestion.rating_num= form.rating.data
+        mcquestion.topic_tag = form.topic.data
         db.session.add(mcquestion)
         if mcquestion.ans_choice_1 + mcquestion.ans_choice_2 + mcquestion.ans_choice_3 + mcquestion.ans_choice_4 == 1:
             db.session.commit()
@@ -174,7 +175,8 @@ def edit_mc_question(mc_question_id):
     form.marks.data=mcquestion.marks
     form.rating.data=mcquestion.rating
     form.feedback.data=mcquestion.feedback
-    return render_template('edit_mc_question.html', mcquestion=mcquestion,form=form)
+    form.topic.data=mcquestion.topic_tag
+    return render_template('edit_mc_question.html', title="Edit Questions", mcquestion=mcquestion,form=form)
 
 # Add fill-in-the-blank questions
 @app.route("/add_fill_in_the_blank_question", methods = ['GET', 'POST'])
