@@ -129,8 +129,13 @@ def formtests():
     allFormtests = Formativetest.query.all()
     return render_template('Formative_test_list.html', title = 'Formative tests list', allFormtests=allFormtests)
 
+@app.route("/Formative_test/<int:Form_test_id>", methods=['GET'])
+def formtest(Form_test_id):
+    formtest = Formativetest.query.get_or_404(Form_test_id)
+    formtestquestions = formtest.linkedquestions
+    return render_template('Formative_test.html', title = formtest.testtitle , formtest=formtest, formtestquestions=formtestquestions)
 
-@app.route("/Formative_test_list/<int:Form_test_id>/delete", methods=['POST'])
+@app.route("/Formative_test/<int:Form_test_id>/delete", methods=['POST'])
 @login_required
 def delete_test(Form_test_id):
   test = Formativetest.query.get_or_404(Form_test_id)
@@ -138,3 +143,5 @@ def delete_test(Form_test_id):
   db.session.commit()
   flash('Your Post has been deleted')
   return redirect('/Formative_test_list.html')
+
+
