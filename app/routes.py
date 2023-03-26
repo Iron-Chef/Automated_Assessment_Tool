@@ -358,10 +358,10 @@ def attempt_test(test_id):
 def results_s():
     results_sum = Results_sum.query.all()
     num_marked = len(Results_sum.query.all())
-    total_mark = Results_sum.query.with_entities(func.sum(Results_sum.mark).label('total')).first().total
-    average_mark = int(total_mark/num_marked)
+    total_marks = Results_sum.query.with_entities(func.sum(Results_sum.total_mark).label('total')).first().total
+    average_mark = int(total_marks/num_marked)
 
-    return render_template('results_s.html', title='Results', results_sum=results_sum, num_marked=num_marked, total_mark=total_mark, average_mark=average_mark)
+    return render_template('results_s.html', title='Results', results_sum=results_sum, num_marked=num_marked, total_marks=total_marks, average_mark=average_mark)
 
 # SP - lecturer Stats - individual students results page
 @app.route("/results_s/<int:user_id>", methods=['GET'])
