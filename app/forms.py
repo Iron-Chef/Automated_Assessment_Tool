@@ -21,12 +21,9 @@ class QuestionForm(FlaskForm):
     ans_multi_select_3 = BooleanField("Option 3")
     answer4=StringField(FlaskForm)
     ans_multi_select_4 = BooleanField("Option 4")
-<<<<<<< HEAD
     rating = SelectField('Rating:',choices=DIFFICULTY_RATING, coerce=int)
-=======
 
     topic = StringField(validators = [DataRequired (message = "Please enter the topic of the question: ")])
->>>>>>> 2658bfa71b1b133938d531bd2552fbb30c3a07b4
     marks=IntegerField(validators=[DataRequired(message="Please enter mark")]) 
     feedback=StringField("Feedback:")
     submit = SubmitField("Add Question")
