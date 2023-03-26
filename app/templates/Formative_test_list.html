@@ -1,10 +1,10 @@
 {% extends "base.html" %}
 {% block content %}
 
-{% for question in allFormtests %}
-    <p>Test Title:{{ question.testtitle }}
-    Test module:{{ question.module_code }} : {{ question.mdls.name }}
-    Test author:{{ question.tstathr.forename}} {{question.tstathr.surname}}</p>
+<h1>Formative Test List</h1>
+
+{% for test in allFormtests %}
+     <p>Test Title: {{ test.testtitle }}, Test module: {{ test.module_code }} - {{ test.mdls.name }}, Test author: {{ test.tstathr.forename}} {{ test.tstathr.surname}}</p>
 {% endfor %}
 
 {% endblock %}

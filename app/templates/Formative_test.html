@@ -1,11 +1,46 @@
 {% extends "base.html" %}
 {% block content %}
-<p>Test Title:{{ formtest.testtitle }}
-    Test module:{{ formtest.module_code }} : {{ formtest.mdls.name }}
-    Test author:{{ formtest.tstathr.forename}} {{ formtest.tstathr.surname}}</p>
+    <p>Test Title: {{ formtest.testtitle }}</p>
+    <p>Test module: {{ formtest.module_code }} - {{ formtest.mdls.name }}</p>
+    <p>Test author: {{ formtest.tstathr.forename}} {{ formtest.tstathr.surname}}</p>
 
 {% for question in formtestquestions %}
-   {{ question.question }}
+    {% if question.question != '-' %}
+        <p>{{ loop.index }}.{{ question.question }}</p>
+        <p>question type:  {{question.question_type}}</p>
+
+        {% if question.ans_choice_1==1 and question.question_type == 'Multiplechoice' %}
+            <p>answer: {{question.answer_1}} - correct anwser</p>
+        {% else %}
+            <p>answer: {{question.answer_1}}</p>
+        {% endif %}
+
+        {% if question.answer_2 != '' %}
+            {% if question.ans_choice_2==1 and question.question_type == 'Multiplechoice' %}
+                <p>answer: {{question.answer_2}} - correct anwser</p>
+            {% else %}
+                <p>answer: {{question.answer_2}}</p>
+            {% endif %}
+        {% endif %}
+
+        {% if question.answer_3 != ''%}
+            {% if question.ans_choice_3==1 and question.question_type == 'Multiplechoice' %}
+                <p>answer: {{question.answer_3}} - correct anwser</p>
+            {% else %}
+                <p>answer: {{question.answer_3}}</p>
+            {% endif %}
+        {% endif %}
+
+        {% if question.answer_4 != ''%}
+            {% if question.ans_choice_4==1 and question.question_type == 'Multiplechoice' %}
+            <p>answer: {{question.answer_4}} - correct anwser</p>
+            {% else %}
+            <p>answer: {{question.answer_4}}</p>
+            {% endif %}
+
+        
+        {% endif %}
+    {% endif %}
 {% endfor %}
 
 {% endblock %}
