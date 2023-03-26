@@ -351,6 +351,8 @@ def attempt_test(test_id):
     return redirect(url_for('index'))
   return render_template('attempt_test.html',title='Attempt Test',form=form,test=test,question_1=question_1,question_2=question_2,question_3=question_3,question_4=question_4,question_5=question_5, marks=marks)
 
+
+# SP - lecturer Stats - Summative results page 
 @app.route("/results_s", methods=['GET'])
 @login_required
 def results_s():
@@ -361,6 +363,7 @@ def results_s():
 
     return render_template('results_s.html', title='Results', results_sum=results_sum, num_marked=num_marked, total_mark=total_mark, average_mark=average_mark)
 
+# SP - lecturer Stats - individual students results page
 @app.route("/results_s/<int:user_id>", methods=['GET'])
 @login_required
 def results_student(user_id):
