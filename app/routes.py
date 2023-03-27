@@ -76,7 +76,7 @@ def result():
 @login_required
 def choose_create_test():
     form = TestChoice()
-    form.question_module.choices = [(module.code, module.name) for module in Module.query.all()]
+    form.question_module.choices = [(module.id, module.name) for module in Module.query.all()]
     if form.test_type.data == 'Formative':
         if form.validate_on_submit():
             formtest= Formativetest(
