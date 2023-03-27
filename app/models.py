@@ -18,14 +18,16 @@ class User(UserMixin, db.Model):
     testauthor = db.relationship('Formativetest', backref = 'tstathr', lazy=True)
 
 
+
     def __repr__(self):
-        return "Student ID: {}, First name: {}, Surname: {}, Email: {}, Year: {}".format(self.id, self.forename, self.surname, self.email, self.year)
+        return "Student ID: {}, First name: {}, Surnam: {}, Email: {}, Year: {}".format(self.id, self.forename, self.surname, self.email, self.year)
 
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
 
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
+
 
 class Module(db.Model):
     id = db.Column(db.Integer, primary_key = True)
@@ -49,6 +51,7 @@ class Formativetest(db.Model):
 class Multiplechoice(db.Model):
     id = db.Column(db.Integer, primary_key = True)
     user_id=db.Column(db.Text, db.ForeignKey('user.id'))
+    # add foreignkey to summative and formative or vice versa
     question= db.Column(db.Text, default="")
     answer_1= db.Column(db.Text, default="")
     ans_choice_1 = db.Column(db.Integer, default=False)

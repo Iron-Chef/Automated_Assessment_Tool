@@ -68,6 +68,7 @@ def create_test():
 @login_required
 def question():
     form=QuestionForm()
+    
     if form.validate_on_submit():
         multi= Multiplechoice(
         user_id=current_user.id,

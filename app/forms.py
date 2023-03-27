@@ -4,7 +4,6 @@ from wtforms.validators import DataRequired, Optional
 from wtforms_sqlalchemy.fields import QuerySelectField
 from app.models import Multiplechoice
 
-
 class LoginForm(FlaskForm):
     username = StringField('Your ID number', validators = [DataRequired()])
     password = PasswordField('Password', validators = [DataRequired()])
