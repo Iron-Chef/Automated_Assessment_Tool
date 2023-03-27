@@ -28,8 +28,10 @@ class User(UserMixin, db.Model):
         return check_password_hash(self.password_hash, password)
 
 class Module(db.Model):
-    code = db.Column(db.Integer, primary_key = True)
+    id = db.Column(db.Integer, primary_key = True)
+    code=db.Column(db.Text, default="")
     name = db.Column(db.Text, nullable = False)
+    credits=db.Column(db.Integer)
     formtestref = db.relationship('Formativetest', backref = 'mdls', lazy=True)
 
 Mc_Ft = db.Table('Mc_Ft',
@@ -41,7 +43,7 @@ class Formativetest(db.Model):
     id = db.Column(db.Integer, primary_key = True)
     testtitle = db.Column(db.Text,)
     author = db.Column(db.Text, db.ForeignKey('user.id'))
-    module_code = db.Column(db.Integer, db.ForeignKey('module.code'))
+    module_code = db.Column(db.Integer, db.ForeignKey('module.id'))
     linkedquestions = db.relationship('Multiplechoice', secondary = Mc_Ft, backref=db.backref('linkquestions', lazy=True),lazy='subquery')
 
 class Multiplechoice(db.Model):
