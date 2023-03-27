@@ -68,7 +68,6 @@ def create_test():
 @login_required
 def question():
     form=QuestionForm()
-    
     if form.validate_on_submit():
         multi= Multiplechoice(
         user_id=current_user.id,
@@ -341,3 +340,18 @@ def delete_test(Form_test_id):
   return redirect('/Formative_test_list.html')
 
 
+
+@app.route("/Formative_test_list", methods=['GET'])
+def formtests():
+    allFormtests = Formativetest.query.all()
+    return render_template('Formative_test_list.html', title = 'Formative tests list', allFormtests=allFormtests)
+
+
+@app.route("/Formative_test_list/<int:Form_test_id>/delete", methods=['POST'])
+@login_required
+def delete_test(Form_test_id):
+  test = Formativetest.query.get_or_404(Form_test_id)
+  db.session.delete(test)
+  db.session.commit()
+  flash('Your Post has been deleted')
+  return redirect('/Formative_test_list.html')

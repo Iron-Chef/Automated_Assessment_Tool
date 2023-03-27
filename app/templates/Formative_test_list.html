@@ -1,42 +1,10 @@
 {% extends "base.html" %}
 {% block content %}
 
-<<<<<<< HEAD
 <h1>Formative Test List</h1>
 
 {% for test in allFormtests %}
      <p>Test Title: {{ test.testtitle }}, Test module: {{ test.module_code }} - {{ test.mdls.name }}, Test author: {{ test.tstathr.forename}} {{ test.tstathr.surname}}</p>
 {% endfor %}
-=======
-<h1>{{question_1.question}}</h1>
-<h3>1) {{question_1.answer_1}}</h2>
-<h3>2) {{question_1.answer_2}}</h2>
-<h3>3) {{question_1.answer_3}}</h2>
-<h3>4) {{question_1.answer_4}}</h2>
-
-<h1>{{question_2.question}}</h1>
-<h3>1) {{question_2.answer_1}}</h2>
-<h3>2) {{question_2.answer_2}}</h2>
-<h3>3) {{question_2.answer_3}}</h2>
-<h3>4) {{question_2.answer_4}}</h2>
-
-<h1>{{question_3.question}}</h1>
-<h3>1) {{question_3.answer_1}}</h2>
-<h3>2) {{question_3.answer_2}}</h2>
-<h3>3) {{question_3.answer_3}}</h2>
-<h3>4) {{question_3.answer_4}}</h2>
-
-<h1>{{question_4.question}}</h1>
-<h3>1) {{question_4.answer_1}}</h2>
-<h3>2) {{question_4.answer_2}}</h2>
-<h3>3) {{question_4.answer_3}}</h2>
-<h3>4) {{question_4.answer_4}}</h2>
-
-<h1>{{question_5.question}}</h1>
-<h3>1) {{question_5.answer_1}}</h2>
-<h3>2) {{question_5.answer_2}}</h2>
-<h3>3) {{question_5.answer_3}}</h2>
-<h3>4) {{question_5.answer_4}}</h2>
->>>>>>> c3d7b89 (relationship rather than extra db)
 
 {% endblock %}
