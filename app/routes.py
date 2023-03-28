@@ -508,8 +508,8 @@ def choose_create_test():
             return redirect('/create_form_test')
     else:
         if form.validate_on_submit():
-            flash('this is not yet possible')
-            return redirect('/create_form_test') 
+            return redirect('/create_test')
+
     return render_template('choose_create_test.html', title = 'Create New Assesment', form=form)
 
 #this allows questions to be added to formative test(sorry about how long it is) - RJ
