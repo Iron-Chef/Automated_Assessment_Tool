@@ -180,7 +180,7 @@
 <button type="button" class="collapsible">Miscellaneous</button>
 <div class="content" id = "collapsible_misc">
   {% for question in questions %}
-  {% if question.subject_tag == "SQL" %}
+  {% if question.subject_tag == "Other" %}
 
   {% if question.question_type == "fill_in_the_blank" %}
   {% with fill_in_the_blank_question = question %}

@@ -22,7 +22,14 @@ class QuestionForm(FlaskForm):
     answer4=StringField(FlaskForm)
     ans_multi_select_4 = BooleanField("Option 4")
     rating = SelectField('Rating:',choices=DIFFICULTY_RATING, coerce=int)
-
+    subject = RadioField("Subject: ", choices = [
+        ("Java", "Java"),
+        ("JavaScript", "JavaScript"),
+        ("Python", "Python"),
+        ("SQL", "SQL"),
+        ("Other", "Other"),
+        ],
+        coerce = str, validators = [DataRequired()])
     topic = StringField(validators = [DataRequired (message = "Please enter the topic of the question: ")])
     marks=IntegerField(validators=[DataRequired(message="Please enter mark")]) 
     feedback=StringField("Feedback:")
@@ -38,6 +45,7 @@ class StudentAnswerForm(FlaskForm):
         ("JavaScript", "JavaScript"),
         ("Python", "Python"),
         ("SQL", "SQL"),
+        ("Other", "Other"),
         ],
         coerce = str, validators = [DataRequired()])
     marks = IntegerField(validators=[DataRequired(message="Please enter mark")]) 
