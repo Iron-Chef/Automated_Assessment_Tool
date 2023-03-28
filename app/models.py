@@ -17,7 +17,6 @@ class User(UserMixin, db.Model):
     year = db.Column(db.Integer)
     is_lecturer = db.Column(db.Boolean, nullable = False, default = False)
     results_s = db.relationship('Results_sum', backref='user', lazy=True)
-    date = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
 
     def __repr__(self):
         return "Student ID: {}, First name: {}, Surnam: {}, Email: {}, Year: {}".format(self.id, self.forename, self.surname, self.email, self.year)

@@ -1,0 +1,25 @@
+
+<!--LECTURER HOME PAGE VIEW-->
+
+{% extends "base.html" %}
+
+{% block content %}
+
+
+    <h1>Home</h1>
+
+    <h1>Hi, {{ current_user.forename }} {{ current_user.surname }}!</h1>
+
+    {% if current_user.is_lecturer == 1 %}
+    <hr>
+    <h2>Questions</h2>
+    <a href="{{ url_for('question_list') }}" class="btn btn-outline-primary btn-sm">Question List</a>
+    <a href="{{ url_for('add_mc_question') }}" class="btn btn-outline-primary btn-sm">Add Multiple Choice Question</a>
+    <a href="{{ url_for('add_fill_in_the_blank_question') }}" class="btn btn-outline-primary btn-sm">Add Fill In The Blank Question</a>
+    <a href="{{ url_for('add_code_challenge_question') }}" class="btn btn-outline-primary btn-sm">Add Code Challenge Question</a>
+
+    {%  else %}
+    {% endif %}
+
+
+{% endblock %}

@@ -33,6 +33,25 @@ def login():
 
     return render_template('login.html', title = 'Login', form = form)
 
+''' Emma - attempting to separate the types of user at log in stage
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        
+        user_type = retrieve_user_type(username, password)
+
+        if user_type == 'lecturer':
+            session['user_type'] = 'lecturer'
+            return redirect(url_for('home_lecturer'))
+        elif user_type == 'student':
+            session['user_type'] = 'student'
+            return redirect(url_for('home_student'))
+        else:
+            flash('Invalid username or password')
+        return redirect(url_for('login'))
+'''
+
 @app.route('/logout')
 def logout():
     logout_user()
@@ -331,8 +350,6 @@ def attempt_test(test_id):
   form.answer_5.choices = [(question_5.ans_choice_1,question_5.answer_1),(question_5.ans_choice_2,question_5.answer_2),(question_5.ans_choice_3,question_5.answer_3),(question_5.ans_choice_4,question_5.answer_4)]
   marks=0
 
-
-
   if form.validate_on_submit():
     if form.answer_1.data =="1":
         marks+=question_1.marks
@@ -373,4 +390,46 @@ def results_student(user_id):
     count_entries = len(Results_sum.query.filter_by(user_id=user_id).all())
     return render_template('res_student.html', title='Student results', individ_results=individ_results, entries=entries, count_entries=count_entries)
 
+''' Emma - Attempting to separate student and lecturer by diverting to 
+different 'home' pages once logged in
 
+@app.route('/home_lecturer/lecturer')
+def home_lecturer():
+    
+    return render_template('home_lecturer.html')
+
+@app.route('/home_student/student')
+def home_student():
+    
+    return render_template('home_student.html')
+'''
+
+''' Emma - export html table of results to a pdf format using pdf library pdfkit
+Have to install >> "pip install fpdf"
+Taken from - https://roytuts.com/generate-pdf-report-from-mysql-database-using-python-flask/
+
+@app.route('/export_to_pdf')
+def export_to_pdf():
+    # get the table of results from your database or form submission
+    results = get_results()
+
+    rendered_template = render_template('your_results.html', results=results)
+
+    # create the pdf page view
+    options = {
+        'page-size': 'Letter',
+        'margin-top': '0.75in',
+        'margin-right': '0.75in',
+        'margin-bottom': '0.75in',
+        'margin-left': '0.75in',
+    }
+
+    # convert the HTML template to PDF using pdfkit
+    pdf = pdfkit.from_string(rendered_template, False, options=options)
+
+    # send the PDF file as a response to the user
+    response = make_response(pdf)
+    response.headers['Content-Type'] = 'application/pdf'
+    response.headers['Content-Disposition'] = 'attachment; filename=results.pdf'
+    return response
+'''
