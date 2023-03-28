@@ -81,11 +81,12 @@ def add_mc_question():
         ans_choice_3=form.ans_multi_select_3.data,
         answer_4=form.answer4.data, 
         ans_choice_4=form.ans_multi_select_4.data,
-        topic_tag = form.topic.data,
+        subject_tag = form.subject.data,
         marks=form.marks.data, 
         rating = dict(DIFFICULTY_RATING).get(form.rating.data),
         rating_num= form.rating.data,
         feedback=form.feedback.data,
+        topic_tag = form.topic.data,
         question_type = "multiple_choice"
         )
         if multi.ans_choice_1 + multi.ans_choice_2 + multi.ans_choice_3 + multi.ans_choice_4 == 1:
@@ -113,18 +114,16 @@ def delete_mcquestion(mc_question_id):
     mcquestion_to_delete=Multiplechoice.query.get_or_404(mc_question_id)
 
     try:
-        db.session.delete (mcquestion_to_delete)
+        db.session.delete(mcquestion_to_delete)
         db.session.commit()
         flash("Question deleted!")
 
-        questions=Multiplechoice.query.all()
-        return render_template('question_list.html',questions=questions)
+        return redirect('/question_list')
 
     except:
         flash("Problem deleting question, please check with Admin!")
 
-        questions=Multiplechoice.query.all()
-        return render_template('question_list.html',questions=questions)
+        return redirect('/question_list')
 
 #view individual mc question by id
 @app.route("/mc_question/<int:mc_question_id>", methods=['GET'])
@@ -138,8 +137,8 @@ def mcquestion(mc_question_id):
 @app.route("/mc_question/edit/<int:mc_question_id>", methods=['GET', 'POST'])
 @login_required
 def edit_mc_question(mc_question_id):
-    mcquestion=Multiplechoice.query.get_or_404(mc_question_id)
-    form=QuestionForm()
+    mcquestion = Multiplechoice.query.get_or_404(mc_question_id)
+    form = QuestionForm()
     if form.validate_on_submit():
         mcquestion.question=form.question.data
         mcquestion.answer_1=form.answer1.data
@@ -188,26 +187,160 @@ def add_fill_in_the_blank_question():
         user_id = current_user.id,
         question = form.question.data, 
         answer_1 = form.answer.data,
-        topic_tag = form.topic.data,
+        subject_tag = form.subject.data,
         marks = form.marks.data, 
         feedback = form.feedback.data,
+        topic_tag = form.topic.data,
         question_type = "fill_in_the_blank"
         )
         db.session.add(question)
         db.session.commit()
 
+        flash('Question added!')
+        return redirect('/question_list')
+
     return render_template('add_fill_in_the_blank_question.html', form = form)
 
 #view list of questions- opportunity to list by different queries# Add code-challenge questions
+@app.route("/fill_in_the_blank_question/<int:fill_in_the_blank_question_id>", methods=['GET'])
+def fill_in_the_blank_question(fill_in_the_blank_question_id):
+
+    fill_in_the_blank_question = Multiplechoice.query.get_or_404(fill_in_the_blank_question_id)
+
+    return render_template(
+        'fill_in_the_blank_question.html',
+        fill_in_the_blank_question = fill_in_the_blank_question,
+        title = fill_in_the_blank_question.question, 
+        fill_in_the_blank_question_id = fill_in_the_blank_question_id
+    )
+
+
+@app.route("/edit_fill_in_the_blank_question/Question_<int:fill_in_the_blank_question_id>", methods=['GET', 'POST'])
+def edit_fill_in_the_blank_question(fill_in_the_blank_question_id):
+
+    fill_in_the_blank_question = Multiplechoice.query.get_or_404(fill_in_the_blank_question_id)
+
+    form = FillInTheBlankQuestionForm()
+
+    if form.validate_on_submit():
+        fill_in_the_blank_question.question = form.question.data
+        fill_in_the_blank_question.answer_1 = form.answer.data
+        fill_in_the_blank_question.subject_tag = form.subject.data
+        fill_in_the_blank_question.marks = form.marks.data
+        fill_in_the_blank_question.feedback = form.feedback.data 
+        fill_in_the_blank_question.topic_tag = form.topic.data
+
+        db.session.add(fill_in_the_blank_question)
+        db.session.commit()
+
+        flash("Question amended")
+        return redirect('/question_list')
+
+    form.question.data = fill_in_the_blank_question.question
+    form.answer.data = fill_in_the_blank_question.answer_1
+    form.subject.data = fill_in_the_blank_question.subject_tag
+    form.marks.data = fill_in_the_blank_question.marks
+    form.feedback.data = fill_in_the_blank_question.feedback
+    form.topic.data = fill_in_the_blank_question.topic_tag
+
+    return render_template('edit_fill_in_the_blank_question.html', fill_in_the_blank_question = fill_in_the_blank_question, form = form)
+
+@app.route("/fill_in_the_blank_question/delete/<int:fill_in_the_blank_question_id>")
+def delete_fill_in_the_blank_question(fill_in_the_blank_question_id):
+    fill_in_the_blank_question_to_delete = Multiplechoice.query.get_or_404(fill_in_the_blank_question_id)
+
+    try:
+        db.session.delete(fill_in_the_blank_question_to_delete)
+        db.session.commit()
+        flash("Question deleted!")
+
+        return redirect('/question_list')
+
+    except:
+        flash("Problem deleting question, please check with Admin!")
+
+        return redirect('/question_list')
+
+@app.route("/fill_in_the_blank_question/<int:fill_in_the_blank_question_id>", methods=['GET'])
+def fill_in_the_blank_question(fill_in_the_blank_question_id):
+
+    fill_in_the_blank_question = Multiplechoice.query.get_or_404(fill_in_the_blank_question_id)
+
+    return render_template(
+        'fill_in_the_blank_question.html',
+        fill_in_the_blank_question = fill_in_the_blank_question,
+        title = fill_in_the_blank_question.question, 
+        fill_in_the_blank_question_id = fill_in_the_blank_question_id
+    )
+
+
+@app.route("/edit_fill_in_the_blank_question/Question_<int:fill_in_the_blank_question_id>", methods=['GET', 'POST'])
+def edit_fill_in_the_blank_question(fill_in_the_blank_question_id):
+
+    fill_in_the_blank_question = Multiplechoice.query.get_or_404(fill_in_the_blank_question_id)
+
+    form = FillInTheBlankQuestionForm()
+
+    if form.validate_on_submit():
+        fill_in_the_blank_question.question = form.question.data
+        fill_in_the_blank_question.answer_1 = form.answer.data
+        fill_in_the_blank_question.subject_tag = form.subject.data
+        fill_in_the_blank_question.marks = form.marks.data
+        fill_in_the_blank_question.feedback = form.feedback.data 
+        fill_in_the_blank_question.topic_tag = form.topic.data
+
+        db.session.add(fill_in_the_blank_question)
+        db.session.commit()
+
+        flash("Question amended")
+        return redirect('/question_list')
+
+    form.question.data = fill_in_the_blank_question.question
+    form.answer.data = fill_in_the_blank_question.answer_1
+    form.subject.data = fill_in_the_blank_question.subject_tag
+    form.marks.data = fill_in_the_blank_question.marks
+    form.feedback.data = fill_in_the_blank_question.feedback
+    form.topic.data = fill_in_the_blank_question.topic_tag
+
+    return render_template('edit_fill_in_the_blank_question.html', fill_in_the_blank_question = fill_in_the_blank_question, form = form)
+
+@app.route("/fill_in_the_blank_question/delete/<int:fill_in_the_blank_question_id>")
+def delete_fill_in_the_blank_question(fill_in_the_blank_question_id):
+    fill_in_the_blank_question_to_delete = Multiplechoice.query.get_or_404(fill_in_the_blank_question_id)
+
+    try:
+        db.session.delete(fill_in_the_blank_question_to_delete)
+        db.session.commit()
+        flash("Question deleted!")
+
+        return redirect('/question_list')
+
+    except:
+        flash("Problem deleting question, please check with Admin!")
+
+        return redirect('/question_list')
+
+# Add code-challenge questions
 @app.route("/add_code_challenge_question.html", methods = ['GET', 'POST'])
 def add_code_challenge_question():
     return render_template('add_code_challenge_question.html')
 
-@app.route("/question_list", methods = ['GET'])
-@login_required
-def question_list():
+@app.route("/question_list/<order_by>", methods = ['GET'])
+@app.route("/<order_by>")
+def question_list(order_by):
     
     questions = Multiplechoice.query.all()
+
+    if order_by == "question_type":
+        questions = Multiplechoice.query.order_by(Multiplechoice.question_type)
+    elif order_by == "topic":
+        questions = Multiplechoice.query.order_by(Multiplechoice.topic_tag)
+    elif order_by == "marks_asc":
+        questions = Multiplechoice.query.order_by(Multiplechoice.marks)
+    elif order_by == "marks_desc":
+        questions = Multiplechoice.query.order_by(Multiplechoice.marks.desc())
+    elif order_by == "difficulty":
+        questions = Multiplechoice.query.order_by(Multiplechoice.difficulty)
     
     return render_template('question_list.html',questions=questions)
 
