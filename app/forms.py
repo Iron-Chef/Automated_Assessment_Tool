@@ -61,7 +61,7 @@ class FillInTheBlankQuestionFormFormField(FlaskForm):
 class TestChoice(FlaskForm):
     question_module = SelectField('module', choices=[])
     test_type = SelectField('Test Type', choices=['Formative','Summative'])
-    test_title = StringField('Test Title', [DataRequired()])
+    test_title = StringField('Test Title')
 #this is needed for queryselectfeild to work - RJ
 def Q_query():
     return Multiplechoice.query
