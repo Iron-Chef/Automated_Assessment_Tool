@@ -17,7 +17,8 @@ class User(UserMixin, db.Model):
     year = db.Column(db.Integer)
     is_lecturer = db.Column(db.Boolean, nullable = False, default = False)
     results_s = db.relationship('Results_sum', backref='user', lazy=True)
-    date = db.Column(db.DateTime, nullable = False, default = datetime.utcnow)
+    testauthor = db.relationship('Formativetest', backref = 'tstathr', lazy=True)
+    #date = db.Column(db.DateTime, nullable = False, default = datetime.utcnow)
 
     def __repr__(self):
         return "Student ID: {}, First name: {}, Surnam: {}, Email: {}, Year: {}".format(self.id, self.forename, self.surname, self.email, self.year)
@@ -56,6 +57,7 @@ class Test(db.Model):
     def __repr__(self):
         return f"Test('{self.test_id}', '{self.creator_id}', '{self.test_type}', '{self.question_id_1}', '{self.question_id_2}', '{self.question_id_3}', '{self.question_id_4}', '{self.question_id_5}')"
 
+#rj
 class Formativetest(db.Model):
     id = db.Column(db.Integer, primary_key = True)
     testtitle = db.Column(db.Text,)
@@ -158,7 +160,7 @@ class FormativeAttempt(db.Model):
     answer_4=db.Column(db.Integer,nullable=True)
     answer_5=db.Column(db.Integer,nullable=True)
     marks=db.Column(db.Integer,nullable=False)
-    
+#DD
 class Result(db.Model):
     id=db.Column(db.Integer,primary_key=True)
     attempt=db.Column(db.Integer,db.ForeignKey('formative_attempt.attempt_id'),nullable=False)
