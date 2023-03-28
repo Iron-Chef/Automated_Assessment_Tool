@@ -64,8 +64,6 @@ class Multiplechoice(db.Model):
     ans_choice_4 = db.Column(db.Integer, default=False)
     rating = db.Column(db.Unicode(40))
     rating_num=db.Column(db.Integer)
-    #add tag column
-    #add difficulty column
     #add student answer foreignkey
     subject_tag = db.Column(db.Text, default = "")
     marks=db.Column(db.Integer, default=False)

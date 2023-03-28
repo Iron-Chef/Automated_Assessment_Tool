@@ -37,6 +37,10 @@
                {% endfor %}
             </p>
 
+            <p>
+                {{ form.rating.label }} {{ form.rating }}
+            </p>
+
             <p> 
                 {{ form.feedback.label }}
                 {{ form.feedback(size = 100) }}
