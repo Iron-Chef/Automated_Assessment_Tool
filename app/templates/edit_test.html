@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="post_date_form">
+
+
+</div>
+    
+
+{{ total }}
+{% for question in questions %} 
+<h2 class="question_title">{{loop.index}}. {{ question.question }}</h2>
+{% if question.marks == 1 %}
+{{ question.question }}
+<p>This Question is worth {{ question.marks}} mark.</p>
+{% else %} 
+<p>This Question is worth {{ question.marks}} marks.</p>
+{% endif %}
+    
+<p>(a) {{ question.answer_1}} {% if question.ans_choice_1==1 %}
+    <p id="correct"><b>Correct Answer</b></p>
+    {% else %} 
+    <p id="incorrect">Incorrect Answer</p>
+    {% endif %}
+</p>
+
+<p>(b) {{ question.answer_2}} {% if question.ans_choice_2==1 %}
+    <p id="correct"><b>Correct Answer</b></p>
+    {% else %} 
+    <p id="incorrect">Incorrect Answer</p>
+    {% endif %}
+</p>
+
+{% if question.answer_3 %}
+<p>(c) {{ question.answer_3}} {% if question.ans_choice_3==1 %}
+    <p id="correct"><b>Correct Answer</b></p>
+    {% else %} 
+    <p id="incorrect">Incorrect Answer</p>
+    {% endif %}
+</p>
+{% endif %}
+
+{% if question.answer_4 %}
+<p>(d) {{ question.answer_4}} {% if question.ans_choice_4==1 %}
+    <p id="correct"><b>Correct Answer</b></p>
+    {% else %} 
+    <p id="incorrect">Incorrect Answer</p>
+    {% endif %}
+</p>
+{% endif %}
+
+</h3>  {% if question.feedback%}
+    <h3>Feedback:</h3> <p id="feedback">{{ question.feedback}}</p>
+    
+    {% endif %}
+</p>
+<hr>
+{% endfor %}
+
+<form method="POST" action="" enctype="multipart/form-data">
+{{ form.csrf_token }}
+<p>Please select your first question {{ form.question_id_1 }}</p>
+
+<p>Please select your second question {{ form.question_id_2 }}</p>
+
+<p>Please select your third question {{ form.question_id_3 }}</p>
+
+<p>Please select your fourth question {{ form.question_id_4 }}</p>
+
+<p>Please select your fifth question {{ form.question_id_5 }}</p>
+
+<p>What type of test would you like to create ? {{ form.test_type }} </p>
+<div class="form-group">
+{{ form.submit(class="btn btn-outline-info") }}
+</div>
+</div>
+
+</form>
+    
+
+
+{% endblock %}
