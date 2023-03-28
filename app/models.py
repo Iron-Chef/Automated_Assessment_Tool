@@ -17,6 +17,7 @@ class User(UserMixin, db.Model):
     year = db.Column(db.Integer)
     is_lecturer = db.Column(db.Boolean, nullable = False, default = False)
     results_s = db.relationship('Results_sum', backref='user', lazy=True)
+    testauthor = db.relationship('Formativetest', backref = 'tstathr', lazy=True)
     date = db.Column(db.DateTime, nullable = False, default = datetime.utcnow)
 
     def __repr__(self):
@@ -33,6 +34,13 @@ class Module(db.Model):
     code=db.Column(db.Text, default="")
     name=db.Column(db.Text, default="")
     credits=db.Column(db.Integer)
+    formtestref = db.relationship('Formativetest', backref = 'mdls', lazy=True)
+
+#formtest to questions many-many realtionship table - rj
+Mc_Ft = db.Table('Mc_Ft',
+    db.Column('Mc_id', db.Integer, db.ForeignKey('multiplechoice.id'), primary_key=True),
+    db.Column('Ft_id', db.Integer, db.ForeignKey('formativetest.id'), primary_key=True)    
+)
 
 class Test(db.Model):
     test_id=db.Column(db.Integer,primary_key=True)
@@ -48,6 +56,14 @@ class Test(db.Model):
     
     def __repr__(self):
         return f"Test('{self.test_id}', '{self.creator_id}', '{self.test_type}', '{self.question_id_1}', '{self.question_id_2}', '{self.question_id_3}', '{self.question_id_4}', '{self.question_id_5}')"
+
+#rj
+class Formativetest(db.Model):
+    id = db.Column(db.Integer, primary_key = True)
+    testtitle = db.Column(db.Text,)
+    author = db.Column(db.Text, db.ForeignKey('user.id'))
+    module_code = db.Column(db.Integer, db.ForeignKey('module.id'))
+    linkedquestions = db.relationship('Multiplechoice', secondary = Mc_Ft, backref=db.backref('linkquestions', lazy=True),lazy='subquery')
 
 class Multiplechoice(db.Model):
     id = db.Column(db.Integer, primary_key = True)

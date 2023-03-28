@@ -2,8 +2,8 @@ from flask import render_template, flash, redirect, url_for, request, session, j
 from flask_login import current_user, login_user, logout_user, login_required
 from werkzeug.urls import url_parse
 from sqlalchemy import *
-from app.models import User,Test, Multiplechoice, FormativeAttempt,Results_sum, Module, Studentanswer
-from app.forms import DIFFICULTY_RATING,LoginForm, CreateTestForm, QuestionForm, SubmitAttemptForm, StudentAnswerForm, ResultsForm, FillInTheBlankQuestionForm
+from app.models import User,Test, Multiplechoice, FormativeAttempt,Results_sum, Module, Studentanswer, Formativetest
+from app.forms import DIFFICULTY_RATING,LoginForm, CreateTestForm, QuestionForm, SubmitAttemptForm, StudentAnswerForm, ResultsForm, FillInTheBlankQuestionForm, QChoiceForm, TestChoice
 from app import app,db
 
 @app.route('/login', methods = ['GET', 'POST'])
@@ -190,7 +190,9 @@ def add_fill_in_the_blank_question():
         question = form.question.data, 
         answer_1 = form.answer.data,
         subject_tag = form.subject.data,
-        marks = form.marks.data, 
+        marks = form.marks.data,
+        rating = dict(DIFFICULTY_RATING).get(form.rating.data),
+        rating_num = form.rating.data,
         feedback = form.feedback.data,
         topic_tag = form.topic.data,
         question_type = "fill_in_the_blank"
@@ -228,6 +230,8 @@ def edit_fill_in_the_blank_question(fill_in_the_blank_question_id):
         fill_in_the_blank_question.answer_1 = form.answer.data
         fill_in_the_blank_question.subject_tag = form.subject.data
         fill_in_the_blank_question.marks = form.marks.data
+        fill_in_the_blank_question.rating = dict(DIFFICULTY_RATING).get(form.rating.data)
+        fill_in_the_blank_question.rating_num = form.rating.data
         fill_in_the_blank_question.feedback = form.feedback.data 
         fill_in_the_blank_question.topic_tag = form.topic.data
 
@@ -241,6 +245,7 @@ def edit_fill_in_the_blank_question(fill_in_the_blank_question_id):
     form.answer.data = fill_in_the_blank_question.answer_1
     form.subject.data = fill_in_the_blank_question.subject_tag
     form.marks.data = fill_in_the_blank_question.marks
+    form.rating.data == dict(DIFFICULTY_RATING).get(fill_in_the_blank_question.rating)
     form.feedback.data = fill_in_the_blank_question.feedback
     form.topic.data = fill_in_the_blank_question.topic_tag
 
@@ -276,8 +281,10 @@ def question_list(order_by):
         questions = Multiplechoice.query.order_by(Multiplechoice.marks)
     elif order_by == "marks_desc":
         questions = Multiplechoice.query.order_by(Multiplechoice.marks.desc())
-    elif order_by == "difficulty":
-        questions = Multiplechoice.query.order_by(Multiplechoice.difficulty)
+    elif order_by == "difficulty_asc":
+        questions = Multiplechoice.query.order_by(Multiplechoice.rating_num)
+    elif order_by == "difficulty_desc":
+        questions = Multiplechoice.query.order_by(Multiplechoice.rating_num.desc())
     
     return render_template('question_list.html',questions=questions)
 
@@ -401,6 +408,47 @@ def attempt_test(test_id):
   form.answer_5.choices = [(question_5.ans_choice_1,question_5.answer_1),(question_5.ans_choice_2,question_5.answer_2),(question_5.ans_choice_3,question_5.answer_3),(question_5.ans_choice_4,question_5.answer_4)]
   marks=0
 
+  if form.validate_on_submit():
+    if form.answer_1.data =="1":
+        marks+=question_1.marks
+    if form.answer_2.data =="1":
+        marks+=question_2.marks
+    if form.answer_3.data =="1":
+        marks+=question_3.marks
+    if form.answer_4.data =="1":
+        marks+=question_4.marks
+    if form.answer_5.data =="1":
+        marks+=question_5.marks
+    formative_attempt=FormativeAttempt(test_id=test.test_id,user_id=current_user.id,answer_1=form.answer_1.data,answer_2=form.answer_2.data,answer_3=form.answer_3.data,answer_4=form.answer_4.data,answer_5=form.answer_5.data,question_id_1=question_1.id,question_id_2=question_2.id,question_id_3=question_3.id,question_id_4=question_4.id,question_id_5=question_5.id, marks=marks)
+    db.session.add(formative_attempt)
+    db.session.commit()
+    flash('Test Submit Succesful!')
+    return redirect(url_for('index'))
+  return render_template('attempt_test.html',title='Attempt Test',form=form,test=test,question_1=question_1,question_2=question_2,question_3=question_3,question_4=question_4,question_5=question_5, marks=marks)
+
+
+# SP - lecturer Stats - Summative results page 
+@app.route("/results_s", methods=['GET'])
+@login_required
+def results_s():
+    results_sum = Results_sum.query.all()
+    num_marked = len(Results_sum.query.all())
+    total_marks = Results_sum.query.with_entities(func.sum(Results_sum.total_mark).label('total')).first().total
+    average_mark = int(total_marks/num_marked)
+
+    return render_template('results_s.html', title='Results', results_sum=results_sum, num_marked=num_marked, total_marks=total_marks, average_mark=average_mark)
+
+# SP - lecturer Stats - individual students results page
+@app.route("/results_s/<int:user_id>", methods=['GET'])
+@login_required
+def results_student(user_id):
+    
+    individ_results = Results_sum.query.filter_by(user_id=user_id).first_or_404()
+    entries = Results_sum.query.filter_by(user_id=user_id).all()
+    count_entries = len(Results_sum.query.filter_by(user_id=user_id).all())
+    return render_template('res_student.html', title='Student results', individ_results=individ_results, entries=entries, count_entries=count_entries)
+
+
 
 
   if form.validate_on_submit():
@@ -443,4 +491,253 @@ def results_student(user_id):
     count_entries = len(Results_sum.query.filter_by(user_id=user_id).all())
     return render_template('res_student.html', title='Student results', individ_results=individ_results, entries=entries, count_entries=count_entries)
 
+#to allow lect. to choose if its formative or summative - RJ 
+@app.route('/choose_create_test', methods=['GET', 'POST'])
+@login_required
+def choose_create_test():
+    form = TestChoice()
+    form.question_module.choices = [(module.id, module.name) for module in Module.query.all()]
+    if form.test_type.data == 'Formative':
+        if form.validate_on_submit():
+            formtest= Formativetest(
+            author=current_user.id,
+            module_code = form.question_module.data,
+            testtitle = form.test_title.data
+            )
+            db.session.add(formtest)
+            db.session.commit()
+            flash('Your test is added!')
+            return redirect('/create_form_test')
+    else:
+        if form.validate_on_submit():
+            flash('this is not yet possible')
+            return redirect('/create_form_test') 
+    return render_template('choose_create_test.html', title = 'Create New Assesment', form=form)
 
+#this allows questions to be added to formative test(sorry about how long it is) - RJ
+@app.route('/create_form_test', methods=['GET', 'POST'])
+@login_required
+def create_form_test():
+    QCform = QChoiceForm()
+    test = Formativetest.query.order_by(Formativetest.id.desc()).first()
+    if QCform.validate_on_submit():
+        if QCform.question_1.data.question != '-':
+            question_1 = QCform.question_1.data
+            test.linkedquestions.append(question_1)
+        if QCform.WriteMCquestion_1.question.data !='':
+            Q1multi= Multiplechoice(
+            user_id=current_user.id,
+            question=QCform.WriteMCquestion_1.question.data, 
+            answer_1=QCform.WriteMCquestion_1.answer1.data,ans_choice_1=QCform.WriteMCquestion_1.ans_multi_select_1.data, 
+            answer_2=QCform.WriteMCquestion_1.answer2.data,ans_choice_2=QCform.WriteMCquestion_1.ans_multi_select_2.data, 
+            answer_3=QCform.WriteMCquestion_1.answer3.data, ans_choice_3=QCform.WriteMCquestion_1.ans_multi_select_3.data,
+            answer_4=QCform.WriteMCquestion_1.answer4.data, ans_choice_4=QCform.WriteMCquestion_1.ans_multi_select_4.data,
+            marks=QCform.WriteMCquestion_1.marks.data,
+            topic_tag = '',
+            feedback=QCform.WriteMCquestion_1.feedback.data,
+            question_type = 'Multiplechoice'
+            )
+            db.session.add(Q1multi)
+            db.session.commit()
+            question_1 = Multiplechoice.query.order_by(Multiplechoice.id.desc()).first()
+            test.linkedquestions.append(question_1)
+        if QCform.WriteFTGquestion_1.question.data !='':
+            Q1FTG = Multiplechoice(
+            user_id = current_user.id,
+            question = QCform.WriteFTGquestion_1.question.data, 
+            answer_1 = QCform.WriteFTGquestion_1.answer.data,
+            answer_2 = '',
+            answer_3 = '',
+            answer_4 = '',
+            topic_tag = '',
+            marks = QCform.WriteFTGquestion_1.marks.data, 
+            feedback = QCform.WriteFTGquestion_1.feedback.data,
+            question_type = "fill_in_the_blank"
+            )
+            db.session.add(Q1FTG)
+            db.session.commit()
+            question_1 = Multiplechoice.query.order_by(Multiplechoice.id.desc()).first()
+            test.linkedquestions.append(question_1)
+        if QCform.question_2.data.question != '-':
+            question_2 = QCform.question_2.data
+            test.linkedquestions.append(question_2)
+        if QCform.WriteMCquestion_2.question.data !='':
+            Q2multi= Multiplechoice(
+            user_id=current_user.id,
+            question=QCform.WriteMCquestion_2.question.data, 
+            answer_1=QCform.WriteMCquestion_2.answer1.data,ans_choice_1=QCform.WriteMCquestion_2.ans_multi_select_1.data, 
+            answer_2=QCform.WriteMCquestion_2.answer2.data,ans_choice_2=QCform.WriteMCquestion_2.ans_multi_select_2.data, 
+            answer_3=QCform.WriteMCquestion_2.answer3.data, ans_choice_3=QCform.WriteMCquestion_2.ans_multi_select_3.data,
+            answer_4=QCform.WriteMCquestion_2.answer4.data, ans_choice_4=QCform.WriteMCquestion_2.ans_multi_select_4.data,
+            marks=QCform.WriteMCquestion_2.marks.data,
+            topic_tag = '',
+            feedback=QCform.WriteMCquestion_2.feedback.data,
+            question_type = 'Multiplechoice'
+            )
+            db.session.add(Q2multi)
+            db.session.commit()
+            question_2 = Multiplechoice.query.order_by(Multiplechoice.id.desc()).first()
+            test.linkedquestions.append(question_2)
+        if QCform.WriteFTGquestion_2.question.data !='':
+            Q2FTG = Multiplechoice(
+            user_id = current_user.id,
+            question = QCform.WriteFTGquestion_2.question.data, 
+            answer_1 = QCform.WriteFTGquestion_2.answer.data,
+            answer_2 = '',
+            answer_3 = '',
+            answer_4 = '',
+            topic_tag = '',
+            marks = QCform.WriteFTGquestion_2.marks.data, 
+            feedback = QCform.WriteFTGquestion_2.feedback.data,
+            question_type = "fill_in_the_blank"
+            )
+            db.session.add(Q2FTG)
+            db.session.commit()
+            question_2 = Multiplechoice.query.order_by(Multiplechoice.id.desc()).first()
+            test.linkedquestions.append(question_2) 
+        if QCform.question_3.data.question != '-':
+            question_3 = QCform.question_3.data
+            test.linkedquestions.append(question_3) 
+        if QCform.WriteMCquestion_3.question.data !='':
+            Q3multi= Multiplechoice(
+            user_id=current_user.id,
+            question=QCform.WriteMCquestion_3.question.data, 
+            answer_1=QCform.WriteMCquestion_3.answer1.data,ans_choice_1=QCform.WriteMCquestion_3.ans_multi_select_1.data, 
+            answer_2=QCform.WriteMCquestion_3.answer2.data,ans_choice_2=QCform.WriteMCquestion_3.ans_multi_select_2.data, 
+            answer_3=QCform.WriteMCquestion_3.answer3.data, ans_choice_3=QCform.WriteMCquestion_3.ans_multi_select_3.data,
+            answer_4=QCform.WriteMCquestion_3.answer4.data, ans_choice_4=QCform.WriteMCquestion_3.ans_multi_select_4.data,
+            marks=QCform.WriteMCquestion_3.marks.data,
+            topic_tag = '',
+            feedback=QCform.WriteMCquestion_3.feedback.data,
+            question_type = 'Multiplechoice'
+            )
+            db.session.add(Q3multi)
+            db.session.commit()
+            question_3 = Multiplechoice.query.order_by(Multiplechoice.id.desc()).first()
+            test.linkedquestions.append(question_3)
+        if QCform.WriteFTGquestion_3.question.data !='':
+            Q3FTG = Multiplechoice(
+            user_id = current_user.id,
+            question = QCform.WriteFTGquestion_3.question.data, 
+            answer_1 = QCform.WriteFTGquestion_3.answer.data,
+            answer_2 = '',
+            answer_3 = '',
+            answer_4 = '',
+            topic_tag = '',
+            marks = QCform.WriteFTGquestion_3.marks.data, 
+            feedback = QCform.WriteFTGquestion_3.feedback.data,
+            question_type = "fill_in_the_blank"
+            )
+            db.session.add(Q3FTG)
+            db.session.commit()
+            question_3 = Multiplechoice.query.order_by(Multiplechoice.id.desc()).first()
+            test.linkedquestions.append(question_3) 
+        if QCform.question_4.data.question != '-':
+            question_4 = QCform.question_4.data
+            test.linkedquestions.append(question_4)
+        if QCform.WriteMCquestion_4.question.data !='':
+            Q4multi= Multiplechoice(
+            user_id=current_user.id,
+            question=QCform.WriteMCquestion_4.question.data, 
+            answer_1=QCform.WriteMCquestion_4.answer1.data,ans_choice_1=QCform.WriteMCquestion_4.ans_multi_select_1.data, 
+            answer_2=QCform.WriteMCquestion_4.answer2.data,ans_choice_2=QCform.WriteMCquestion_4.ans_multi_select_2.data, 
+            answer_3=QCform.WriteMCquestion_4.answer3.data, ans_choice_3=QCform.WriteMCquestion_4.ans_multi_select_3.data,
+            answer_4=QCform.WriteMCquestion_4.answer4.data, ans_choice_4=QCform.WriteMCquestion_4.ans_multi_select_4.data,
+            marks=QCform.WriteMCquestion_4.marks.data,
+            topic_tag = '',
+            feedback=QCform.WriteMCquestion_4.feedback.data,
+            question_type = 'Multiplechoice'
+            )
+            db.session.add(Q4multi)
+            db.session.commit()
+            question_4 = Multiplechoice.query.order_by(Multiplechoice.id.desc()).first()
+            test.linkedquestions.append(question_4)
+        if QCform.WriteFTGquestion_4.question.data !='':
+            Q4FTG = Multiplechoice(
+            user_id = current_user.id,
+            question = QCform.WriteFTGquestion_4.question.data, 
+            answer_1 = QCform.WriteFTGquestion_4.answer.data,
+            answer_2 = '',
+            answer_3 = '',
+            answer_4 = '',
+            topic_tag = '',
+            marks = QCform.WriteFTGquestion_4.marks.data, 
+            feedback = QCform.WriteFTGquestion_4.feedback.data,
+            question_type = "fill_in_the_blank"
+            )
+            db.session.add(Q4FTG)
+            db.session.commit()
+            question_4 = Multiplechoice.query.order_by(Multiplechoice.id.desc()).first()
+            test.linkedquestions.append(question_4) 
+        if QCform.question_5.data.question != '-':
+            question_5 = QCform.question_5.data
+            test.linkedquestions.append(question_5)
+        if QCform.WriteMCquestion_5.question.data !='':
+            Q5multi= Multiplechoice(
+            user_id=current_user.id,
+            question=QCform.WriteMCquestion_5.question.data, 
+            answer_1=QCform.WriteMCquestion_5.answer1.data,ans_choice_1=QCform.WriteMCquestion_5.ans_multi_select_1.data, 
+            answer_2=QCform.WriteMCquestion_5.answer2.data,ans_choice_2=QCform.WriteMCquestion_5.ans_multi_select_2.data, 
+            answer_3=QCform.WriteMCquestion_5.answer3.data, ans_choice_3=QCform.WriteMCquestion_5.ans_multi_select_3.data,
+            answer_4=QCform.WriteMCquestion_5.answer4.data, ans_choice_4=QCform.WriteMCquestion_5.ans_multi_select_4.data,
+            marks=QCform.WriteMCquestion_5.marks.data,
+            topic_tag = '',
+            feedback=QCform.WriteMCquestion_5.feedback.data,
+            question_type = 'Multiplechoice'
+            )
+            db.session.add(Q5multi)
+            db.session.commit()
+            question_5 = Multiplechoice.query.order_by(Multiplechoice.id.desc()).first()
+            test.linkedquestions.append(question_5)
+        if QCform.WriteFTGquestion_5.question.data !='':
+            Q5FTG = Multiplechoice(
+            user_id = current_user.id,
+            question = QCform.WriteFTGquestion_5.question.data, 
+            answer_1 = QCform.WriteFTGquestion_5.answer.data,
+            answer_2 = '',
+            answer_3 = '',
+            answer_4 = '',
+            topic_tag = '',
+            marks = QCform.WriteFTGquestion_5.marks.data, 
+            feedback = QCform.WriteFTGquestion_5.feedback.data,
+            question_type = "fill_in_the_blank"
+            )
+            db.session.add(Q5FTG)
+            db.session.commit()
+            question_5 = Multiplechoice.query.order_by(Multiplechoice.id.desc()).first()
+            test.linkedquestions.append(question_5)  
+        
+        db.session.commit()
+        flash('test added')
+        return redirect('/Formative_test_list')
+
+
+    return render_template('create_form_test.html', title = 'Create Formative Assesment', QCform=QCform, test=test)
+
+#rj
+@app.route("/Formative_test_list", methods=['GET'])
+def formtests():
+    allFormtests = Formativetest.query.all()
+    return render_template('Formative_test_list.html', title = 'Formative tests list', allFormtests=allFormtests)
+#rj
+@app.route("/Formative_test/<int:Form_test_id>", methods=['GET'])
+def formtest(Form_test_id):
+    formtest = Formativetest.query.get_or_404(Form_test_id)
+    formtestquestions = formtest.linkedquestions
+    return render_template('Formative_test.html', title = formtest.testtitle , formtest=formtest, formtestquestions=formtestquestions)
+#rj
+@app.route("/Take_Formative_test/<int:Form_test_id>", methods=['GET', 'POST'])
+def takeformtest(Form_test_id):
+    test = Formativetest.query.get_or_404(Form_test_id)
+    questions = test.linkedquestions
+    answers = StudentAnswerForm()
+    return render_template('Take_Formative_test.html', title = 'Take: ' + test.testtitle , test=test, questions=questions, answers=answers)
+#rj
+@app.route("/Formative_test/<int:Form_test_id>/delete", methods=['POST'])
+@login_required
+def delete_formtest(Form_test_id):
+  test = Formativetest.query.get_or_404(Form_test_id)
+  db.session.delete(test)
+  db.session.commit()
+  flash('Your Post has been deleted')
+  return redirect('/Formative_test_list.html')
