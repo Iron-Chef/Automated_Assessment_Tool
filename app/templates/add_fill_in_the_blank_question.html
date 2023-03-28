@@ -20,13 +20,13 @@
                 <span style="color: red;">[{{ error }}]</span>
                 {% endfor %}
             </p>
-            
+
             <p>
-                {{ form.topic.label }}
-                {{ form.topic (size=100) }}
-                {% for error in form.topic.errors %} 
-                <span style="color: red;">[{{ error }}]</span>
-                {% endfor %}
+            {{ form.subject.label }}
+            {% for choice in form.subject %}
+                {{ choice.label }}
+                {{ choice }}
+            {% endfor %}
             </p>
 
             <p> 
@@ -42,13 +42,22 @@
                 {{ form.feedback(size = 100) }}
             </p>
 
-        </div>
+            <p>
+                {{ form.topic.label }}
+                {{ form.topic (size=100) }}
+                {% for error in form.topic.errors %} 
+                <span style="color: red;">[{{ error }}]</span>
+                {% endfor %}
+            </p>
+
+
             <p>
                 {{ form.submit(class="btn btn-info ")}}
             </p>
             <!--Clear button-->
             <input type="reset", class="btn btn-info ">
         </form>
+    </div>
 
 
 

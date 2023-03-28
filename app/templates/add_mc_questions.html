@@ -44,10 +44,10 @@
             </p>
 
             <p>
-                {{ form.topic.label }}:
-                {{ form.topic (size=100) }}
-                {% for error in form.topic.errors %} 
-                <span style="color: red;">[{{ error }}]</span>
+                {{ form.subject.label }}
+                {% for choice in form.subject %}
+                    {{ choice.label }}
+                    {{ choice }}
                 {% endfor %}
             </p>
          
@@ -61,11 +61,19 @@
             <p> 
                 {{ form.feedback.label }}
                 {{ form.feedback(size=100) }}
-                
             </p>
             <p>
               Difficulty:  {{ form.rating }}
             </p>
+
+            <p>
+                {{ form.topic.label }}
+                {{ form.topic (size=100) }}
+                {% for error in form.topic.errors %} 
+                <span style="color: red;">[{{ error }}]</span>
+                {% endfor %}
+            </p>
+
         </div>
             <p>
                 
