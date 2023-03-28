@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block content %}
+    <p>Test Title: {{ test.testtitle }}</p>
+    
+{% for question in questions %}
+    {% if question.question != '-' %}
+        <p>{{ loop.index }}.{{ question.question }}</p>
+        {% if question.question_type == 'Multiplechoice' %}
+            <p>{{ question.answer_1 }}  {{ answers.ans_multi_select_1 }}</p>
+            {{ question.answer_2 }}  {{ answers.ans_multi_select_2 }}</p>
+            {% if question.answer_3 != '' %}
+            <p> {{ question.answer_3 }}  {{ answers.ans_multi_select_3 }}</p>
+            {% endif %}
+            {% if question.answer_4 != '' %}
+            <p>{{ question.answer_4 }}  {{ answers.ans_multi_select_4 }}</p>
+            {% endif %}
+        {% else %}
+            <p>{{ answers.ans_FTG }} </p>   
+        {% endif %}
+        
+    {% endif %}
+{% endfor %}
+
+<input type="submit">
+
+{% endblock %}
