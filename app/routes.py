@@ -188,7 +188,9 @@ def add_fill_in_the_blank_question():
         question = form.question.data, 
         answer_1 = form.answer.data,
         subject_tag = form.subject.data,
-        marks = form.marks.data, 
+        marks = form.marks.data,
+        rating = dict(DIFFICULTY_RATING).get(form.rating.data),
+        rating_num = form.rating.data,
         feedback = form.feedback.data,
         topic_tag = form.topic.data,
         question_type = "fill_in_the_blank"
@@ -226,6 +228,8 @@ def edit_fill_in_the_blank_question(fill_in_the_blank_question_id):
         fill_in_the_blank_question.answer_1 = form.answer.data
         fill_in_the_blank_question.subject_tag = form.subject.data
         fill_in_the_blank_question.marks = form.marks.data
+        fill_in_the_blank_question.rating = dict(DIFFICULTY_RATING).get(form.rating.data)
+        fill_in_the_blank_question.rating_num = form.rating.data
         fill_in_the_blank_question.feedback = form.feedback.data 
         fill_in_the_blank_question.topic_tag = form.topic.data
 
@@ -239,6 +243,7 @@ def edit_fill_in_the_blank_question(fill_in_the_blank_question_id):
     form.answer.data = fill_in_the_blank_question.answer_1
     form.subject.data = fill_in_the_blank_question.subject_tag
     form.marks.data = fill_in_the_blank_question.marks
+    form.rating.data == dict(DIFFICULTY_RATING).get(fill_in_the_blank_question.rating)
     form.feedback.data = fill_in_the_blank_question.feedback
     form.topic.data = fill_in_the_blank_question.topic_tag
 
@@ -274,8 +279,10 @@ def question_list(order_by):
         questions = Multiplechoice.query.order_by(Multiplechoice.marks)
     elif order_by == "marks_desc":
         questions = Multiplechoice.query.order_by(Multiplechoice.marks.desc())
-    elif order_by == "difficulty":
-        questions = Multiplechoice.query.order_by(Multiplechoice.difficulty)
+    elif order_by == "difficulty_asc":
+        questions = Multiplechoice.query.order_by(Multiplechoice.rating_num)
+    elif order_by == "difficulty_desc":
+        questions = Multiplechoice.query.order_by(Multiplechoice.rating_num.desc())
     
     return render_template('question_list.html',questions=questions)
 
@@ -398,6 +405,47 @@ def attempt_test(test_id):
   form.answer_4.choices = [(question_4.ans_choice_1,question_4.answer_1),(question_4.ans_choice_2,question_4.answer_2),(question_4.ans_choice_3,question_4.answer_3),(question_4.ans_choice_4,question_4.answer_4)]
   form.answer_5.choices = [(question_5.ans_choice_1,question_5.answer_1),(question_5.ans_choice_2,question_5.answer_2),(question_5.ans_choice_3,question_5.answer_3),(question_5.ans_choice_4,question_5.answer_4)]
   marks=0
+
+  if form.validate_on_submit():
+    if form.answer_1.data =="1":
+        marks+=question_1.marks
+    if form.answer_2.data =="1":
+        marks+=question_2.marks
+    if form.answer_3.data =="1":
+        marks+=question_3.marks
+    if form.answer_4.data =="1":
+        marks+=question_4.marks
+    if form.answer_5.data =="1":
+        marks+=question_5.marks
+    formative_attempt=FormativeAttempt(test_id=test.test_id,user_id=current_user.id,answer_1=form.answer_1.data,answer_2=form.answer_2.data,answer_3=form.answer_3.data,answer_4=form.answer_4.data,answer_5=form.answer_5.data,question_id_1=question_1.id,question_id_2=question_2.id,question_id_3=question_3.id,question_id_4=question_4.id,question_id_5=question_5.id, marks=marks)
+    db.session.add(formative_attempt)
+    db.session.commit()
+    flash('Test Submit Succesful!')
+    return redirect(url_for('index'))
+  return render_template('attempt_test.html',title='Attempt Test',form=form,test=test,question_1=question_1,question_2=question_2,question_3=question_3,question_4=question_4,question_5=question_5, marks=marks)
+
+
+# SP - lecturer Stats - Summative results page 
+@app.route("/results_s", methods=['GET'])
+@login_required
+def results_s():
+    results_sum = Results_sum.query.all()
+    num_marked = len(Results_sum.query.all())
+    total_marks = Results_sum.query.with_entities(func.sum(Results_sum.total_mark).label('total')).first().total
+    average_mark = int(total_marks/num_marked)
+
+    return render_template('results_s.html', title='Results', results_sum=results_sum, num_marked=num_marked, total_marks=total_marks, average_mark=average_mark)
+
+# SP - lecturer Stats - individual students results page
+@app.route("/results_s/<int:user_id>", methods=['GET'])
+@login_required
+def results_student(user_id):
+    
+    individ_results = Results_sum.query.filter_by(user_id=user_id).first_or_404()
+    entries = Results_sum.query.filter_by(user_id=user_id).all()
+    count_entries = len(Results_sum.query.filter_by(user_id=user_id).all())
+    return render_template('res_student.html', title='Student results', individ_results=individ_results, entries=entries, count_entries=count_entries)
+
 
 
 

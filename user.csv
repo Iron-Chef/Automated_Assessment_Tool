@@ -1,0 +1,21 @@
+id,username,forename,surname,password_hash,email,intake_year,is_lecturer,date,number_of_log_ins
+1,c12345678,Dave,Smith,pbkdf2:sha256:260000$ATzi0o9OUdYCwBhr$fdb8365c32153663f43a49d21f8ce779d9bfb8494b79f1a698e381a0c8cc7ba3,smithd@cardiff.ac.uk,1999,1,15/03/2023 12:33,200
+2,c12335689,Micky,Mouse,pbkdf2:sha256:260000$ATzi0o9OUdYCwBhr$fdb8365c32153663f43a49d21f8ce779d9bfb8494b79f1a698e381a0c8cc7ba3,micky@cardiff.ac.uk,2015,1,28/03/2023 12:33,30
+3,c21113882,Anthony,Jones,pbkdf2:sha256:260000$ATzi0o9OUdYCwBhr$fdb8365c32153663f43a49d21f8ce779d9bfb8494b79f1a698e381a0c8cc7ba3,jonesa228@cardiff.ac.uk,2022,0,15/03/2023 12:33,12
+4,c12356709,Fred,Flinstone,pbkdf2:sha256:260000$ATzi0o9OUdYCwBhr$fdb8365c32153663f43a49d21f8ce779d9bfb8494b79f1a698e381a0c8cc7ba3,fred@cardiff.ac.uk,2022,0,15/03/2023 12:33,12
+5,c13765298,Alec,Cook,pbkdf2:sha256:260000$ATzi0o9OUdYCwBhr$fdb8365c32153663f43a49d21f8ce779d9bfb8494b79f1a698e381a0c8cc7ba3,Cook@cardiff.ac.uk,2022,0,15/03/2023 12:33,16
+6,c25624188,Emma,Wilson,pbkdf2:sha256:260000$ATzi0o9OUdYCwBhr$fdb8365c32153663f43a49d21f8ce779d9bfb8494b79f1a698e381a0c8cc7ba3,Wilson@cardiff.ac.uk,2022,0,15/03/2023 12:33,16
+7,c28504312,Gregory,Painter,pbkdf2:sha256:260000$ATzi0o9OUdYCwBhr$fdb8365c32153663f43a49d21f8ce779d9bfb8494b79f1a698e381a0c8cc7ba3,Painter@cardiff.ac.uk,2022,0,28/03/2023 12:33,18
+8,c12094786,Daniel,Dominguez,pbkdf2:sha256:260000$ATzi0o9OUdYCwBhr$fdb8365c32153663f43a49d21f8ce779d9bfb8494b79f1a698e381a0c8cc7ba3,Dominguez@cardiff.ac.uk,2022,0,28/03/2023 12:33,18
+9,c13489034,Richard,Johns,pbkdf2:sha256:260000$ATzi0o9OUdYCwBhr$fdb8365c32153663f43a49d21f8ce779d9bfb8494b79f1a698e381a0c8cc7ba3,Johns@cardiff.ac.uk,2022,0,28/03/2023 12:33,8
+10,c14762111,Sarah,Parker,pbkdf2:sha256:260000$ATzi0o9OUdYCwBhr$fdb8365c32153663f43a49d21f8ce779d9bfb8494b79f1a698e381a0c8cc7ba3,Parker@cardiff.ac.uk,2022,0,28/03/2023 12:33,8
+11,c15990325,Matthew,Matt,pbkdf2:sha256:260000$ATzi0o9OUdYCwBhr$fdb8365c32153663f43a49d21f8ce779d9bfb8494b79f1a698e381a0c8cc7ba3,Matt@cardiff.ac.uk,2023,0,28/03/2023 12:33,4
+12,c16662314,Ellie,Jumper,pbkdf2:sha256:260000$ATzi0o9OUdYCwBhr$fdb8365c32153663f43a49d21f8ce779d9bfb8494b79f1a698e381a0c8cc7ba3,Jumper@cardiff.ac.uk,2023,0,28/03/2023 12:33,4
+13,c17334404,Maddie,Scarf,pbkdf2:sha256:260000$ATzi0o9OUdYCwBhr$fdb8365c32153663f43a49d21f8ce779d9bfb8494b79f1a698e381a0c8cc7ba3,Scarf@cardiff.ac.uk,2023,0,31/03/2023 12:33,17
+14,c18234333,Jack,Hat,pbkdf2:sha256:260000$ATzi0o9OUdYCwBhr$fdb8365c32153663f43a49d21f8ce779d9bfb8494b79f1a698e381a0c8cc7ba3,Hat@cardiff.ac.uk,2023,0,31/03/2023 12:33,17
+15,c19876543,Tim,Sock,pbkdf2:sha256:260000$ATzi0o9OUdYCwBhr$fdb8365c32153663f43a49d21f8ce779d9bfb8494b79f1a698e381a0c8cc7ba3,Sock@cardiff.ac.uk,2023,0,31/03/2023 12:33,9
+16,c12448383,Paul,Coates,pbkdf2:sha256:260000$ATzi0o9OUdYCwBhr$fdb8365c32153663f43a49d21f8ce779d9bfb8494b79f1a698e381a0c8cc7ba3,Coates@cardiff.ac.uk,2023,0,31/03/2023 12:33,9
+17,c13876555,Nobu,Williamson,pbkdf2:sha256:260000$ATzi0o9OUdYCwBhr$fdb8365c32153663f43a49d21f8ce779d9bfb8494b79f1a698e381a0c8cc7ba3,Williamson@cardiff.ac.uk,2023,0,31/03/2023 12:33,6
+18,c14882201,Nathan,White,pbkdf2:sha256:260000$ATzi0o9OUdYCwBhr$fdb8365c32153663f43a49d21f8ce779d9bfb8494b79f1a698e381a0c8cc7ba3,White@cardiff.ac.uk,2023,0,31/03/2023 12:33,6
+19,c15324157,Edward,Lee,pbkdf2:sha256:260000$ATzi0o9OUdYCwBhr$fdb8365c32153663f43a49d21f8ce779d9bfb8494b79f1a698e381a0c8cc7ba3,Lee@cardiff.ac.uk,2023,0,31/03/2023 12:33,32
+20,c20983621,Georgina,Currie,pbkdf2:sha256:260000$ATzi0o9OUdYCwBhr$fdb8365c32153663f43a49d21f8ce779d9bfb8494b79f1a698e381a0c8cc7ba3,Currie@cardiff.ac.uk,2023,0,28/03/2023 12:33,32
