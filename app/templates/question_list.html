@@ -40,7 +40,7 @@
 <!--JavaScript COLLAPSIBLE-->
 <button type="button" class="collapsible">JavaScript</button>
 <div class="content" id = "collapsible_javascript">
-  
+
   {% for question in questions %}
   {% if question.subject_tag == "JavaScript" %}
   {% if question.question_type == "fill_in_the_blank" %}
@@ -162,60 +162,11 @@
   {% for question in questions %}
   {% if question.subject_tag == "SQL" %}
 
-<<<<<<< HEAD
-{% if question.feedback%}
-<h3>Feedback:</h3> <p id="feedback">{{ question.feedback}}</p>
-{% endif %}
->>>>>>> 2658bfa71b1b133938d531bd2552fbb30c3a07b4
-=======
-=======
-  {% with mcquestion = question %}
-    {% include "mc_question.html" %}
-  {% endwith %}
-
-  {% endif %}
-  {% endif %} <!--This is for subject_tag-->
-  {% endfor %}
-</div>
-
-<!--PYTHON COLLAPSIBLE-->
-<button type="button" class="collapsible">Python</button>
-<div class="content" id = "collapsible_python">
-  {% for question in questions %}
-  {% if question.subject_tag == "Python" %}
-
   {% if question.question_type == "fill_in_the_blank" %}
   {% with fill_in_the_blank_question = question %}
     {% include "fill_in_the_blank_question.html" %}
   {% endwith %}
 
-  {% else %}
-  {% with mcquestion = question %}
-    {% include "mc_question.html" %}
-  {% endwith %}
-
-  {% endif %}
-  {% endif %} <!--This is for subject_tag-->
-  {% endfor %}
-</div>
-
-<!--SQL COLLAPSIBLE-->
-<button type="button" class="collapsible">SQL</button>
-<div class="content" id = "collapsible_sql">
-  {% for question in questions %}
-  {% if question.subject_tag == "SQL" %}
-
->>>>>>> 33491c2a2b5e7d905496aaacd8a71fb16afd18f9
-  {% if question.question_type == "fill_in_the_blank" %}
-  {% with fill_in_the_blank_question = question %}
-    {% include "fill_in_the_blank_question.html" %}
-  {% endwith %}
-<<<<<<< HEAD
->>>>>>> 33491c2 (Edit/Delete FITB questions)
-=======
->>>>>>> 33491c2a2b5e7d905496aaacd8a71fb16afd18f9
-
-  {% else %}
   {% with mcquestion = question %}
     {% include "mc_question.html" %}
   {% endwith %}

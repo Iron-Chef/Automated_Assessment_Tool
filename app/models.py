@@ -17,7 +17,7 @@ class User(UserMixin, db.Model):
     year = db.Column(db.Integer)
     is_lecturer = db.Column(db.Boolean, nullable = False, default = False)
     results_s = db.relationship('Results_sum', backref='user', lazy=True)
-    date = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+    date = db.Column(db.DateTime, nullable = False, default = datetime.utcnow)
 
     def __repr__(self):
         return "Student ID: {}, First name: {}, Surnam: {}, Email: {}, Year: {}".format(self.id, self.forename, self.surname, self.email, self.year)
@@ -34,8 +34,6 @@ class Module(db.Model):
     name=db.Column(db.Text, default="")
     credits=db.Column(db.Integer)
 
-
-
 class Test(db.Model):
     test_id=db.Column(db.Integer,primary_key=True)
     creator_id= db.Column(db.Integer,db.ForeignKey('user.id'), nullable=False)
@@ -51,7 +49,6 @@ class Test(db.Model):
     def __repr__(self):
         return f"Test('{self.test_id}', '{self.creator_id}', '{self.test_type}', '{self.question_id_1}', '{self.question_id_2}', '{self.question_id_3}', '{self.question_id_4}', '{self.question_id_5}')"
 
-
 class Multiplechoice(db.Model):
     id = db.Column(db.Integer, primary_key = True)
     user_id=db.Column(db.Text, db.ForeignKey('user.id'))
@@ -65,7 +62,7 @@ class Multiplechoice(db.Model):
     ans_choice_3 = db.Column(db.Integer, default=False)
     answer_4= db.Column(db.Text, nullable=True)
     ans_choice_4 = db.Column(db.Integer, default=False)
-    rating =db.Column(db.Unicode(40))
+    rating = db.Column(db.Unicode(40))
     rating_num=db.Column(db.Integer)
     #add tag column
     #add difficulty column

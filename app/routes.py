@@ -201,7 +201,7 @@ def add_fill_in_the_blank_question():
 
     return render_template('add_fill_in_the_blank_question.html', form = form)
 
-#view list of questions- opportunity to list by different queries# Add code-challenge questions
+#view list of questions- opportunity to list by different queries
 @app.route("/fill_in_the_blank_question/<int:fill_in_the_blank_question_id>", methods=['GET'])
 def fill_in_the_blank_question(fill_in_the_blank_question_id):
 
@@ -213,7 +213,6 @@ def fill_in_the_blank_question(fill_in_the_blank_question_id):
         title = fill_in_the_blank_question.question, 
         fill_in_the_blank_question_id = fill_in_the_blank_question_id
     )
-
 
 @app.route("/edit_fill_in_the_blank_question/Question_<int:fill_in_the_blank_question_id>", methods=['GET', 'POST'])
 def edit_fill_in_the_blank_question(fill_in_the_blank_question_id):
@@ -260,70 +259,6 @@ def delete_fill_in_the_blank_question(fill_in_the_blank_question_id):
         flash("Problem deleting question, please check with Admin!")
 
         return redirect('/question_list')
-
-@app.route("/fill_in_the_blank_question/<int:fill_in_the_blank_question_id>", methods=['GET'])
-def fill_in_the_blank_question(fill_in_the_blank_question_id):
-
-    fill_in_the_blank_question = Multiplechoice.query.get_or_404(fill_in_the_blank_question_id)
-
-    return render_template(
-        'fill_in_the_blank_question.html',
-        fill_in_the_blank_question = fill_in_the_blank_question,
-        title = fill_in_the_blank_question.question, 
-        fill_in_the_blank_question_id = fill_in_the_blank_question_id
-    )
-
-
-@app.route("/edit_fill_in_the_blank_question/Question_<int:fill_in_the_blank_question_id>", methods=['GET', 'POST'])
-def edit_fill_in_the_blank_question(fill_in_the_blank_question_id):
-
-    fill_in_the_blank_question = Multiplechoice.query.get_or_404(fill_in_the_blank_question_id)
-
-    form = FillInTheBlankQuestionForm()
-
-    if form.validate_on_submit():
-        fill_in_the_blank_question.question = form.question.data
-        fill_in_the_blank_question.answer_1 = form.answer.data
-        fill_in_the_blank_question.subject_tag = form.subject.data
-        fill_in_the_blank_question.marks = form.marks.data
-        fill_in_the_blank_question.feedback = form.feedback.data 
-        fill_in_the_blank_question.topic_tag = form.topic.data
-
-        db.session.add(fill_in_the_blank_question)
-        db.session.commit()
-
-        flash("Question amended")
-        return redirect('/question_list')
-
-    form.question.data = fill_in_the_blank_question.question
-    form.answer.data = fill_in_the_blank_question.answer_1
-    form.subject.data = fill_in_the_blank_question.subject_tag
-    form.marks.data = fill_in_the_blank_question.marks
-    form.feedback.data = fill_in_the_blank_question.feedback
-    form.topic.data = fill_in_the_blank_question.topic_tag
-
-    return render_template('edit_fill_in_the_blank_question.html', fill_in_the_blank_question = fill_in_the_blank_question, form = form)
-
-@app.route("/fill_in_the_blank_question/delete/<int:fill_in_the_blank_question_id>")
-def delete_fill_in_the_blank_question(fill_in_the_blank_question_id):
-    fill_in_the_blank_question_to_delete = Multiplechoice.query.get_or_404(fill_in_the_blank_question_id)
-
-    try:
-        db.session.delete(fill_in_the_blank_question_to_delete)
-        db.session.commit()
-        flash("Question deleted!")
-
-        return redirect('/question_list')
-
-    except:
-        flash("Problem deleting question, please check with Admin!")
-
-        return redirect('/question_list')
-
-# Add code-challenge questions
-@app.route("/add_code_challenge_question.html", methods = ['GET', 'POST'])
-def add_code_challenge_question():
-    return render_template('add_code_challenge_question.html')
 
 @app.route("/question_list/<order_by>", methods = ['GET'])
 @app.route("/<order_by>")
