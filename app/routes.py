@@ -1,4 +1,4 @@
-from flask import render_template, flash, redirect, url_for, request, g,session
+from flask import render_template, flash, redirect, url_for, request, session, jsonify
 from flask_login import current_user, login_user, logout_user, login_required
 from werkzeug.urls import url_parse
 from app.models import User, Multiplechoice, Formativetest, Module
@@ -43,6 +43,25 @@ def logout():
 def index():
     return render_template('index.html', title = 'Home')
 
+@app.route("/create_test",methods=['GET','POST'])
+@login_required
+def create_test():
+  form = CreateTestForm() 
+  questions=Multiplechoice.query.all()
+  form.question_id_1.choices = [(question.id,question.id) for question in questions]
+  form.question_id_2.choices = [(question.id,question.id) for question in questions]
+  form.question_id_3.choices = [(question.id,question.id) for question in questions]
+  form.question_id_4.choices = [(question.id,question.id) for question in questions]
+  form.question_id_5.choices = [(question.id,question.id) for question in questions]
+  if form.validate_on_submit():
+    test=Test(test_type=form.test_type.data,creator_id=current_user.id,question_id_1=form.question_id_1.data,question_id_2=form.question_id_2.data,question_id_3=form.question_id_3.data,question_id_4=form.question_id_4.data,question_id_5=form.question_id_5.data)
+    db.session.add(test)
+    db.session.commit()
+    flash('Test Creation Succesful!')
+    return redirect(url_for('index'))
+  return render_template('create_test.html',title='Create Test',form=form,questions=questions)
+
+
 # Add multiple choice questions
 @app.route('/mc_questions', methods=['GET', 'POST'])
 @login_required
@@ -71,6 +90,11 @@ def result():
     questions=Multiplechoice.query.all()
         
     return render_template('question_list.html',questions=questions)
+
+@app.route('/modules', methods=['GET'])
+def modules():
+    modules = Module.query.all()
+    return render_template('modules.html',title='MSc Computing Modules',modules=modules)
 
 @app.route('/choose_create_test', methods=['GET', 'POST'])
 @login_required
@@ -320,5 +344,22 @@ def takeformtest(Form_test_id):
     questions = test.linkedquestions
     answers = StudentAnswerForm()
     return render_template('Take_Formative_test.html', title = 'Take: ' + test.testtitle , test=test, questions=questions, answers=answers)
+
+
+
+@app.route("/Formative_test_list", methods=['GET'])
+def formtests():
+    allFormtests = Formativetest.query.all()
+    return render_template('Formative_test_list.html', title = 'Formative tests list', allFormtests=allFormtests)
+
+
+@app.route("/Formative_test/<int:Form_test_id>/delete", methods=['POST'])
+@login_required
+def delete_test(Form_test_id):
+  test = Formativetest.query.get_or_404(Form_test_id)
+  db.session.delete(test)
+  db.session.commit()
+  flash('Your Post has been deleted')
+  return redirect('/Formative_test_list.html')
 
 

@@ -4,7 +4,6 @@ from wtforms.validators import DataRequired, Optional
 from wtforms_sqlalchemy.fields import QuerySelectField
 from app.models import Multiplechoice
 
-
 class LoginForm(FlaskForm):
     username = StringField('Your ID number', validators = [DataRequired()])
     password = PasswordField('Password', validators = [DataRequired()])
@@ -72,6 +71,7 @@ class QChoiceForm(FlaskForm):
 
 class EmptyForm(FlaskForm):
   submit = SubmitField('Submit')
+<<<<<<< HEAD
 
 class StudentAnswerForm(FlaskForm):
     ans_multi_select_1 = BooleanField("Option 1")
@@ -81,3 +81,5 @@ class StudentAnswerForm(FlaskForm):
     ans_FTG = StringField("Type answer")
         
     submit = SubmitField("Form Complete")
+=======
+>>>>>>> a3b87d5fbbaa4a446a1f57de1e9c92f924b24153
