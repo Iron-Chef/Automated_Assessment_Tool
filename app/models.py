@@ -36,6 +36,11 @@ class Module(db.Model):
     name = db.Column(db.Text, nullable = False)
     credits=db.Column(db.Integer)
     formtestref = db.relationship('Formativetest', backref = 'mdls', lazy=True)
+    #formtest to questions many-many realtionship table - rj
+    Mc_Ft = db.Table('Mc_Ft',
+    db.Column('Mc_id', db.Integer, db.ForeignKey('multiplechoice.id'), primary_key=True),
+    db.Column('Ft_id', db.Integer, db.ForeignKey('formativetest.id'), primary_key=True)    
+)
 
 Mc_Ft = db.Table('Mc_Ft',
     db.Column('Mc_id', db.Integer, db.ForeignKey('multiplechoice.id'), primary_key=True),
@@ -50,6 +55,13 @@ class Formativetest(db.Model):
     linkedquestions = db.relationship('Multiplechoice', secondary = Mc_Ft, backref=db.backref('linkquestions', lazy=True),lazy='subquery')
     #testresults = db.relationship('Results_sum', backref = 'tstrslts', lazy=True)
     #test rating by averaging out the score of the questions
+
+class Formativetest(db.Model):
+    id = db.Column(db.Integer, primary_key = True)
+    testtitle = db.Column(db.Text,)
+    author = db.Column(db.Text, db.ForeignKey('user.id'))
+    module_code = db.Column(db.Integer, db.ForeignKey('module.id'))
+    linkedquestions = db.relationship('Multiplechoice', secondary = Mc_Ft, backref=db.backref('linkquestions', lazy=True),lazy='subquery')
 
 class Multiplechoice(db.Model):
     id = db.Column(db.Integer, primary_key = True)
