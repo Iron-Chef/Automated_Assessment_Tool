@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% block content %}
     <p>Test Title: {{ formtest.testtitle }}</p>
-    <p>Test module: {{ formtest.module_code }} - {{ formtest.mdls.name }}</p>
+    <p>Test module: {{ formtest.mdls.code }} - {{ formtest.mdls.name }}</p>
     <p>Test author: {{ formtest.tstathr.forename}} {{ formtest.tstathr.surname}}</p>
 
 {% for question in formtestquestions %}

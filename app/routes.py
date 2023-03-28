@@ -448,46 +448,24 @@ def results_student(user_id):
 
 
 
+    if form.validate_on_submit():
+        if form.answer_1.data =="1":
+            marks+=question_1.marks
+        if form.answer_2.data =="1":
+            marks+=question_2.marks
+        if form.answer_3.data =="1":
+            marks+=question_3.marks
+        if form.answer_4.data =="1":
+            marks+=question_4.marks
+        if form.answer_5.data =="1":
+            marks+=question_5.marks
+        formative_attempt=FormativeAttempt(test_id=test.test_id,user_id=current_user.id,answer_1=form.answer_1.data,answer_2=form.answer_2.data,answer_3=form.answer_3.data,answer_4=form.answer_4.data,answer_5=form.answer_5.data,question_id_1=question_1.id,question_id_2=question_2.id,question_id_3=question_3.id,question_id_4=question_4.id,question_id_5=question_5.id, marks=marks)
+        db.session.add(formative_attempt)
+        db.session.commit()
+        flash('Test Submit Succesful!')
+        return redirect(url_for('index'))
+    return render_template('attempt_test.html',title='Attempt Test',form=form,test=test,question_1=question_1,question_2=question_2,question_3=question_3,question_4=question_4,question_5=question_5, marks=marks)
 
-  if form.validate_on_submit():
-    if form.answer_1.data =="1":
-        marks+=question_1.marks
-    if form.answer_2.data =="1":
-        marks+=question_2.marks
-    if form.answer_3.data =="1":
-        marks+=question_3.marks
-    if form.answer_4.data =="1":
-        marks+=question_4.marks
-    if form.answer_5.data =="1":
-        marks+=question_5.marks
-    formative_attempt=FormativeAttempt(test_id=test.test_id,user_id=current_user.id,answer_1=form.answer_1.data,answer_2=form.answer_2.data,answer_3=form.answer_3.data,answer_4=form.answer_4.data,answer_5=form.answer_5.data,question_id_1=question_1.id,question_id_2=question_2.id,question_id_3=question_3.id,question_id_4=question_4.id,question_id_5=question_5.id, marks=marks)
-    db.session.add(formative_attempt)
-    db.session.commit()
-    flash('Test Submit Succesful!')
-    return redirect(url_for('index'))
-  return render_template('attempt_test.html',title='Attempt Test',form=form,test=test,question_1=question_1,question_2=question_2,question_3=question_3,question_4=question_4,question_5=question_5, marks=marks)
-
-
-# SP - lecturer Stats - Summative results page 
-@app.route("/results_s", methods=['GET'])
-@login_required
-def results_s():
-    results_sum = Results_sum.query.all()
-    num_marked = len(Results_sum.query.all())
-    total_marks = Results_sum.query.with_entities(func.sum(Results_sum.total_mark).label('total')).first().total
-    average_mark = int(total_marks/num_marked)
-
-    return render_template('results_s.html', title='Results', results_sum=results_sum, num_marked=num_marked, total_marks=total_marks, average_mark=average_mark)
-
-# SP - lecturer Stats - individual students results page
-@app.route("/results_s/<int:user_id>", methods=['GET'])
-@login_required
-def results_student(user_id):
-    
-    individ_results = Results_sum.query.filter_by(user_id=user_id).first_or_404()
-    entries = Results_sum.query.filter_by(user_id=user_id).all()
-    count_entries = len(Results_sum.query.filter_by(user_id=user_id).all())
-    return render_template('res_student.html', title='Student results', individ_results=individ_results, entries=entries, count_entries=count_entries)
 
 #to allow lect. to choose if its formative or summative - RJ 
 @app.route('/choose_create_test', methods=['GET', 'POST'])
@@ -508,8 +486,8 @@ def choose_create_test():
             return redirect('/create_form_test')
     else:
         if form.validate_on_submit():
-            flash('this is not yet possible')
-            return redirect('/create_form_test') 
+            return redirect('/create_test')
+
     return render_template('choose_create_test.html', title = 'Create New Assesment', form=form)
 
 #this allows questions to be added to formative test(sorry about how long it is) - RJ
