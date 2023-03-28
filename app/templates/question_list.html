@@ -1,8 +1,8 @@
 {% extends "base.html" %}
 {% block content %}
 
-
 <h1>Previous Questions</h1>
+
 
 <!--JAVA COLLAPSIBLE-->
 <button type="button" class="collapsible">Java</button>
@@ -12,10 +12,11 @@
     <button class="btn btn-secondary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">Order By</button>
     <ul class="dropdown-menu">
       <li><a class="dropdown-item" href="{{ url_for('question_list', order_by = 'question_type') }}">Question Type</a></li>
-      <li><a class="dropdown-item" href="{{ url_for('question_list', order_by = 'topic') }}">Topic</a></li>
+      <li><a class="dropdown-item" href="{{ url_for('question_list', order_by = 'topic') }}">Tags</a></li>
       <li><a class="dropdown-item" href="{{ url_for('question_list', order_by = 'marks_asc') }}">Marks (Asc)</a></li>
       <li><a class="dropdown-item" href="{{ url_for('question_list', order_by = 'marks_desc') }}">Marks (Desc)</a></li>
-      <li><a class="dropdown-item" href="{{ url_for('question_list', order_by = 'difficulty') }}">Difficulty</a></li>
+      <li><a class="dropdown-item" href="{{ url_for('question_list', order_by = 'difficulty_asc') }}">Difficulty (Asc)</a></li>
+      <li><a class="dropdown-item" href="{{ url_for('question_list', order_by = 'difficulty_desc') }}">Difficulty (Desc)</a></li>
     </ul>
   </div>
 
@@ -196,6 +197,7 @@
   {% endif %} <!--This is for subject_tag-->
   {% endfor %}
 </div>
+
 
 <!--Script for collapsible sections-->
 <script>

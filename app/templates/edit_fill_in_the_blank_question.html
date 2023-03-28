@@ -22,11 +22,11 @@
         </p>
 
         <p>
-        {{ form.subject.label }}
-        {% for choice in form.subject %}
-            {{ choice.label }}
-            {{ choice }}
-        {% endfor %}
+            {{ form.subject.label }}
+            {% for choice in form.subject %}
+                {{ choice.label }}
+                {{ choice }}
+            {% endfor %}
         </p>
 
         <p> 
@@ -35,6 +35,10 @@
             {% for error in form.marks.errors %} 
            <span style="color: red;">[{{ error }}]</span>
            {% endfor %}
+        </p>
+
+        <p>
+            {{ form.rating.label }} {{ form.rating }}
         </p>
 
         <p> 

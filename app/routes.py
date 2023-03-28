@@ -188,7 +188,9 @@ def add_fill_in_the_blank_question():
         question = form.question.data, 
         answer_1 = form.answer.data,
         subject_tag = form.subject.data,
-        marks = form.marks.data, 
+        marks = form.marks.data,
+        rating = dict(DIFFICULTY_RATING).get(form.rating.data),
+        rating_num = form.rating.data,
         feedback = form.feedback.data,
         topic_tag = form.topic.data,
         question_type = "fill_in_the_blank"
@@ -226,6 +228,8 @@ def edit_fill_in_the_blank_question(fill_in_the_blank_question_id):
         fill_in_the_blank_question.answer_1 = form.answer.data
         fill_in_the_blank_question.subject_tag = form.subject.data
         fill_in_the_blank_question.marks = form.marks.data
+        fill_in_the_blank_question.rating = dict(DIFFICULTY_RATING).get(form.rating.data)
+        fill_in_the_blank_question.rating_num = form.rating.data
         fill_in_the_blank_question.feedback = form.feedback.data 
         fill_in_the_blank_question.topic_tag = form.topic.data
 
@@ -239,6 +243,7 @@ def edit_fill_in_the_blank_question(fill_in_the_blank_question_id):
     form.answer.data = fill_in_the_blank_question.answer_1
     form.subject.data = fill_in_the_blank_question.subject_tag
     form.marks.data = fill_in_the_blank_question.marks
+    form.rating.data == dict(DIFFICULTY_RATING).get(fill_in_the_blank_question.rating)
     form.feedback.data = fill_in_the_blank_question.feedback
     form.topic.data = fill_in_the_blank_question.topic_tag
 
@@ -274,8 +279,10 @@ def question_list(order_by):
         questions = Multiplechoice.query.order_by(Multiplechoice.marks)
     elif order_by == "marks_desc":
         questions = Multiplechoice.query.order_by(Multiplechoice.marks.desc())
-    elif order_by == "difficulty":
-        questions = Multiplechoice.query.order_by(Multiplechoice.difficulty)
+    elif order_by == "difficulty_asc":
+        questions = Multiplechoice.query.order_by(Multiplechoice.rating_num)
+    elif order_by == "difficulty_desc":
+        questions = Multiplechoice.query.order_by(Multiplechoice.rating_num.desc())
     
     return render_template('question_list.html',questions=questions)
 
@@ -398,8 +405,6 @@ def attempt_test(test_id):
   form.answer_4.choices = [(question_4.ans_choice_1,question_4.answer_1),(question_4.ans_choice_2,question_4.answer_2),(question_4.ans_choice_3,question_4.answer_3),(question_4.ans_choice_4,question_4.answer_4)]
   form.answer_5.choices = [(question_5.ans_choice_1,question_5.answer_1),(question_5.ans_choice_2,question_5.answer_2),(question_5.ans_choice_3,question_5.answer_3),(question_5.ans_choice_4,question_5.answer_4)]
   marks=0
-
-
 
   if form.validate_on_submit():
     if form.answer_1.data =="1":
