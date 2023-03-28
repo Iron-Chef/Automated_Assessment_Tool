@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, BooleanField, SubmitField, IntegerField,SelectField
+from wtforms import StringField, PasswordField, BooleanField, SubmitField, IntegerField, SelectField, RadioField
 from wtforms.validators import DataRequired
 from wtforms.widgets import TextArea
 
@@ -33,16 +33,32 @@ class StudentAnswerForm(FlaskForm):
     ans_multi_select_2 = BooleanField("Option 2")
     ans_multi_select_3 = BooleanField("Option 3")
     ans_multi_select_4 = BooleanField("Option 4")
-        
+    subject = RadioField("Subject: ", choices = [
+        ("Java", "Java"),
+        ("JavaScript", "JavaScript"),
+        ("Python", "Python"),
+        ("SQL", "SQL"),
+        ],
+        coerce = str, validators = [DataRequired()])
+    marks = IntegerField(validators=[DataRequired(message="Please enter mark")]) 
+    feedback = StringField("Feedback:")
+    topic = StringField("Topic: ")
     submit = SubmitField("Form Complete")
 
 class FillInTheBlankQuestionForm(FlaskForm):
     question = StringField(validators = [DataRequired (message = "Please type your question here: ")])
     answer = StringField(validators = [DataRequired (message = "Please enter the correct answer")])
-    
-    topic = StringField(validators = [DataRequired (message = "Please enter the topic of the question: ")])
+    subject = RadioField("Subject: ", choices = [
+        ("Java", "Java"),
+        ("JavaScript", "JavaScript"),
+        ("Python", "Python"),
+        ("SQL", "SQL"),
+        ("Misc", "Misc"),
+        ],
+        coerce = str, validators = [DataRequired()])
     marks = IntegerField(validators = [DataRequired (message = "Please type your question here: ")])
     feedback = StringField ("Feedback: ")
+    topic = StringField("Topic: ")
     submit = SubmitField("Form Complete")
 
 class CreateTestForm(FlaskForm):
