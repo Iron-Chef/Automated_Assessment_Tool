@@ -1,4 +1,5 @@
 from app import db, login
+from datetime import datetime
 from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
 
@@ -15,7 +16,8 @@ class User(UserMixin, db.Model):
     email = db.Column(db.String(120), index=True, unique=True)
     year = db.Column(db.Integer)
     is_lecturer = db.Column(db.Boolean, nullable = False, default = False)
-    testauthor = db.relationship('Formativetest', backref = 'tstathr', lazy=True)
+    # testauthor = db.relationship('Formativetest', backref = 'tstathr', lazy=True)
+    # testtaker = db.relationship('Results_sum', backref = 'tsttkr', lazy=True)
 
 
     def __repr__(self):
@@ -45,6 +47,8 @@ class Formativetest(db.Model):
     author = db.Column(db.Text, db.ForeignKey('user.id'))
     module_code = db.Column(db.Integer, db.ForeignKey('module.id'))
     linkedquestions = db.relationship('Multiplechoice', secondary = Mc_Ft, backref=db.backref('linkquestions', lazy=True),lazy='subquery')
+    #testresults = db.relationship('Results_sum', backref = 'tstrslts', lazy=True)
+    #test rating by averaging out the score of the questions
 
 class Multiplechoice(db.Model):
     id = db.Column(db.Integer, primary_key = True)
@@ -67,6 +71,31 @@ class Multiplechoice(db.Model):
     def __repr__(self):
 
         return "id: {}, Question: {}, Answer 1: {}, Answer 2: {}, Answer 3: {}, Answer 4: {}".format(self.id, self.question, self.answer_1, self.answer_2, self.answer_3, self.answer_4)
+
+class Results_sum(db.Model):
+    id = db.Column(db.Integer, primary_key = True)
+    user_id = db.Column(db.Text, db.ForeignKey('user.id'))
+    # attempt date
+    date = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+    cohort_year = db.Column(db.String(15))
+    #test_id = db.Column(db.Integer, db.ForeignKey('Formativetest.id'))
+    Q1_mark = db.Column(db.Integer)
+    Q1_attempts = db.Column(db.Integer)
+    Q2_mark = db.Column(db.Integer)
+    Q2_attempts = db.Column(db.Integer)
+    Q3_mark = db.Column(db.Integer)
+    Q3_attempts = db.Column(db.Integer)
+    Q4_mark = db.Column(db.Integer)
+    Q4_attempts = db.Column(db.Integer)
+    Q5_mark = db.Column(db.Integer)
+    Q5_attempts = db.Column(db.Integer)
+    # test total mark (%)
+    total_mark = db.Column(db.Integer)
+    # test contribution to total module credit
+    test_weighting = db.Column(db.Integer)
+
+#     # def __repr__(self):
+#     #     return f"Results_sum('{self.user_id}','{self.username}', '{self.forename}', '{self.surname}', '{self.test_id}','{self.total_mark}','{self.cohort_year}','{self.res_module}' ,'{self.Q1_mark}','{self.Q1_attempts}' ,'{self.Q2_mark}','{self.Q2_attempts}','{self.Q3_mark}','{self.Q3_attempts}','{self.Q4_mark}','{self. Q4_attempts}','{self.Q5_mark}','{self.Q5_attempts}','{self.test_rating}','{self.form_summ}','{self.test_weighting}','{self.date}')"
 
 
 

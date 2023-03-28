@@ -72,3 +72,12 @@ class QChoiceForm(FlaskForm):
 
 class EmptyForm(FlaskForm):
   submit = SubmitField('Submit')
+
+class StudentAnswerForm(FlaskForm):
+    ans_multi_select_1 = BooleanField("Option 1")
+    ans_multi_select_2 = BooleanField("Option 2")
+    ans_multi_select_3 = BooleanField("Option 3")
+    ans_multi_select_4 = BooleanField("Option 4")
+    ans_FTG = StringField("Type answer")
+        
+    submit = SubmitField("Form Complete")

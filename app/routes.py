@@ -2,7 +2,7 @@ from flask import render_template, flash, redirect, url_for, request, g,session
 from flask_login import current_user, login_user, logout_user, login_required
 from werkzeug.urls import url_parse
 from app.models import User, Multiplechoice, Formativetest, Module
-from app.forms import LoginForm, QuestionForm, QChoiceForm, TestChoice
+from app.forms import LoginForm, QuestionForm, QChoiceForm, TestChoice, StudentAnswerForm
 from app import app, db
 
 @app.route('/login', methods = ['GET', 'POST'])
@@ -313,5 +313,12 @@ def delete_test(Form_test_id):
   db.session.commit()
   flash('Your Post has been deleted')
   return redirect('/Formative_test_list.html')
+
+@app.route("/Take_Formative_test/<int:Form_test_id>", methods=['GET', 'POST'])
+def takeformtest(Form_test_id):
+    test = Formativetest.query.get_or_404(Form_test_id)
+    questions = test.linkedquestions
+    answers = StudentAnswerForm()
+    return render_template('Take_Formative_test.html', title = 'Take: ' + test.testtitle , test=test, questions=questions, answers=answers)
 
 
