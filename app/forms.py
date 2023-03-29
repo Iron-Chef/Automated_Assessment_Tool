@@ -1,7 +1,7 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, BooleanField, SubmitField, IntegerField, SelectField, RadioField, FormField, validators
-from wtforms.validators import DataRequired, Optional
-from wtforms_sqlalchemy.fields import QuerySelectField, NumberRange
+from wtforms.validators import DataRequired, Optional, NumberRange
+from wtforms_sqlalchemy.fields import QuerySelectField
 from wtforms.widgets import TextArea
 from app.models import Multiplechoice
 
