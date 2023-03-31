@@ -4,7 +4,7 @@
 <h1>Formative Test List</h1>
 
 {% for test in allFormtests %}
-     <a href="{{ url_for( 'formtest', Form_test_id=test.id ) }}"><p>Test Title: {{ test.testtitle }}, Test module: {{ test.mdls.code }} - {{ test.mdls.name }}, Test author: {{ test.tstathr.forename}} {{ test.tstathr.surname}}</p></a>
+     <a href="{{ url_for( 'formtest', Form_test_id=test.id ) }}"><p>Test Title: {{ test.testtitle }}, Test module: {{ test.mdls.code }} - {{ test.mdls.name }}, Test author: {{ test.tstathr.forename}} {{ test.tstathr.surname}}</a><a href="{{ url_for( 'startformtest', Form_test_id=test.id ) }}">   ->  Take Test</p></a>
 {% endfor %}
 
 {% endblock %}

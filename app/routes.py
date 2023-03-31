@@ -2,8 +2,9 @@ from flask import render_template, flash, redirect, url_for, request, session, j
 from flask_login import current_user, login_user, logout_user, login_required
 from werkzeug.urls import url_parse
 from sqlalchemy import *
+from datetime import datetime
 from app.models import User,Test, Multiplechoice, FormativeAttempt,Results_sum, Module, Studentanswer, Formativetest
-from app.forms import DIFFICULTY_RATING,LoginForm, CreateTestForm, QuestionForm, SubmitAttemptForm, StudentAnswerForm, ResultsForm, FillInTheBlankQuestionForm, QChoiceForm, TestChoice
+from app.forms import DIFFICULTY_RATING,LoginForm, CreateTestForm, QuestionForm, SubmitAttemptForm, StudentAnswerForm, ResultsForm, FillInTheBlankQuestionForm, QChoiceForm, TestChoice, TakeFormTestForm, Q1TakeFormTestForm, Q2TakeFormTestForm, Q3TakeFormTestForm, Q4TakeFormTestForm, Q5TakeFormTestForm, FinishFormTestForm
 from app import app,db
 
 @app.route('/login', methods = ['GET', 'POST'])
@@ -701,13 +702,256 @@ def formtest(Form_test_id):
     formtest = Formativetest.query.get_or_404(Form_test_id)
     formtestquestions = formtest.linkedquestions
     return render_template('Formative_test.html', title = formtest.testtitle , formtest=formtest, formtestquestions=formtestquestions)
+
+@app.route("/Start_Formative_test/<int:Form_test_id>", methods=['GET', 'POST'])
+def startformtest(Form_test_id):
+    test = Formativetest.query.get_or_404(Form_test_id)
+    start = TakeFormTestForm()
+
+    if start.validate_on_submit():
+        testres = Results_sum(
+        user_id = current_user.id,
+        username = current_user.username,
+        forename = current_user.forename,
+        surname = current_user.surname,
+        date = datetime.now(),
+        cohort_year = '',
+        test_id = test.id,
+        form_summ = 0,
+        res_module = test.mdls.code,
+        Q1_mark = 0,
+        Q1_attempts = 0,
+        Q2_mark = 0,
+        Q2_attempts = 0,
+        Q3_mark = 0,
+        Q3_attempts = 0,
+        Q4_mark = 0,
+        Q4_attempts = 0,
+        Q5_mark = 0,
+        Q5_attempts = 0,
+        test_rating = 10,
+        test_weighting = 10,
+        )
+        db.session.add(testres)
+        db.session.commit()
+        flash('Your test has started!')
+        return redirect(url_for('takeformtest', Form_test_id=Form_test_id))
+    
+    return render_template('Start_Formative_test.html', title = 'Start: ' + test.testtitle , test=test, start=start)
+
 #rj
 @app.route("/Take_Formative_test/<int:Form_test_id>", methods=['GET', 'POST'])
 def takeformtest(Form_test_id):
     test = Formativetest.query.get_or_404(Form_test_id)
     questions = test.linkedquestions
-    answers = StudentAnswerForm()
-    return render_template('Take_Formative_test.html', title = 'Take: ' + test.testtitle , test=test, questions=questions, answers=answers)
+    q1answers = Q1TakeFormTestForm()
+    q2answers = Q2TakeFormTestForm()
+    q3answers = Q3TakeFormTestForm()
+    q4answers = Q4TakeFormTestForm()
+    q5answers = Q5TakeFormTestForm()
+    finish = FinishFormTestForm()
+    question_1 = questions[0]
+    question_2 = questions[1]
+    question_3 = questions[2]
+    question_4 = questions[3]
+    question_5 = questions[4]
+
+    lastres = Results_sum.query.order_by(Results_sum.id.desc()).first()
+
+    if q1answers.q1_submit.data and q1answers.validate():
+        if question_1.question_type == 'Multiplechoice':
+            if question_1.ans_choice_1 == True and q1answers.q1_ans_multi_select_1.data == True:
+                lastres.Q1_mark = 100
+                lastres.Q1_attempts = lastres.Q1_attempts + 1
+            if question_1.ans_choice_1 == False and q1answers.q1_ans_multi_select_1.data == True:
+                lastres.Q1_mark = 0
+                lastres.Q1_attempts = lastres.Q1_attempts + 1
+            if question_1.ans_choice_2 == True and q1answers.q1_ans_multi_select_2.data == True:
+                lastres.Q1_mark = 100
+                lastres.Q1_attempts = lastres.Q1_attempts + 1
+            if question_1.ans_choice_2 == False and q1answers.q1_ans_multi_select_2.data == True:
+                lastres.Q1_mark = 0
+                lastres.Q1_attempts = lastres.Q1_attempts + 1
+            if question_1.ans_choice_3 == True and q1answers.q1_ans_multi_select_3.data == True:
+                lastres.Q1_mark = 100
+                lastres.Q1_attempts = lastres.Q1_attempts + 1
+            if question_1.ans_choice_3 == False and q1answers.q1_ans_multi_select_3.data == True:
+                lastres.Q1_mark = 0
+                lastres.Q1_attempts = lastres.Q1_attempts + 1
+            if question_1.ans_choice_4 == True and q1answers.q1_ans_multi_select_4.data == True:
+                lastres.Q1_mark = 100
+                lastres.Q1_attempts = lastres.Q1_attempts + 1
+            if question_1.ans_choice_1 == False and q1answers.q1_ans_multi_select_1.data == True:
+                lastres.Q1_mark = 0
+                lastres.Q1_attempts = lastres.Q1_attempts + 1
+        else:
+            if question_1.answer_1 == q1answers.q1_ans_FTG.data:
+                lastres.Q1_mark = 0
+                lastres.Q1_attempts = lastres.Q1_attempts + 1
+            if question_1.answer_1 == q1answers.q1_ans_FTG.data:
+                lastres.Q1_mark = 0
+                lastres.Q1_attempts = lastres.Q1_attempts + 1
+        db.session.commit()
+
+    if q2answers.q2_submit.data and q2answers.validate():
+        if question_2.question_type == 'Multiplechoice':
+            if question_2.ans_choice_1 == True and q2answers.q2_ans_multi_select_1.data == True:
+                lastres.Q2_mark = 100
+                lastres.Q2_attempts = lastres.Q2_attempts + 1
+            if question_2.ans_choice_1 == False and q2answers.q2_ans_multi_select_1.data == True:
+                lastres.Q2_mark = 0
+                lastres.Q2_attempts = lastres.Q2_attempts + 1
+            if question_2.ans_choice_2 == True and q2answers.q2_ans_multi_select_2.data == True:
+                lastres.Q2_mark = 100
+                lastres.Q2_attempts = lastres.Q2_attempts + 1
+            if question_2.ans_choice_2 == False and q2answers.q2_ans_multi_select_2.data == True:
+                lastres.Q2_mark = 0
+                lastres.Q2_attempts = lastres.Q2_attempts + 1
+            if question_2.ans_choice_3 == True and q2answers.q2_ans_multi_select_3.data == True:
+                lastres.Q2_mark = 100
+                lastres.Q2_attempts = lastres.Q2_attempts + 1
+            if question_2.ans_choice_3 == False and q2answers.q2_ans_multi_select_3.data == True:
+                lastres.Q2_mark = 0
+                lastres.Q2_attempts = lastres.Q2_attempts + 1
+            if question_2.ans_choice_4 == True and q2answers.q2_ans_multi_select_4.data == True:
+                lastres.Q2_mark = 100
+                lastres.Q2_attempts = lastres.Q2_attempts + 1
+            if question_2.ans_choice_1 == False and q2answers.q2_ans_multi_select_1.data == True:
+                lastres.Q2_mark = 0
+                lastres.Q2_attempts = lastres.Q2_attempts + 1
+        else:
+            if question_2.answer_1 == q2answers.q2_ans_FTG.data:
+                lastres.Q2_mark = 0
+                lastres.Q2_attempts = lastres.Q2_attempts + 1
+            if question_2.answer_1 == q2answers.q2_ans_FTG.data:
+                lastres.Q2_mark = 0
+                lastres.Q2_attempts = lastres.Q2_attempts + 1
+        db.session.commit()
+    
+    if q3answers.q3_submit.data and q3answers.validate():
+        if question_3.question_type == 'Multiplechoice':
+            if question_3.ans_choice_1 == True and q3answers.q3_ans_multi_select_1.data == True:
+                lastres.Q3_mark = 100
+                lastres.Q3_attempts = lastres.Q3_attempts + 1
+            if question_3.ans_choice_1 == False and q3answers.q3_ans_multi_select_1.data == True:
+                lastres.Q3_mark = 0
+                lastres.Q3_attempts = lastres.Q3_attempts + 1
+            if question_3.ans_choice_2 == True and q3answers.q3_ans_multi_select_2.data == True:
+                lastres.Q3_mark = 100
+                lastres.Q3_attempts = lastres.Q3_attempts + 1
+            if question_3.ans_choice_2 == False and q3answers.q3_ans_multi_select_2.data == True:
+                lastres.Q3_mark = 0
+                lastres.Q3_attempts = lastres.Q3_attempts + 1
+            if question_3.ans_choice_3 == True and q3answers.q3_ans_multi_select_3.data == True:
+                lastres.Q3_mark = 100
+                lastres.Q3_attempts = lastres.Q3_attempts + 1
+            if question_3.ans_choice_3 == False and q3answers.q3_ans_multi_select_3.data == True:
+                lastres.Q3_mark = 0
+                lastres.Q3_attempts = lastres.Q3_attempts + 1
+            if question_3.ans_choice_4 == True and q3answers.q3_ans_multi_select_4.data == True:
+                lastres.Q3_mark = 100
+                lastres.Q3_attempts = lastres.Q3_attempts + 1
+            if question_3.ans_choice_1 == False and q3answers.q3_ans_multi_select_1.data == True:
+                lastres.Q3_mark = 0
+                lastres.Q3_attempts = lastres.Q3_attempts + 1
+        else:
+            if question_3.answer_1 == q3answers.q3_ans_FTG.data:
+                lastres.Q3_mark = 0
+                lastres.Q3_attempts = lastres.Q3_attempts + 1
+            if question_3.answer_1 == q3answers.q3_ans_FTG.data:
+                lastres.Q3_mark = 0
+                lastres.Q3_attempts = lastres.Q3_attempts + 1
+        db.session.commit()
+    
+    if q4answers.q4_submit.data and q4answers.validate():
+        if question_4.question_type == 'Multiplechoice':
+            if question_4.ans_choice_1 == True and q4answers.q4_ans_multi_select_1.data == True:
+                lastres.Q4_mark = 100
+                lastres.Q4_attempts = lastres.Q4_attempts + 1
+            if question_4.ans_choice_1 == False and q4answers.q4_ans_multi_select_1.data == True:
+                lastres.Q4_mark = 0
+                lastres.Q4_attempts = lastres.Q4_attempts + 1
+            if question_4.ans_choice_2 == True and q4answers.q4_ans_multi_select_2.data == True:
+                lastres.Q4_mark = 100
+                lastres.Q4_attempts = lastres.Q4_attempts + 1
+            if question_4.ans_choice_2 == False and q4answers.q4_ans_multi_select_2.data == True:
+                lastres.Q4_mark = 0
+                lastres.Q4_attempts = lastres.Q4_attempts + 1
+            if question_4.ans_choice_3 == True and q4answers.q4_ans_multi_select_3.data == True:
+                lastres.Q4_mark = 100
+                lastres.Q4_attempts = lastres.Q4_attempts + 1
+            if question_4.ans_choice_3 == False and q4answers.q4_ans_multi_select_3.data == True:
+                lastres.Q4_mark = 0
+                lastres.Q4_attempts = lastres.Q4_attempts + 1
+            if question_4.ans_choice_4 == True and q4answers.q4_ans_multi_select_4.data == True:
+                lastres.Q4_mark = 100
+                lastres.Q4_attempts = lastres.Q4_attempts + 1
+            if question_4.ans_choice_1 == False and q4answers.q4_ans_multi_select_1.data == True:
+                lastres.Q4_mark = 0
+                lastres.Q4_attempts = lastres.Q4_attempts + 1
+        else:
+            if question_4.answer_1 == q4answers.q4_ans_FTG.data:
+                lastres.Q4_mark = 0
+                lastres.Q4_attempts = lastres.Q4_attempts + 1
+            if question_4.answer_1 == q4answers.q3_ans_FTG.data:
+                lastres.Q4_mark = 0
+                lastres.Q4_attempts = lastres.Q4_attempts + 1
+        db.session.commit()
+
+    if q5answers.q5_submit.data and q5answers.validate():
+        if question_5.question_type == 'Multiplechoice':
+            if question_5.ans_choice_1 == True and q5answers.q5_ans_multi_select_1.data == True:
+                lastres.Q5_mark = 100
+                lastres.Q5_attempts = lastres.Q5_attempts + 1
+            if question_5.ans_choice_1 == False and q5answers.q5_ans_multi_select_1.data == True:
+                lastres.Q5_mark = 0
+                lastres.Q5_attempts = lastres.Q5_attempts + 1
+            if question_5.ans_choice_2 == True and q5answers.q5_ans_multi_select_2.data == True:
+                lastres.Q5_mark = 100
+                lastres.Q5_attempts = lastres.Q5_attempts + 1
+            if question_5.ans_choice_2 == False and q5answers.q5_ans_multi_select_2.data == True:
+                lastres.Q5_mark = 0
+                lastres.Q5_attempts = lastres.Q5_attempts + 1
+            if question_5.ans_choice_3 == True and q5answers.q5_ans_multi_select_3.data == True:
+                lastres.Q5_mark = 100
+                lastres.Q5_attempts = lastres.Q5_attempts + 1
+            if question_5.ans_choice_3 == False and q5answers.q5_ans_multi_select_3.data == True:
+                lastres.Q5_mark = 0
+                lastres.Q5_attempts = lastres.Q5_attempts + 1
+            if question_5.ans_choice_4 == True and q5answers.q5_ans_multi_select_4.data == True:
+                lastres.Q5_mark = 100
+                lasres.Q5_attempts = lastres.Q5_attempts + 1
+            if question_5.ans_choice_1 == False and q5answers.q5_ans_multi_select_1.data == True:
+                lastres.Q5_mark = 0
+                lastres.Q5_attempts = lastres.Q5_attempts + 1
+        else:
+            if question_5.answer_1 == q5answers.q5_ans_FTG.data:
+                lastres.Q5_mark = 100
+                lastres.Q5_attempts = lastres.Q5_attempts + 1
+            if question_5.answer_1 == q5answers.q5_ans_FTG.data:
+                lastres.Q5_mark = 0
+                lastres.Q5_attempts = lastres.Q5_attempts + 1
+        db.session.commit()
+
+    if finish.submitF.data and finish.validate():
+        list = []
+        if question_1.question != '':
+            list.append(lastres.Q1_mark)
+        if question_2.question != '':
+            list.append(lastres.Q2_mark)
+        if question_3.question != '':
+            list.append(lastres.Q3_mark)
+        if question_4.question != '':
+            list.append(lastres.Q4_mark)
+        if question_5.question != '':
+            list.append(lastres.Q5_mark)
+        listtotal = sum(list)
+        total_mark_sum = listtotal / len(list)
+        lastres.total_mark = total_mark_sum
+        db.session.commit()
+        return redirect('/results_s')
+
+    return render_template('Take_Formative_test.html', title = 'Take: ' + test.testtitle , test=test, questions=questions, q1answers=q1answers, q2answers=q2answers, q3answers=q3answers, q4answers=q4answers, q5answers=q5answers, finish=finish, question_1=question_1, question_2=question_2, question_3=question_3, question_4=question_4, question_5=question_5)
 #rj
 @app.route("/Formative_test/<int:Form_test_id>/delete", methods=['POST'])
 @login_required
