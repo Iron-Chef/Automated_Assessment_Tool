@@ -18,7 +18,11 @@
         {% else %}
             <p>{{ q1answers.q1_ans_FTG }} </p>   
         {% endif %} 
-        {{q1answers.q1_submit}}
+        {% if lastres.Q1_mark != 100 %}
+            {{q1answers.q1_submit}}
+        {% else %}
+            <p>You have answered this correctly! Question feeedback: {{question_1.feedback}}</p>
+        {% endif %}
 {% endif %}
 
 {% if question_2.question != '-' %}
@@ -37,7 +41,11 @@
         {% else %}
             <p>{{ q2answers.q2_ans_FTG }} </p>   
         {% endif %} 
-        {{q2answers.q2_submit}}       
+        {% if lastres.Q2_mark != 100 %}
+            {{q2answers.q2_submit}}
+        {% else %}
+            <p>You have answered this correctly! Question feeedback: {{question_2.feedback}}</p>
+        {% endif %}       
 {% endif %}
 
 {% if question_3.question != '-' %}
@@ -56,7 +64,11 @@
         {% else %}
             <p>{{ q3answers.q3_ans_FTG }} </p>   
         {% endif %}  
-        {{q3answers.q3_submit}}       
+        {% if lastres.Q3_mark != 100 %}
+            {{q3answers.q3_submit}}
+        {% else %}
+            <p>You have answered this correctly! Question feeedback: {{question_3.feedback}}</p>
+        {% endif %}       
 {% endif %}
 
 {% if question_4.question != '-' %}
@@ -75,7 +87,11 @@
         {% else %}
             <p>{{ q4answers.q4_ans_FTG }} </p>   
         {% endif %}
-        {{q4answers.q4_submit}}        
+        {% if lastres.Q4_mark != 100 %}
+            {{q4answers.q4_submit}}
+        {% else %}
+            <p>You have answered this correctly! Question feeedback: {{question_4.feedback}}</p>
+        {% endif %}        
 {% endif %}
 
 {% if question_5.question != '-' %}
@@ -94,7 +110,11 @@
         {% else %}
             <p>{{ q5answers.q5_ans_FTG }} </p>   
         {% endif %} 
-        {{q5answers.q5_submit}}       
+        {% if lastres.Q5_mark != 100 %}
+            {{q5answers.q5_submit}}
+        {% else %}
+            <p>You have answered this correctly! Question feeedback: {{question_5.feedback}}</p>
+        {% endif %}       
 {% endif %}
 
 <form action="/Take_Formative_test/{{test.id}}" method="POST">
