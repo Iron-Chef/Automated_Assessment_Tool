@@ -86,6 +86,54 @@ class QChoiceForm(FlaskForm):
 class EmptyForm(FlaskForm):
   submit = SubmitField('Submit')
 
+class TakeFormTestForm(FlaskForm):
+    ready = BooleanField("Yes")
+    submitS = SubmitField("Start test")
+
+class Q1TakeFormTestForm(FlaskForm):
+    q1_ans_multi_select_1 = BooleanField("Option 1")
+    q1_ans_multi_select_2 = BooleanField("Option 2")
+    q1_ans_multi_select_3 = BooleanField("Option 3")
+    q1_ans_multi_select_4 = BooleanField("Option 4")
+    q1_ans_FTG = StringField("Type answer")
+    q1_submit = SubmitField("q1 check answer")
+
+class Q2TakeFormTestForm(FlaskForm):   
+    q2_ans_multi_select_1 = BooleanField("Option 1")
+    q2_ans_multi_select_2 = BooleanField("Option 2")
+    q2_ans_multi_select_3 = BooleanField("Option 3")
+    q2_ans_multi_select_4 = BooleanField("Option 4")
+    q2_ans_FTG = StringField("Type answer")
+    q2_submit = SubmitField("q2 check answer")
+
+class Q3TakeFormTestForm(FlaskForm):
+    q3_ans_multi_select_1 = BooleanField("Option 1")
+    q3_ans_multi_select_2 = BooleanField("Option 2")
+    q3_ans_multi_select_3 = BooleanField("Option 3")
+    q3_ans_multi_select_4 = BooleanField("Option 4")
+    q3_ans_FTG = StringField("Type answer")
+    q3_submit = SubmitField("q3 check answer")
+
+class Q4TakeFormTestForm(FlaskForm):
+    q4_ans_multi_select_1 = BooleanField("Option 1")
+    q4_ans_multi_select_2 = BooleanField("Option 2")
+    q4_ans_multi_select_3 = BooleanField("Option 3")
+    q4_ans_multi_select_4 = BooleanField("Option 4")
+    q4_ans_FTG = StringField("Type answer")
+    q4_submit = SubmitField("q4 check answer")
+
+class Q5TakeFormTestForm(FlaskForm):
+    q5_ans_multi_select_1 = BooleanField("Option 1")
+    q5_ans_multi_select_2 = BooleanField("Option 2")
+    q5_ans_multi_select_3 = BooleanField("Option 3")
+    q5_ans_multi_select_4 = BooleanField("Option 4")
+    q5_ans_FTG = StringField("Type answer")
+    q5_submit = SubmitField("q5 check answer")
+
+class FinishFormTestForm(FlaskForm):
+    finished = BooleanField("Yes")
+    submitF = SubmitField('Finish')
+
 
 class StudentAnswerForm(FlaskForm):
     ans_multi_select_1 = BooleanField("Option 1")
@@ -144,3 +192,4 @@ class SubmitAttemptForm(FlaskForm):
 class ResultsForm(FlaskForm):
     attempt_id=IntegerField('attempt_id')
     marks=IntegerField('marks')
+

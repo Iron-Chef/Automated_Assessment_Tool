@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block content %}
+
+<p>Test Title: {{ test.testtitle }}</p>
+
+<form action="/Start_Formative_test/{{test.id}}" method="POST">
+    {{ start.csrf_token }}
+    <p>are you ready to start the test click?</p>
+    <p>Yes {{ start.ready }}</p>
+    {{start.submitS}}
+
+</form>
+
+{% endblock %}

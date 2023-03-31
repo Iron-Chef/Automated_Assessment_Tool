@@ -1,26 +1,105 @@
 {% extends "base.html" %}
 {% block content %}
-    <p>Test Title: {{ test.testtitle }}</p>
-    
-{% for question in questions %}
-    {% if question.question != '-' %}
-        <p>{{ loop.index }}.{{ question.question }}</p>
-        {% if question.question_type == 'Multiplechoice' %}
-            <p>{{ question.answer_1 }}  {{ answers.ans_multi_select_1 }}</p>
-            {{ question.answer_2 }}  {{ answers.ans_multi_select_2 }}</p>
-            {% if question.answer_3 != '' %}
-            <p> {{ question.answer_3 }}  {{ answers.ans_multi_select_3 }}</p>
+<p>Test Title: {{ test.testtitle }}</p>
+
+{% if question_1.question != '-' %}
+    <form action="/Take_Formative_test/{{test.id}}" method="POST">
+        {{ q1answers.csrf_token }}
+        <p>1.{{ question_1.question }}</p>
+        {% if question_1.question_type == 'Multiplechoice' %}
+            <p>{{ question_1.answer_1 }}  {{ q1answers.q1_ans_multi_select_1 }}</p>
+            {{ question_1.answer_2 }}  {{ q1answers.q1_ans_multi_select_2 }}</p>
+            {% if question_1.answer_3 != '' %}
+                <p> {{ question_1.answer_3 }}  {{ q1answers.q1_ans_multi_select_3 }}</p>
             {% endif %}
-            {% if question.answer_4 != '' %}
-            <p>{{ question.answer_4 }}  {{ answers.ans_multi_select_4 }}</p>
+            {% if question_1.answer_4 != '' %}
+                <p>{{ question_1.answer_4 }}  {{ q1answers.q1_ans_multi_select_4 }}</p>
             {% endif %}
         {% else %}
-            <p>{{ answers.ans_FTG }} </p>   
-        {% endif %}
-        
-    {% endif %}
-{% endfor %}
+            <p>{{ q1answers.q1_ans_FTG }} </p>   
+        {% endif %} 
+        {{q1answers.q1_submit}}
+{% endif %}
 
-<input type="submit">
+{% if question_2.question != '-' %}
+    <form action="/Take_Formative_test/{{test.id}}" method="POST">
+        {{ q2answers.csrf_token }}
+        <p>2.{{ question_2.question }}</p>
+        {% if question_2.question_type == 'Multiplechoice' %}
+            <p>{{ question_2.answer_1 }}  {{ q2answers.q2_ans_multi_select_1 }}</p>
+            {{ question_2.answer_2 }}  {{ q2answers.q2_ans_multi_select_2 }}</p>
+            {% if question_2.answer_3 != '' %}
+                <p> {{ question_2.answer_3 }}  {{ q2answers.q2_ans_multi_select_3 }}</p>
+            {% endif %}
+            {% if question_2.answer_4 != '' %}
+                <p>{{ question_2.answer_4 }}  {{ q2answers.q2_ans_multi_select_4 }}</p>
+            {% endif %}
+        {% else %}
+            <p>{{ q2answers.q2_ans_FTG }} </p>   
+        {% endif %} 
+        {{q2answers.q2_submit}}       
+{% endif %}
+
+{% if question_3.question != '-' %}
+    <form action="/Take_Formative_test/{{test.id}}" method="POST">
+        {{ q3answers.csrf_token }}
+        <p>3.{{ question_3.question }}</p>
+        {% if question_3.question_type == 'Multiplechoice' %}
+            <p>{{ question_3.answer_1 }}  {{ q3answers.q3_ans_multi_select_1 }}</p>
+            {{ question_3.answer_2 }}  {{ q3answers.q3_ans_multi_select_2 }}</p>
+            {% if question_3.answer_3 != '' %}
+                <p> {{ question_3.answer_3 }}  {{ q3answers.q3_ans_multi_select_3 }}</p>
+            {% endif %}
+            {% if question_3.answer_4 != '' %}
+                <p>{{ question_3.answer_4 }}  {{ q3answers.q3_ans_multi_select_4 }}</p>
+            {% endif %}
+        {% else %}
+            <p>{{ q3answers.q3_ans_FTG }} </p>   
+        {% endif %}  
+        {{q3answers.q3_submit}}       
+{% endif %}
+
+{% if question_4.question != '-' %}
+    <form action="/Take_Formative_test/{{test.id}}" method="POST">
+        {{ q4answers.csrf_token }}
+        <p>4.{{ question_4.question }}</p>
+        {% if question_4.question_type == 'Multiplechoice' %}
+            <p>{{ question_4.answer_1 }}  {{ q4answers.q4_ans_multi_select_1 }}</p>
+            {{ question_4.answer_2 }}  {{ q4answers.q4_ans_multi_select_2 }}</p>
+            {% if question_4.answer_3 != '' %}
+                <p> {{ question_4.answer_3 }}  {{ q4answers.q4_ans_multi_select_3 }}</p>
+            {% endif %}
+            {% if question_4.answer_4 != '' %}
+                <p>{{ question_4.answer_4 }}  {{ q4answers.q4_ans_multi_select_4 }}</p>
+            {% endif %}
+        {% else %}
+            <p>{{ q4answers.q4_ans_FTG }} </p>   
+        {% endif %}
+        {{q4answers.q4_submit}}        
+{% endif %}
+
+{% if question_5.question != '-' %}
+    <form action="/Take_Formative_test/{{test.id}}" method="POST">
+        {{ q5answers.csrf_token }}
+        <p>5.{{ question_5.question }}</p>
+        {% if question_5.question_type == 'Multiplechoice' %}
+            <p>{{ question_5.answer_1 }}  {{ q5answers.q5_ans_multi_select_1 }}</p>
+            {{ question_5.answer_2 }}  {{ q5answers.q5_ans_multi_select_2 }}</p>
+            {% if question_5.answer_3 != '' %}
+                <p> {{ question_5.answer_3 }}  {{ q5answers.q5_ans_multi_select_3 }}</p>
+            {% endif %}
+            {% if question_5.answer_4 != '' %}
+                <p>{{ question_5.answer_4 }}  {{ q5answers.q5_ans_multi_select_4 }}</p>
+            {% endif %}
+        {% else %}
+            <p>{{ q5answers.q5_ans_FTG }} </p>   
+        {% endif %} 
+        {{q5answers.q5_submit}}       
+{% endif %}
+
+<form action="/Take_Formative_test/{{test.id}}" method="POST">
+    {{ finish.csrf_token }}
+    {{finish.submitF}}
+</form>
 
 {% endblock %}
