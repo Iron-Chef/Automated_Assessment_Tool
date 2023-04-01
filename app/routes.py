@@ -285,7 +285,7 @@ def question_list(order_by):
     elif order_by == "difficulty_desc":
         questions = Multiplechoice.query.order_by(Multiplechoice.rating_num.desc())
     
-    return render_template('question_list.html',questions=questions)
+    return render_template('question_list.html', questions=questions)
 
 #Individual student answer attempt to test funtionality
 @app.route("/student_answer/<int:question_id>", methods=['GET', 'POST'])
@@ -497,6 +497,7 @@ def choose_create_test():
 def create_form_test():
     QCform = QChoiceForm()
     test = Formativetest.query.order_by(Formativetest.id.desc()).first()
+    blank = Multiplechoice.query.filter_by(question='-').first()
     if QCform.validate_on_submit():
         if QCform.question_1.data.question != '-':
             question_1 = QCform.question_1.data
@@ -535,6 +536,8 @@ def create_form_test():
             db.session.commit()
             question_1 = Multiplechoice.query.order_by(Multiplechoice.id.desc()).first()
             test.linkedquestions.append(question_1)
+        if QCform.question_1.data.question == '-' and QCform.WriteMCquestion_1.question.data =='' and QCform.WriteFTGquestion_1.question.data =='':
+            test.linkedquestions.append(blank)
         if QCform.question_2.data.question != '-':
             question_2 = QCform.question_2.data
             test.linkedquestions.append(question_2)
@@ -571,7 +574,9 @@ def create_form_test():
             db.session.add(Q2FTG)
             db.session.commit()
             question_2 = Multiplechoice.query.order_by(Multiplechoice.id.desc()).first()
-            test.linkedquestions.append(question_2) 
+            test.linkedquestions.append(question_2)
+        if QCform.question_2.data.question == '-' and QCform.WriteMCquestion_2.question.data =='' and QCform.WriteFTGquestion_2.question.data =='':
+            test.linkedquestions.append(blank)
         if QCform.question_3.data.question != '-':
             question_3 = QCform.question_3.data
             test.linkedquestions.append(question_3) 
@@ -608,7 +613,9 @@ def create_form_test():
             db.session.add(Q3FTG)
             db.session.commit()
             question_3 = Multiplechoice.query.order_by(Multiplechoice.id.desc()).first()
-            test.linkedquestions.append(question_3) 
+            test.linkedquestions.append(question_3)
+        if QCform.question_3.data.question == '-' and QCform.WriteMCquestion_3.question.data =='' and QCform.WriteFTGquestion_3.question.data =='':
+            test.linkedquestions.append(blank) 
         if QCform.question_4.data.question != '-':
             question_4 = QCform.question_4.data
             test.linkedquestions.append(question_4)
@@ -645,7 +652,9 @@ def create_form_test():
             db.session.add(Q4FTG)
             db.session.commit()
             question_4 = Multiplechoice.query.order_by(Multiplechoice.id.desc()).first()
-            test.linkedquestions.append(question_4) 
+            test.linkedquestions.append(question_4)
+        if QCform.question_4.data.question == '-' and QCform.WriteMCquestion_4.question.data =='' and QCform.WriteFTGquestion_4.question.data =='':
+            test.linkedquestions.append(blank)
         if QCform.question_5.data.question != '-':
             question_5 = QCform.question_5.data
             test.linkedquestions.append(question_5)
@@ -682,7 +691,9 @@ def create_form_test():
             db.session.add(Q5FTG)
             db.session.commit()
             question_5 = Multiplechoice.query.order_by(Multiplechoice.id.desc()).first()
-            test.linkedquestions.append(question_5)  
+            test.linkedquestions.append(question_5)
+        if QCform.question_5.data.question == '-' and QCform.WriteMCquestion_5.question.data =='' and QCform.WriteFTGquestion_5.question.data =='':
+            test.linkedquestions.append(blank)  
         
         db.session.commit()
         flash('test added')
@@ -755,7 +766,7 @@ def takeformtest(Form_test_id):
     question_3 = questions[2]
     question_4 = questions[3]
     question_5 = questions[4]
-
+        
     lastres = Results_sum.query.order_by(Results_sum.id.desc()).first()
 
     if q1answers.q1_submit.data and q1answers.validate():
