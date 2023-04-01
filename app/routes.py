@@ -3,6 +3,7 @@ from flask_login import current_user, login_user, logout_user, login_required
 from werkzeug.urls import url_parse
 from sqlalchemy import *
 from datetime import datetime
+import random
 from app.models import User,Test, Multiplechoice, FormativeAttempt,Results_sum, Module, Studentanswer, Formativetest
 from app.forms import DIFFICULTY_RATING,LoginForm, CreateTestForm, QuestionForm, SubmitAttemptForm, StudentAnswerForm, ResultsForm, FillInTheBlankQuestionForm, QChoiceForm, TestChoice, TakeFormTestForm, Q1TakeFormTestForm, Q2TakeFormTestForm, Q3TakeFormTestForm, Q4TakeFormTestForm, Q5TakeFormTestForm, FinishFormTestForm
 from app import app,db
@@ -701,6 +702,33 @@ def create_form_test():
 
 
     return render_template('create_form_test.html', title = 'Create Formative Assesment', QCform=QCform, test=test)
+
+#rj
+@app.route("/Random_Formative_test", methods=['POST'])
+@login_required
+def random_formtest():
+    test = Formativetest.query.order_by(Formativetest.id.desc()).first()
+    totalquestions = Multiplechoice.query.count()
+    randomqlist = random.sample(range(2, totalquestions+1), 5)
+
+    q1index = randomqlist[0]
+    q2index = randomqlist[1]
+    q3index = randomqlist[2]
+    q4index = randomqlist[3]
+    q5index = randomqlist[4]
+
+    question_1 = Multiplechoice.query.filter_by(id = q1index).first()
+    test.linkedquestions.append(question_1)
+    question_2 = Multiplechoice.query.filter_by(id = q2index).first()
+    test.linkedquestions.append(question_2)
+    question_3 = Multiplechoice.query.filter_by(id = q3index).first()
+    test.linkedquestions.append(question_3)
+    question_4 = Multiplechoice.query.filter_by(id = q4index).first()
+    test.linkedquestions.append(question_4)
+    question_5 = Multiplechoice.query.filter_by(id = q5index).first()
+    test.linkedquestions.append(question_5)
+    db.session.commit()
+    return redirect('/Formative_test_list')
 
 #rj
 @app.route("/Formative_test_list", methods=['GET'])
