@@ -4,7 +4,7 @@ from werkzeug.urls import url_parse
 from sqlalchemy import *
 from datetime import datetime
 import random
-from app.models import User,Test, Multiplechoice, FormativeAttempt,Results_sum, Module, Studentanswer, Formativetest, Mc_Ft
+from app.models import User,Test, Multiplechoice, FormativeAttempt,Results_sum, Module, Studentanswer, Formativetest
 from app.forms import DIFFICULTY_RATING,LoginForm, CreateTestForm, QuestionForm, SubmitAttemptForm, StudentAnswerForm, ResultsForm, FillInTheBlankQuestionForm, QChoiceForm, TestChoice, TakeFormTestForm, Q1TakeFormTestForm, Q2TakeFormTestForm, Q3TakeFormTestForm, Q4TakeFormTestForm, Q5TakeFormTestForm, FinishFormTestForm
 from app import app,db
 
