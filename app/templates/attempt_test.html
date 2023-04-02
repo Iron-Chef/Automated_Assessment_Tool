@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% block content %}
+<form method="POST" action="" enctype="multipart/form-data">
+{{ form.csrf_token }}
+<h1>{{question_1.question}}</h1>
+<h3>1) {{question_1.answer_1}}</h2>
+<h3>1) {{question_1.answer_2}}</h2>
+<h3>1) {{question_1.answer_3}}</h2>
+<h3>1) {{question_1.answer_4}}</h2>
+
+<p>Please select your answer {{ form.answer_1 }}</p>
+
+
+
+<h1>{{question_2.question}}</h1>
+<h3>1) {{question_2.answer_1}}</h2>
+<h3>1) {{question_2.answer_2}}</h2>
+<h3>1) {{question_2.answer_3}}</h2>
+<h3>1) {{question_2.answer_4}}</h2>
+
+
+
+<p>Please select your answer {{ form.answer_2 }}</p>
+
+
+<h1>{{question_3.question}}</h1>
+<h3>1) {{question_3.answer_1}}</h2>
+<h3>1) {{question_3.answer_2}}</h2>
+<h3>1) {{question_3.answer_3}}</h2>
+<h3>1) {{question_3.answer_4}}</h2>
+
+    <p>Please select your answer {{ form.answer_3 }}</p>
+
+
+<h1>{{question_4.question}}</h1>
+<h3>1) {{question_4.answer_1}}</h2>
+<h3>1) {{question_4.answer_2}}</h2>
+<h3>1) {{question_4.answer_3}}</h2>
+<h3>1) {{question_4.answer_4}}</h2>
+
+    <p>Please select your answer {{ form.answer_4 }}</p>
+
+
+
+<h1>{{question_5.question}}</h1>
+<h3>1) {{question_5.answer_1}}</h2>
+<h3>1) {{question_5.answer_2}}</h2>
+<h3>1) {{question_5.answer_3}}</h2>
+<h3>1) {{question_5.answer_4}}</h2>
+
+    <p>Please select your answer {{ form.answer_5 }}</p>
+
+
+    <div class="form-group">
+        {{ form.submit(class="btn btn-outline-info") }}
+      </div>
+    </form>
+{% endblock %}
