@@ -48,19 +48,38 @@ class QuestionFormFormField(FlaskForm):
     ans_multi_select_3 = BooleanField("Option 3",[validators.Optional()])
     answer4=StringField("answer 4",[validators.Optional()])
     ans_multi_select_4 = BooleanField("Option 4",[validators.Optional()])
+    rating = SelectField('Rating:',choices=DIFFICULTY_RATING, coerce=int, validators = [validators.Optional()])
+    subject = RadioField("Subject: ", choices = [
+        ("Java", "Java"),
+        ("JavaScript", "JavaScript"),
+        ("Python", "Python"),
+        ("SQL", "SQL"),
+        ("Other", "Other"),
+        ],
+        coerce = str, validators = [validators.Optional()])
+    topic = StringField("topic",[validators.Optional()])
     marks=IntegerField("marks",[validators.Optional()]) 
     feedback=StringField("Feedback:",[validators.Optional()])
 #allows fill in the gap questions to be written when filling in the gap - rj
 class FillInTheBlankQuestionFormFormField(FlaskForm):
     question = StringField("question",[validators.Optional()])
     answer = StringField("answer",[validators.Optional()])
+    rating = SelectField('Rating:',choices=DIFFICULTY_RATING, coerce=int, validators = [validators.Optional()])
+    subject = RadioField("Subject: ", choices = [
+        ("Java", "Java"),
+        ("JavaScript", "JavaScript"),
+        ("Python", "Python"),
+        ("SQL", "SQL"),
+        ("Other", "Other"),
+        ],
+        coerce = str, validators = [validators.Optional()])
     topic = StringField("topic",[validators.Optional()])
     marks = IntegerField("marks",[validators.Optional()])
     feedback = StringField ("Feedback: ", [validators.Optional()])
 #to choose which path to go down Sum/form - RJ
 class TestChoice(FlaskForm):
     question_module = SelectField('module', choices=[])
-    test_type = SelectField('Test Type', choices=['Formative','Summative'])
+    test_type = SelectField('Test Type', choices=['Summative', 'Formative'])
     test_title = StringField('Test Title')
 #this is needed for queryselectfeild to work - RJ
 def Q_query():
