@@ -103,14 +103,19 @@ class Results_sum(db.Model):
     surname = db.Column(db.String(128))
     # attempt date
     date = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
-    cohort_year = db.Column(db.String(15))
+    # year of study
+    cohort_year = db.Column(db.String(15))    
     # unique test ref
     test_id = db.Column(db.Integer)
+    tag = db.Column(db.String(30))
     # 0 = formative result, 1 = summative result
     form_summ = db.Column(db.Integer)
     # module result relates to
     res_module = db.Column(db.String(128))
+    #########################################
+    # mark for each question
     Q1_mark = db.Column(db.Integer)
+    # reallocated column: new use - correct answer = 1, incorrect answer = 0
     Q1_attempts = db.Column(db.Integer)
     Q2_mark = db.Column(db.Integer)
     Q2_attempts = db.Column(db.Integer)
@@ -120,15 +125,16 @@ class Results_sum(db.Model):
     Q4_attempts = db.Column(db.Integer)
     Q5_mark = db.Column(db.Integer)
     Q5_attempts = db.Column(db.Integer)
+    #########################################
     # test total mark (%)
     total_mark = db.Column(db.Integer)
     # difficulty (total)
     test_rating = db.Column(db.Integer)
-    # test contribution to total module credit
+    # reallocated column: new use - completed test = 1 
     test_weighting = db.Column(db.Integer)
 
     def __repr__(self):
-        return f"Results_sum('{self.user_id}','{self.username}', '{self.forename}', '{self.surname}', '{self.test_id}','{self.total_mark}','{self.cohort_year}','{self.res_module}' ,'{self.Q1_mark}','{self.Q1_attempts}' ,'{self.Q2_mark}','{self.Q2_attempts}','{self.Q3_mark}','{self.Q3_attempts}','{self.Q4_mark}','{self. Q4_attempts}','{self.Q5_mark}','{self.Q5_attempts}','{self.test_rating}','{self.form_summ}','{self.test_weighting}','{self.date}')"
+        return f"Results_sum('{self.user_id}','{self.username}', '{self.forename}', '{self.surname}', '{self.test_id}','{self.total_mark}','{self.cohort_year}','{self.res_module}' ,'{self.Q1_mark}','{self.Q1_attempts}' ,'{self.Q2_mark}','{self.Q2_attempts}','{self.Q3_mark}','{self.Q3_attempts}','{self.Q4_mark}','{self. Q4_attempts}','{self.Q5_mark}','{self.Q5_attempts}','{self.test_rating}','{self.form_summ}','{self.test_weighting}','{self.date}', '{self.date}')"
 
 
 
