@@ -21,7 +21,6 @@
                 <span style="color: red;">[{{ error }}]</span>
                 {% endfor %}
             </p>
-            
             <p>
                 {{ form.ans_multi_select_2.label }}
                 {{ form.answer2 }}
@@ -30,25 +29,15 @@
                 <span style="color: red;">[{{ error }}]</span>
                 {% endfor %}
             </p>
-
             <p>
                 {{ form.ans_multi_select_3.label }}
                 {{ form.answer3 }}
                 {{ form.ans_multi_select_3}}
             </p>
-
             <p>
                 {{ form.ans_multi_select_4.label }}
                 {{ form.answer4 }}
                 {{ form.ans_multi_select_4}}
-            </p>
-
-            <p>
-                {{ form.subject.label }}
-                {% for choice in form.subject %}
-                    {{ choice.label }}
-                    {{ choice }}
-                {% endfor %}
             </p>
          
             <p> 
@@ -61,19 +50,8 @@
             <p> 
                 {{ form.feedback.label }}
                 {{ form.feedback(size=100) }}
+                
             </p>
-            <p>
-                {{ form.rating }}
-            </p>
-
-            <p>
-                {{ form.topic.label }}
-                {{ form.topic (size=100) }}
-                {% for error in form.topic.errors %} 
-                <span style="color: red;">[{{ error }}]</span>
-                {% endfor %}
-            </p>
-
         </div>
             <p>
                 

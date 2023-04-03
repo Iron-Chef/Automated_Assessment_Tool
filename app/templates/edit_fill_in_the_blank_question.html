@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h1>Edit Fill-in-the-blank-questions</h1>
+<div>
+    <form action="", method="post" novalidate>
+        {{ form.hidden_tag() }}
+
+        <p> Question: 
+            {{ form.question(class="form-control form-control-lg")}}
+            {% for error in form.question.errors %} 
+           <span style="color: red;">[{{ error }}]</span>
+           {% endfor %}
+        </p>
+        
+        <p>
+            {{ form.answer.label }}
+            {{ form.answer }}
+            {% for error in form.answer.errors %} 
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+
+        <p>
+        {{ form.subject.label }}
+        {% for choice in form.subject %}
+            {{ choice.label }}
+            {{ choice }}
+        {% endfor %}
+        </p>
+
+        <p> 
+            {{ form.marks.label }}
+            {{ form.marks }}
+            {% for error in form.marks.errors %} 
+           <span style="color: red;">[{{ error }}]</span>
+           {% endfor %}
+        </p>
+
+        <p>
+            {{ form.rating.label }} {{ form.rating }}
+        </p>
+
+        <p> 
+            {{ form.feedback.label }}
+            {{ form.feedback(size = 100) }}
+        </p>
+
+        <p>
+            {{ form.topic.label }}
+            {{ form.topic (size=100) }}
+            {% for error in form.topic.errors %} 
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+
+
+        <p>
+            {{ form.submit(class="btn btn-info ")}}
+        </p>
+        <!--Clear button-->
+        <input type="reset", class="btn btn-info ">
+    </form>
+</div>
+
+{% endblock %}

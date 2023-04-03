@@ -6,8 +6,6 @@
 </div>
 <h1>Hi {{ current_user.forename }}, this is question No. {{mcquestion.id}}</h1>
     
-
-
 <form action="", method="post" novalidate>
     {{ form.hidden_tag() }}
 
@@ -51,6 +49,9 @@
         {% for error in form.marks.errors %} 
        <span style="color: red;">[{{ error }}]</span>
        {% endfor %}
+    </p>
+    <p>
+        {{ form.rating }}
     </p>
     <p> 
         {{ form.feedback.label }}

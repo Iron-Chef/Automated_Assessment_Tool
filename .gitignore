@@ -4,5 +4,6 @@ __pycache__
 instructions.txt
 .db
 project.db
+reponse.db
 config.py
 .ds
