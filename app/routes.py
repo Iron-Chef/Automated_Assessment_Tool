@@ -4,6 +4,7 @@ from werkzeug.urls import url_parse
 from sqlalchemy import *
 from datetime import datetime
 import random
+from app.functions import *
 from app.models import User,Test, Multiplechoice, FormativeAttempt,Results_sum, Module, Studentanswer, Formativetest
 from app.forms import DIFFICULTY_RATING,LoginForm, CreateTestForm, QuestionForm, SubmitAttemptForm, StudentAnswerForm, ResultsForm, FillInTheBlankQuestionForm, QChoiceForm, TestChoice, TakeFormTestForm, Q1TakeFormTestForm, Q2TakeFormTestForm, Q3TakeFormTestForm, Q4TakeFormTestForm, Q5TakeFormTestForm, FinishFormTestForm
 from app import app,db
@@ -480,7 +481,9 @@ def choose_create_test():
             formtest= Formativetest(
             author=current_user.id,
             module_code = form.question_module.data,
-            testtitle = form.test_title.data
+            testtitle = form.test_title.data,
+            test_rating_num = 0
+            #Test_feedback = ''
             )
             db.session.add(formtest)
             db.session.commit()
@@ -496,206 +499,35 @@ def choose_create_test():
 @app.route('/create_form_test', methods=['GET', 'POST'])
 @login_required
 def create_form_test():
-    QCform = QChoiceForm()
     test = Formativetest.query.order_by(Formativetest.id.desc()).first()
-    blank = Multiplechoice.query.filter_by(question='-').first()
-    if QCform.validate_on_submit():
-        if QCform.question_1.data.question != '-':
-            question_1 = QCform.question_1.data
-            test.linkedquestions.append(question_1)
-        if QCform.WriteMCquestion_1.question.data !='':
-            Q1multi= Multiplechoice(
-            user_id=current_user.id,
-            question=QCform.WriteMCquestion_1.question.data, 
-            answer_1=QCform.WriteMCquestion_1.answer1.data,ans_choice_1=QCform.WriteMCquestion_1.ans_multi_select_1.data, 
-            answer_2=QCform.WriteMCquestion_1.answer2.data,ans_choice_2=QCform.WriteMCquestion_1.ans_multi_select_2.data, 
-            answer_3=QCform.WriteMCquestion_1.answer3.data, ans_choice_3=QCform.WriteMCquestion_1.ans_multi_select_3.data,
-            answer_4=QCform.WriteMCquestion_1.answer4.data, ans_choice_4=QCform.WriteMCquestion_1.ans_multi_select_4.data,
-            marks=QCform.WriteMCquestion_1.marks.data,
-            topic_tag = '',
-            feedback=QCform.WriteMCquestion_1.feedback.data,
-            question_type = 'Multiplechoice'
-            )
-            db.session.add(Q1multi)
-            db.session.commit()
-            question_1 = Multiplechoice.query.order_by(Multiplechoice.id.desc()).first()
-            test.linkedquestions.append(question_1)
-        if QCform.WriteFTGquestion_1.question.data !='':
-            Q1FTG = Multiplechoice(
-            user_id = current_user.id,
-            question = QCform.WriteFTGquestion_1.question.data, 
-            answer_1 = QCform.WriteFTGquestion_1.answer.data,
-            answer_2 = '',
-            answer_3 = '',
-            answer_4 = '',
-            topic_tag = '',
-            marks = QCform.WriteFTGquestion_1.marks.data, 
-            feedback = QCform.WriteFTGquestion_1.feedback.data,
-            question_type = "fill_in_the_blank"
-            )
-            db.session.add(Q1FTG)
-            db.session.commit()
-            question_1 = Multiplechoice.query.order_by(Multiplechoice.id.desc()).first()
-            test.linkedquestions.append(question_1)
-        if QCform.question_1.data.question == '-' and QCform.WriteMCquestion_1.question.data =='' and QCform.WriteFTGquestion_1.question.data =='':
-            test.linkedquestions.append(blank)
-        if QCform.question_2.data.question != '-':
-            question_2 = QCform.question_2.data
-            test.linkedquestions.append(question_2)
-        if QCform.WriteMCquestion_2.question.data !='':
-            Q2multi= Multiplechoice(
-            user_id=current_user.id,
-            question=QCform.WriteMCquestion_2.question.data, 
-            answer_1=QCform.WriteMCquestion_2.answer1.data,ans_choice_1=QCform.WriteMCquestion_2.ans_multi_select_1.data, 
-            answer_2=QCform.WriteMCquestion_2.answer2.data,ans_choice_2=QCform.WriteMCquestion_2.ans_multi_select_2.data, 
-            answer_3=QCform.WriteMCquestion_2.answer3.data, ans_choice_3=QCform.WriteMCquestion_2.ans_multi_select_3.data,
-            answer_4=QCform.WriteMCquestion_2.answer4.data, ans_choice_4=QCform.WriteMCquestion_2.ans_multi_select_4.data,
-            marks=QCform.WriteMCquestion_2.marks.data,
-            topic_tag = '',
-            feedback=QCform.WriteMCquestion_2.feedback.data,
-            question_type = 'Multiplechoice'
-            )
-            db.session.add(Q2multi)
-            db.session.commit()
-            question_2 = Multiplechoice.query.order_by(Multiplechoice.id.desc()).first()
-            test.linkedquestions.append(question_2)
-        if QCform.WriteFTGquestion_2.question.data !='':
-            Q2FTG = Multiplechoice(
-            user_id = current_user.id,
-            question = QCform.WriteFTGquestion_2.question.data, 
-            answer_1 = QCform.WriteFTGquestion_2.answer.data,
-            answer_2 = '',
-            answer_3 = '',
-            answer_4 = '',
-            topic_tag = '',
-            marks = QCform.WriteFTGquestion_2.marks.data, 
-            feedback = QCform.WriteFTGquestion_2.feedback.data,
-            question_type = "fill_in_the_blank"
-            )
-            db.session.add(Q2FTG)
-            db.session.commit()
-            question_2 = Multiplechoice.query.order_by(Multiplechoice.id.desc()).first()
-            test.linkedquestions.append(question_2)
-        if QCform.question_2.data.question == '-' and QCform.WriteMCquestion_2.question.data =='' and QCform.WriteFTGquestion_2.question.data =='':
-            test.linkedquestions.append(blank)
-        if QCform.question_3.data.question != '-':
-            question_3 = QCform.question_3.data
-            test.linkedquestions.append(question_3) 
-        if QCform.WriteMCquestion_3.question.data !='':
-            Q3multi= Multiplechoice(
-            user_id=current_user.id,
-            question=QCform.WriteMCquestion_3.question.data, 
-            answer_1=QCform.WriteMCquestion_3.answer1.data,ans_choice_1=QCform.WriteMCquestion_3.ans_multi_select_1.data, 
-            answer_2=QCform.WriteMCquestion_3.answer2.data,ans_choice_2=QCform.WriteMCquestion_3.ans_multi_select_2.data, 
-            answer_3=QCform.WriteMCquestion_3.answer3.data, ans_choice_3=QCform.WriteMCquestion_3.ans_multi_select_3.data,
-            answer_4=QCform.WriteMCquestion_3.answer4.data, ans_choice_4=QCform.WriteMCquestion_3.ans_multi_select_4.data,
-            marks=QCform.WriteMCquestion_3.marks.data,
-            topic_tag = '',
-            feedback=QCform.WriteMCquestion_3.feedback.data,
-            question_type = 'Multiplechoice'
-            )
-            db.session.add(Q3multi)
-            db.session.commit()
-            question_3 = Multiplechoice.query.order_by(Multiplechoice.id.desc()).first()
-            test.linkedquestions.append(question_3)
-        if QCform.WriteFTGquestion_3.question.data !='':
-            Q3FTG = Multiplechoice(
-            user_id = current_user.id,
-            question = QCform.WriteFTGquestion_3.question.data, 
-            answer_1 = QCform.WriteFTGquestion_3.answer.data,
-            answer_2 = '',
-            answer_3 = '',
-            answer_4 = '',
-            topic_tag = '',
-            marks = QCform.WriteFTGquestion_3.marks.data, 
-            feedback = QCform.WriteFTGquestion_3.feedback.data,
-            question_type = "fill_in_the_blank"
-            )
-            db.session.add(Q3FTG)
-            db.session.commit()
-            question_3 = Multiplechoice.query.order_by(Multiplechoice.id.desc()).first()
-            test.linkedquestions.append(question_3)
-        if QCform.question_3.data.question == '-' and QCform.WriteMCquestion_3.question.data =='' and QCform.WriteFTGquestion_3.question.data =='':
-            test.linkedquestions.append(blank) 
-        if QCform.question_4.data.question != '-':
-            question_4 = QCform.question_4.data
-            test.linkedquestions.append(question_4)
-        if QCform.WriteMCquestion_4.question.data !='':
-            Q4multi= Multiplechoice(
-            user_id=current_user.id,
-            question=QCform.WriteMCquestion_4.question.data, 
-            answer_1=QCform.WriteMCquestion_4.answer1.data,ans_choice_1=QCform.WriteMCquestion_4.ans_multi_select_1.data, 
-            answer_2=QCform.WriteMCquestion_4.answer2.data,ans_choice_2=QCform.WriteMCquestion_4.ans_multi_select_2.data, 
-            answer_3=QCform.WriteMCquestion_4.answer3.data, ans_choice_3=QCform.WriteMCquestion_4.ans_multi_select_3.data,
-            answer_4=QCform.WriteMCquestion_4.answer4.data, ans_choice_4=QCform.WriteMCquestion_4.ans_multi_select_4.data,
-            marks=QCform.WriteMCquestion_4.marks.data,
-            topic_tag = '',
-            feedback=QCform.WriteMCquestion_4.feedback.data,
-            question_type = 'Multiplechoice'
-            )
-            db.session.add(Q4multi)
-            db.session.commit()
-            question_4 = Multiplechoice.query.order_by(Multiplechoice.id.desc()).first()
-            test.linkedquestions.append(question_4)
-        if QCform.WriteFTGquestion_4.question.data !='':
-            Q4FTG = Multiplechoice(
-            user_id = current_user.id,
-            question = QCform.WriteFTGquestion_4.question.data, 
-            answer_1 = QCform.WriteFTGquestion_4.answer.data,
-            answer_2 = '',
-            answer_3 = '',
-            answer_4 = '',
-            topic_tag = '',
-            marks = QCform.WriteFTGquestion_4.marks.data, 
-            feedback = QCform.WriteFTGquestion_4.feedback.data,
-            question_type = "fill_in_the_blank"
-            )
-            db.session.add(Q4FTG)
-            db.session.commit()
-            question_4 = Multiplechoice.query.order_by(Multiplechoice.id.desc()).first()
-            test.linkedquestions.append(question_4)
-        if QCform.question_4.data.question == '-' and QCform.WriteMCquestion_4.question.data =='' and QCform.WriteFTGquestion_4.question.data =='':
-            test.linkedquestions.append(blank)
-        if QCform.question_5.data.question != '-':
-            question_5 = QCform.question_5.data
-            test.linkedquestions.append(question_5)
-        if QCform.WriteMCquestion_5.question.data !='':
-            Q5multi= Multiplechoice(
-            user_id=current_user.id,
-            question=QCform.WriteMCquestion_5.question.data, 
-            answer_1=QCform.WriteMCquestion_5.answer1.data,ans_choice_1=QCform.WriteMCquestion_5.ans_multi_select_1.data, 
-            answer_2=QCform.WriteMCquestion_5.answer2.data,ans_choice_2=QCform.WriteMCquestion_5.ans_multi_select_2.data, 
-            answer_3=QCform.WriteMCquestion_5.answer3.data, ans_choice_3=QCform.WriteMCquestion_5.ans_multi_select_3.data,
-            answer_4=QCform.WriteMCquestion_5.answer4.data, ans_choice_4=QCform.WriteMCquestion_5.ans_multi_select_4.data,
-            marks=QCform.WriteMCquestion_5.marks.data,
-            topic_tag = '',
-            feedback=QCform.WriteMCquestion_5.feedback.data,
-            question_type = 'Multiplechoice'
-            )
-            db.session.add(Q5multi)
-            db.session.commit()
-            question_5 = Multiplechoice.query.order_by(Multiplechoice.id.desc()).first()
-            test.linkedquestions.append(question_5)
-        if QCform.WriteFTGquestion_5.question.data !='':
-            Q5FTG = Multiplechoice(
-            user_id = current_user.id,
-            question = QCform.WriteFTGquestion_5.question.data, 
-            answer_1 = QCform.WriteFTGquestion_5.answer.data,
-            answer_2 = '',
-            answer_3 = '',
-            answer_4 = '',
-            topic_tag = '',
-            marks = QCform.WriteFTGquestion_5.marks.data, 
-            feedback = QCform.WriteFTGquestion_5.feedback.data,
-            question_type = "fill_in_the_blank"
-            )
-            db.session.add(Q5FTG)
-            db.session.commit()
-            question_5 = Multiplechoice.query.order_by(Multiplechoice.id.desc()).first()
-            test.linkedquestions.append(question_5)
-        if QCform.question_5.data.question == '-' and QCform.WriteMCquestion_5.question.data =='' and QCform.WriteFTGquestion_5.question.data =='':
-            test.linkedquestions.append(blank)  
+    test_diff = []
+    QCform = QChoiceForm()
+    if QCform.validate_on_submit(): 
+        add_question_1()
+        questions = test.linkedquestions
+        question_1 = questions[-1]
+        test_diff.append(question_1.rating_num)
+        add_question_2()
+        questions = test.linkedquestions 
+        question_2 = questions[-1]
+        test_diff.append(question_2.rating_num)
+        add_question_3()
+        questions = test.linkedquestions
+        question_3 = questions[-1]
+        test_diff.append(question_3.rating_num)
+        add_question_4()
+        questions = test.linkedquestions
+        question_4 = questions[-1]
+        test_diff.append(question_4.rating_num)
+        add_question_5()
+        questions = test.linkedquestions
+        question_5 = questions[-1]
+        test_diff.append(question_5.rating_num)  
         
+        #test.Test_feedback = QCform.Test_feedback.data
+        tdlisttotal = sum(test_diff)
+        test_rating = tdlisttotal / len(test_diff)
+        test.test_rating_num = test_rating
         db.session.commit()
         flash('test added')
         return redirect('/Formative_test_list')
@@ -710,6 +542,7 @@ def random_formtest():
     test = Formativetest.query.order_by(Formativetest.id.desc()).first()
     totalquestions = Multiplechoice.query.count()
     randomqlist = random.sample(range(2, totalquestions+1), 5)
+    test_diff = []
 
     q1index = randomqlist[0]
     q2index = randomqlist[1]
@@ -719,15 +552,24 @@ def random_formtest():
 
     question_1 = Multiplechoice.query.filter_by(id = q1index).first()
     test.linkedquestions.append(question_1)
+    test_diff.append(question_1.rating_num)
     question_2 = Multiplechoice.query.filter_by(id = q2index).first()
     test.linkedquestions.append(question_2)
+    test_diff.append(question_2.rating_num)
     question_3 = Multiplechoice.query.filter_by(id = q3index).first()
     test.linkedquestions.append(question_3)
+    test_diff.append(question_3.rating_num)
     question_4 = Multiplechoice.query.filter_by(id = q4index).first()
     test.linkedquestions.append(question_4)
+    test_diff.append(question_4.rating_num)
     question_5 = Multiplechoice.query.filter_by(id = q5index).first()
     test.linkedquestions.append(question_5)
+    test_diff.append(question_5.rating_num)
+    tdlisttotal = sum(test_diff)
+    test_rating = tdlisttotal / len(test_diff)
+    test.test_rating_num = test_rating
     db.session.commit()
+
     return redirect('/Formative_test_list')
 
 #rj
@@ -768,8 +610,8 @@ def startformtest(Form_test_id):
         Q4_attempts = 0,
         Q5_mark = 0,
         Q5_attempts = 0,
-        test_rating = 10,
-        test_weighting = 10,
+        test_rating = test.test_rating_num,
+        test_weighting = test.mdls.code,
         )
         db.session.add(testres)
         db.session.commit()
@@ -783,17 +625,50 @@ def startformtest(Form_test_id):
 def takeformtest(Form_test_id):
     test = Formativetest.query.get_or_404(Form_test_id)
     questions = test.linkedquestions
+    blank = Multiplechoice.query.filter_by(question='-').first()
     q1answers = Q1TakeFormTestForm()
     q2answers = Q2TakeFormTestForm()
     q3answers = Q3TakeFormTestForm()
     q4answers = Q4TakeFormTestForm()
     q5answers = Q5TakeFormTestForm()
     finish = FinishFormTestForm()
-    question_1 = questions[0]
-    question_2 = questions[1]
-    question_3 = questions[2]
-    question_4 = questions[3]
-    question_5 = questions[4]
+    if len(questions) == 5:
+        question_1 = questions[0]
+        question_2 = questions[1]
+        question_3 = questions[2]
+        question_4 = questions[3]
+        question_5 = questions[4]
+    if len(questions) == 4:
+        question_1 = questions[0]
+        question_2 = questions[1]
+        question_3 = questions[2]
+        question_4 = questions[3]
+        question_5 = blank
+    if len(questions) == 3:
+        question_1 = questions[0]
+        question_2 = questions[1]
+        question_3 = questions[2]
+        question_4 = blank
+        question_5 = blank
+    if len(questions) == 2:
+        question_1 = questions[0]
+        question_2 = questions[1]
+        question_3 = blank
+        question_4 = blank
+        question_5 = blank
+    if len(questions) == 1:
+        question_1 = questions[0]
+        question_2 = blank
+        question_3 = blank
+        question_4 = blank
+        question_5 = blank
+    if len(questions) == 0:
+        question_1 = blank
+        question_2 = blank
+        question_3 = blank
+        question_4 = blank
+        question_5 = blank
+    
         
     lastres = Results_sum.query.order_by(Results_sum.id.desc()).first()
 
@@ -951,7 +826,7 @@ def takeformtest(Form_test_id):
             if question_4.answer_1 == q4answers.q4_ans_FTG.data:
                 lastres.Q4_mark = 0
                 lastres.Q4_attempts = lastres.Q4_attempts + 1
-            if question_4.answer_1 != q4answers.q3_ans_FTG.data:
+            if question_4.answer_1 != q4answers.q4_ans_FTG.data:
                 lastres.Q4_mark = 0
                 lastres.Q4_attempts = lastres.Q4_attempts + 1
                 flash('Incorrect - Try again')
@@ -999,18 +874,19 @@ def takeformtest(Form_test_id):
 
     if finish.submitF.data and finish.validate():
         list = []
-        if question_1.question != '':
+        if question_1.question != '-':
             list.append(lastres.Q1_mark)
-        if question_2.question != '':
+        if question_2.question != '-':
             list.append(lastres.Q2_mark)
-        if question_3.question != '':
+        if question_3.question != '-':
             list.append(lastres.Q3_mark)
-        if question_4.question != '':
+        if question_4.question != '-':
             list.append(lastres.Q4_mark)
-        if question_5.question != '':
+        if question_5.question != '-':
             list.append(lastres.Q5_mark)
         listtotal = sum(list)
-        total_mark_sum = listtotal / len(list)
+        length = len(list)
+        total_mark_sum = listtotal / length
         lastres.total_mark = total_mark_sum
         db.session.commit()
         return redirect('/results_s')
@@ -1024,4 +900,15 @@ def delete_formtest(Form_test_id):
   db.session.delete(test)
   db.session.commit()
   flash('Your Post has been deleted')
-  return redirect('/Formative_test_list.html')
+  return redirect('/Formative_test_list')
+
+@app.route("/Formative_test/<int:Form_test_id>/release", methods=['POST'])
+@login_required
+def release_formtest(Form_test_id):
+    test = Formativetest.query.get_or_404(Form_test_id)
+    if test.available_to_take == True:
+        test.available_to_take = False
+    else:
+        test.available_to_take = True
+    db.session.commit()
+    return redirect('/Formative_test_list')

@@ -38,8 +38,8 @@ class Module(db.Model):
 
 #formtest to questions many-many realtionship table - rj
 Mc_Ft = db.Table('Mc_Ft',
-    db.Column('Mc_id', db.Integer, db.ForeignKey('multiplechoice.id'), primary_key=True),
-    db.Column('Ft_id', db.Integer, db.ForeignKey('formativetest.id'), primary_key=True)    
+    db.Column('Mc_id', db.Integer, db.ForeignKey('multiplechoice.id')),
+    db.Column('Ft_id', db.Integer, db.ForeignKey('formativetest.id'))    
 )
 
 class Test(db.Model):
@@ -60,9 +60,12 @@ class Test(db.Model):
 #rj
 class Formativetest(db.Model):
     id = db.Column(db.Integer, primary_key = True)
-    testtitle = db.Column(db.Text,)
+    testtitle = db.Column(db.Text)
     author = db.Column(db.Text, db.ForeignKey('user.id'))
     module_code = db.Column(db.Integer, db.ForeignKey('module.id'))
+    test_rating_num = db.Column(db.Integer, nullable=False)
+    available_to_take = db.Column(db.Boolean, nullable=True, default=True)
+    #Test_feedback = db.Column(db.Text)
     linkedquestions = db.relationship('Multiplechoice', secondary = Mc_Ft, backref=db.backref('linkquestions', lazy=True),lazy='subquery')
 
 class Multiplechoice(db.Model):
