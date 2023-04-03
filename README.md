@@ -15,3 +15,7 @@ Password - password
 
 Username - c12345
 Password - password
+
+nb. for FOrmative test pathway to work first entry in Multiplechoice db needs to be
+INSERT INTO multiplechoice
+VALUES(1,null,'-','-',1,'-',0,'-',0,'-',0,'',0,'',0,'','','');
