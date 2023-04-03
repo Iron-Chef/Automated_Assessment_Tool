@@ -101,6 +101,7 @@ class QChoiceForm(FlaskForm):
     question_5 = QuerySelectField(query_factory=Q_query, allow_blank=False, get_label='question')
     WriteMCquestion_5 = FormField(QuestionFormFormField)
     WriteFTGquestion_5 = FormField(FillInTheBlankQuestionFormFormField)
+    Test_feedback=StringField("Test Feedback:")
 
 class EmptyForm(FlaskForm):
   submit = SubmitField('Submit')
