@@ -505,24 +505,29 @@ def create_form_test():
     if QCform.validate_on_submit(): 
         add_question_1()
         questions = test.linkedquestions
-        question_1 = questions[-1]
-        test_diff.append(question_1.rating_num)
+        if len(questions) = 1:
+            question_1 = questions[-1]
+            test_diff.append(question_1.rating_num)
         add_question_2()
         questions = test.linkedquestions 
-        question_2 = questions[-1]
-        test_diff.append(question_2.rating_num)
+        if len(questions) = 2:
+            question_2 = questions[-1]
+            test_diff.append(question_2.rating_num)
         add_question_3()
         questions = test.linkedquestions
-        question_3 = questions[-1]
-        test_diff.append(question_3.rating_num)
+        if len(questions) = 3:
+            question_3 = questions[-1]
+            test_diff.append(question_3.rating_num)
         add_question_4()
         questions = test.linkedquestions
-        question_4 = questions[-1]
-        test_diff.append(question_4.rating_num)
+        if len(questions) = 4:
+            question_4 = questions[-1]
+            test_diff.append(question_4.rating_num)
         add_question_5()
         questions = test.linkedquestions
-        question_5 = questions[-1]
-        test_diff.append(question_5.rating_num)  
+        if len(questions) = 5:
+            question_5 = questions[-1]
+            test_diff.append(question_5.rating_num)  
         
         #test.Test_feedback = QCform.Test_feedback.data
         tdlisttotal = sum(test_diff)
