@@ -1,0 +1,321 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div class="container">
+
+        <div class="row row-cols-1 row-cols-md-2 g-4">
+            <div class="col">
+                <div class="card h-100">
+                    <div class="row g-0">
+                        <div class="col-md-3">
+                            <img src="{{ url_for('static', filename='form.jpg' ) }}"  class="img-fluid rounded-start" width="160" height="100" >
+                        </div>
+                        <div class="col-md-8">
+                            <div class="card-body">
+                                <h5 class="card-title">Formative Assessment</h5>
+                                <br>
+                                <p class="card-text"> <strong> {{ num_users_with_results }}</strong> students out of a possible <strong> {{ unique_user_ids }} </strong> have completed tests </p>
+                                <p class="card-text"> completion rate: <strong> {{ percentage_users_with_results }}%</strong>  </p>
+                                <p class="card-text"><small class="text-muted">space for small words</small></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card h-100" >
+                    <div class="card-header d-flex justify-content-between">Stats for all marks <a href="#" class="btn btn-primary">view</a></div>
+                    <ul class="list-group">
+                        <li class="list-group-item d-flex justify-content-between align-items-center">number marked <span class="list-group-flush"> {{ total_mark_count }} </span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">lowest mark (%)<span class="list-group-flush"> {{ total_mark_min }}</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">higest mark (%)<span class="list-group-flush"> {{ total_mark_max }}</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">average mark (%)<span class="list-group-flush"> {{ total_mark_avg }} </span>
+                        </li>
+                </div>
+            </div>
+            
+        </div>
+        <br>
+        <br>
+
+        <!-- Table:  summary of formative results -->
+
+        <table id="data_form" class="table">
+            <thead>
+                <tr>
+                    <th>test id</th>
+                    <th>Num of Students</th>
+                    <th>total Num attempts</th>
+                    <th>Q1: Num Corrrect, % Correct</th>
+                    <th>Q2: Num Corrrect, % Correct</th>
+                    <th>Q3: Num Corrrect, % Correct</th>
+                    <th>Q4: Num Corrrect, % Correct</th>
+                    <th>Q5: Num Corrrect, % Correct</th>
+                    
+                </tr>
+            </thead>
+            <tbody>
+                {% for res in test_results %}
+                    <tr>
+                        <td><a href="#">{{ res.test_id }} </a> </td>
+                        <td> <strong> {{ res.unique_user_count }} </strong> </td>
+                        <td> <strong> {{ res.q1_attempts_count }} </strong> </td>
+                        <td> <strong> {{ res.q1_attempts_sum }} </strong> ({{ res.q1_percent }}%)</td>
+                        <td> <strong> {{ res.q2_attempts_sum }} </strong> ({{ res.q2_percent }}%)</td>
+                        <td> <strong> {{ res.q3_attempts_sum }} </strong> ({{ res.q3_percent }}%)</td>
+                        <td> <strong> {{ res.q4_attempts_sum }} </strong> ({{ res.q4_percent }}%)</td>
+                        <td> <strong> {{ res.q5_attempts_sum }} </strong> ({{ res.q5_percent }}%)</td>
+                        
+                                               
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <br>
+        <br>
+        <br>
+
+
+        <div class="row row-cols-1 row-cols-md-2 g-4">
+
+            <!-- graph 1: showing correct & incorrect answers (filtered by test id) -->
+            
+            <div class="col">
+                {% if num_users_with_results > 0 %}
+                <div class="card">
+                    <div class="card-header">
+                      <h5 class="card-title">Correct and Incorrect Answers by Test</h5>
+                    </div>
+                    <div class="card-body">
+               
+                        <form>
+                            <div class="form-group">
+                            <label for="plot1_dropdown">Select Test ID:</label>
+                            <select class="form-control" id="plot1_dropdown">
+                                {% for test_result in test_results %}
+                                <option value="{{ test_result.test_id }}">{{ test_result.test_id }}</option>
+                                {% endfor %}
+                            </select>
+                            </div>
+                        </form>
+                        
+                        <div id="plot1_num_correct"></div>
+                    </div>
+                </div>
+                {% else %}
+                <p>No results available.</p>
+                {% endif %}
+            
+            </div>
+
+
+            <!-- graph 15: showing the number of students and how many times they have completed a test   ! -->
+            
+            <div class="col">
+              <div class="card h-100">
+                <div class="card-header">
+                  <h5>Engagement: Number of students completing tests</h5>
+                </div>
+                <div>
+                  <div class="card-body">
+                    <form>
+                      <div class="form-group">
+                      <label for="plot2_dropdown">Select Test ID:</label>
+                      <select class="form-control" id="plot2_dropdown">                    
+                        {% for test_id in plot15_dict.keys() %}
+                          <option value="{{ test_id }}">{{ test_id }}</option>
+                        {% endfor %}
+                    </select>
+                    </div>
+                  </form>
+                
+                <div id="plot-15"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <br>
+
+                    
+    </div>
+    <br>
+    <br>
+    
+    
+    
+
+{% endblock %}
+
+<!-- adapted from Miguel Grinerg 'Beautiful interactive tables for your Flask Templates' -->
+<!-- accessed 18-03-2023  https://blog.miguelgrinberg.com/post/beautiful-interactive-tables-for-your-flask-templates -->
+
+{% block scripts %}
+  <script>
+
+    // JS for datatable
+    $(document).ready(function () {
+      $('#data_form').DataTable({
+        columns: [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+        ],
+        // dom: 'Bfrtip',
+        // buttons: [
+        // 'copy', 'csv', 'excel', 'pdf', 'print'
+        // ]
+    });
+    });
+
+  // charts created after watching loads of youtube tutorials and reading up on plotly documentation
+  // https://plotly.com/javascript/bar-charts/
+  // https://plotly.com/javascript/plotlyjs-function-reference/
+  // https://towardsdatascience.com/how-to-use-plotly-js-for-data-visualization-46933e1bbd29
+  // https://towardsdatascience.com/visualization-with-plotly-express-comprehensive-guide-eb5ee4b50b57
+  // https://www.sharpsightlabs.com/blog/plotly-scatter-plot/
+  // accessed 28/03/2023 to 05/04/2023
+
+
+
+    // ###############################################
+    //  JS for 1st graph - correct & incorrect answers ()
+    // ############################################### 
+
+    var questions_test_results = {{ questions_test_results|tojson }};
+    var plot1_data = [];
+
+    function updateChart1(test_id) {
+      var correct = [];
+      var wrong = [];
+
+      for (var i = 0; i < questions_test_results.length; i++) {
+        if (questions_test_results[i].test_id == test_id) {
+          correct.push(questions_test_results[i].q1_attempts_sum);
+          correct.push(questions_test_results[i].q2_attempts_sum);
+          correct.push(questions_test_results[i].q3_attempts_sum);
+          correct.push(questions_test_results[i].q4_attempts_sum);
+          correct.push(questions_test_results[i].q5_attempts_sum);
+          wrong.push(questions_test_results[i].q1_attempts_wrong);
+          wrong.push(questions_test_results[i].q2_attempts_wrong);
+          wrong.push(questions_test_results[i].q3_attempts_wrong);
+          wrong.push(questions_test_results[i].q4_attempts_wrong);
+          wrong.push(questions_test_results[i].q5_attempts_wrong);
+        }
+      }
+
+      var plot1_trace1 = {
+        x: ['Question 1', 'Question 2', 'Question 3', 'Question 4', 'Question 5'],
+        y: correct,
+        type: 'bar',
+        name: 'Correct answers',
+        marker: {
+          color: 'mediumseagreen'
+        }
+      };
+
+      var plot1_trace2 = {
+        x: ['Question 1', 'Question 2', 'Question 3', 'Question 4', 'Question 5'],
+        y: wrong,
+        type: 'bar',
+        name: 'Incorrect answers',
+        marker: {
+          color: 'mediumvioletred'
+        }
+      };
+
+      plot1_data = [plot1_trace1, plot1_trace2];
+
+      var plot1_layout = {
+        barmode: 'stack',
+        // title: 'Test Results',
+        showlegend: false,
+        xaxis: {
+        //   title: 'Question',
+          tickangle: 45
+        },
+        
+        yaxis: {
+          title: 'Attempts', 
+          range: [0, 10.5],
+          linecolor: 'grey',
+          dtick: 1, // set tick marks on whole numbers
+          }
+        
+        
+      };
+
+      Plotly.newPlot('plot1_num_correct', plot1_data, plot1_layout);
+    }
+
+    $(document).ready(function() {
+      // initialize chart with first test_id on page load
+      updateChart1('{{ test_results[0].test_id }}');
+
+      // update chart when test_id is selected from dropdown
+      $('#plot1_dropdown').on('change', function() {
+        var selected_test_id = $(this).val();
+        updateChart1(selected_test_id);
+      });
+    });
+
+
+    // ################################################################
+    //  JS for 15th graph - num users v tests completed ()
+    // ################################################################ 
+
+    var plot15_data = {{ plot15_dict | tojson }};
+
+    function updateChart2(test_id) {
+      var innerDict = plot15_data[test_id];
+      var countVals = Object.values(innerDict);
+      var countKeys = Object.keys(innerDict);
+      var trace = {
+        x: countKeys,
+        y: countVals.map(function(arr) { return arr.length; }),
+        type: 'bar'
+      };
+      var layout = {
+        // title: 'Results for Test ' + test_id,
+        xaxis: { 
+          title: 'Number of times tests were completed',
+          range: [0.1, 10], // set the x-axis range to 1-10 (needs updating to range(max)+1 )
+          dtick: 1 // set tick marks on whole numbers
+        },
+        yaxis: { 
+          title: 'Number of students',
+          range: [0, 10], // set the x-axis range to 1-10 (needs updating to range(max)+1 )
+          dtick: 1, // set tick marks on whole numbers
+          linecolor: 'grey'
+        }
+      };
+      var plotData = [trace];
+      Plotly.newPlot('plot-15', plotData, layout);
+    }
+
+
+    $(document).ready(function() {
+      // initialize chart with first test_id on page load
+      updateChart2('{{ test_results[0].test_id }}');
+
+      // update chart when test_id is selected from dropdown
+      $('#plot2_dropdown').on('change', function() {
+        var selected_test_id = $(this).val();
+        updateChart2(selected_test_id);
+      });
+    });
+
+    
+
+
+  </script>
+{% endblock %}

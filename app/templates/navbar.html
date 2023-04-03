@@ -41,8 +41,13 @@
                     <li class="nav-item">
                         <a class="nav-link" href="{{ url_for('test_list') }}">Summative test list</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('results_s') }}">Results</a>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Results</a>
+                          <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <li><a class="dropdown-item" href="{{ url_for('results_s') }}">Summative</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('results_form') }}">Formative</a></li>
+                          </ul>
+                        <!-- <a class="nav-link" href="{{ url_for('results_s') }}">Results</a> -->
                     </li>
                 {% else %}
                     <li class="nav-item">
