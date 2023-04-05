@@ -505,27 +505,27 @@ def create_form_test():
     if QCform.validate_on_submit(): 
         add_question_1()
         questions = test.linkedquestions
-        if len(questions) = 1:
+        if len(questions) == 1:
             question_1 = questions[-1]
             test_diff.append(question_1.rating_num)
         add_question_2()
         questions = test.linkedquestions 
-        if len(questions) = 2:
+        if len(questions) == 2:
             question_2 = questions[-1]
             test_diff.append(question_2.rating_num)
         add_question_3()
         questions = test.linkedquestions
-        if len(questions) = 3:
+        if len(questions) == 3:
             question_3 = questions[-1]
             test_diff.append(question_3.rating_num)
         add_question_4()
         questions = test.linkedquestions
-        if len(questions) = 4:
+        if len(questions) == 4:
             question_4 = questions[-1]
             test_diff.append(question_4.rating_num)
         add_question_5()
         questions = test.linkedquestions
-        if len(questions) = 5:
+        if len(questions) == 5:
             question_5 = questions[-1]
             test_diff.append(question_5.rating_num)  
         
@@ -616,7 +616,7 @@ def startformtest(Form_test_id):
         Q5_mark = 0,
         Q5_attempts = 0,
         test_rating = test.test_rating_num,
-        test_weighting = test.mdls.code,
+        test_weighting = 1,
         )
         db.session.add(testres)
         db.session.commit()
