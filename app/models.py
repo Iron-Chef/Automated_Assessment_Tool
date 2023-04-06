@@ -45,8 +45,11 @@ Mc_Ft = db.Table('Mc_Ft',
 class Test(db.Model):
     test_id=db.Column(db.Integer,primary_key=True)
     creator_id= db.Column(db.Integer,db.ForeignKey('user.id'), nullable=False)
+    title= db.Column(db.Text,nullable=False)
+    module=db.Column(db.Integer, db.ForeignKey('module.id'),nullable=False)
+    rating= db.Column(db.Integer,nullable=False)
     test_type = db.Column(db.Integer, nullable = False)# 0=formative;1=summative
-    question_id_1=db.Column(db.Integer,db.ForeignKey('multiplechoice.id'), nullable=True)
+    question_id_1=db.Column(db.Integer,db.ForeignKey('multiplechoice.id'), nullable=False)
     question_id_2=db.Column(db.Integer,db.ForeignKey('multiplechoice.id'), nullable=True)
     question_id_3=db.Column(db.Integer,db.ForeignKey('multiplechoice.id'), nullable=True)
     question_id_4=db.Column(db.Integer,db.ForeignKey('multiplechoice.id'), nullable=True)
@@ -153,7 +156,7 @@ class Results_sum(db.Model):
         return f"Results_sum('{self.user_id}','{self.username}', '{self.forename}', '{self.surname}', '{self.test_id}','{self.total_mark}','{self.cohort_year}','{self.res_module}' ,'{self.Q1_mark}','{self.Q1_attempts}' ,'{self.Q2_mark}','{self.Q2_attempts}','{self.Q3_mark}','{self.Q3_attempts}','{self.Q4_mark}','{self. Q4_attempts}','{self.Q5_mark}','{self.Q5_attempts}','{self.test_rating}','{self.form_summ}','{self.test_weighting}','{self.date}', '{self.date}')"
 
 
-
+# This is not redundant I am leaving it here for now so other code that relies on it doesnt break but I am now writing summative tests to result_sum-DD
 class FormativeAttempt(db.Model):
     attempt_id=db.Column(db.Integer(),primary_key=True)
     test_id=db.Column(db.Integer(),db.ForeignKey('test.test_id'),nullable=False)
