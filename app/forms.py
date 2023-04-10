@@ -178,8 +178,8 @@ class StudentAnswerForm(FlaskForm):
     submit = SubmitField("Done")
 
 class FillInTheBlankQuestionForm(FlaskForm):
-    question = StringField(validators = [DataRequired (message = "Please type a question. ")])
-    answer = StringField(validators = [DataRequired (message = "Please provide an answer. ")])
+    question = StringField(validators = [DataRequired (message = "Please type a question.")])
+    answer = StringField(validators = [DataRequired (message = "Please provide an answer.")])
     subject = RadioField("Subject: ", 
         choices = [
         ("Java", "Java"),
@@ -189,8 +189,8 @@ class FillInTheBlankQuestionForm(FlaskForm):
         ("Misc", "Misc"),
         ],
         coerce = str, 
-        validators = [DataRequired (message = "Please select a subject. ")])
-    marks = IntegerField(validators = [DataRequired (message = "Please enter a mark. ")])
+        validators = [DataRequired (message = "Please select a subject.")])
+    marks = IntegerField(validators = [DataRequired (message = "Please enter a mark.")])
     rating = SelectField('Difficulty Rating:',choices=DIFFICULTY_RATING, coerce=int)
     feedback = StringField ("Feedback: ")
     topic = StringField("Topic: ")
