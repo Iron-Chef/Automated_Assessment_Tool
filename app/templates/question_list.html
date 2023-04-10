@@ -3,23 +3,22 @@
 
 <h1>Previous Questions</h1>
 
+<div class="btn-group order_by_button">
+  <button class="btn btn-secondary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">Order By</button>
+  <ul class="dropdown-menu">
+    <li><a class="dropdown-item" href="{{ url_for('question_list', order_by = 'question_type') }}">Question Type</a></li>
+    <li><a class="dropdown-item" href="{{ url_for('question_list', order_by = 'topic') }}">Tags</a></li>
+    <li><a class="dropdown-item" href="{{ url_for('question_list', order_by = 'marks_asc') }}">Marks (Asc)</a></li>
+    <li><a class="dropdown-item" href="{{ url_for('question_list', order_by = 'marks_desc') }}">Marks (Desc)</a></li>
+    <li><a class="dropdown-item" href="{{ url_for('question_list', order_by = 'difficulty_asc') }}">Difficulty (Asc)</a></li>
+    <li><a class="dropdown-item" href="{{ url_for('question_list', order_by = 'difficulty_desc') }}">Difficulty (Desc)</a></li>
+  </ul>
+</div>
+
 
 <!--JAVA COLLAPSIBLE-->
 <button type="button" class="collapsible">Java</button>
 <div class="content" id = "collapsible_java">
-
-  <div class="btn-group">
-    <button class="btn btn-secondary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">Order By</button>
-    <ul class="dropdown-menu">
-      <li><a class="dropdown-item" href="{{ url_for('question_list', order_by = 'question_type') }}">Question Type</a></li>
-      <li><a class="dropdown-item" href="{{ url_for('question_list', order_by = 'topic') }}">Tags</a></li>
-      <li><a class="dropdown-item" href="{{ url_for('question_list', order_by = 'marks_asc') }}">Marks (Asc)</a></li>
-      <li><a class="dropdown-item" href="{{ url_for('question_list', order_by = 'marks_desc') }}">Marks (Desc)</a></li>
-      <li><a class="dropdown-item" href="{{ url_for('question_list', order_by = 'difficulty_asc') }}">Difficulty (Asc)</a></li>
-      <li><a class="dropdown-item" href="{{ url_for('question_list', order_by = 'difficulty_desc') }}">Difficulty (Desc)</a></li>
-    </ul>
-  </div>
-
   {% for question in questions %}
   {% if question.subject_tag == "Java" %}
 
@@ -44,6 +43,7 @@
 
   {% for question in questions %}
   {% if question.subject_tag == "JavaScript" %}
+
   {% if question.question_type == "fill_in_the_blank" %}
   {% with fill_in_the_blank_question = question %}
     {% include "fill_in_the_blank_question.html" %}
@@ -168,6 +168,7 @@
     {% include "fill_in_the_blank_question.html" %}
   {% endwith %}
 
+  {% else %}
   {% with mcquestion = question %}
     {% include "mc_question.html" %}
   {% endwith %}
@@ -177,11 +178,11 @@
   {% endfor %}
 </div>
 
-<!--Miscellaneous COLLAPSIBLE-->
-<button type="button" class="collapsible">Miscellaneous</button>
+<!--Other COLLAPSIBLE-->
+<button type="button" class="collapsible">Other</button>
 <div class="content" id = "collapsible_misc">
   {% for question in questions %}
-  {% if question.subject_tag == "Other" %}
+  {% if question.subject_tag == "Other" or question.subject_tag == Null %}
 
   {% if question.question_type == "fill_in_the_blank" %}
   {% with fill_in_the_blank_question = question %}
@@ -201,7 +202,6 @@
 
 <!--Script for collapsible sections-->
 <script>
-
   
     var coll = document.getElementsByClassName("collapsible");
     var i;

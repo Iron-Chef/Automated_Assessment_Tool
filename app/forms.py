@@ -22,14 +22,16 @@ class QuestionForm(FlaskForm):
     answer4=StringField(FlaskForm)
     ans_multi_select_4 = BooleanField("Option 4")
     rating = SelectField('Rating:',choices=DIFFICULTY_RATING, coerce=int)
-    subject = RadioField("Subject: ", choices = [
+    subject = RadioField("Subject: ",
+        choices = [
         ("Java", "Java"),
         ("JavaScript", "JavaScript"),
         ("Python", "Python"),
         ("SQL", "SQL"),
         ("Other", "Other"),
         ],
-        coerce = str, validators = [DataRequired()])
+        coerce = str, 
+        validators = [DataRequired()])
     topic = StringField(validators = [DataRequired (message = "Please enter the topic of the question: ")])
     marks=IntegerField(validators=[DataRequired(message="Please enter mark")]) 
     feedback=StringField("Feedback:")
@@ -40,35 +42,39 @@ class StudentAnswerForm(FlaskForm):
     ans_multi_select_2 = BooleanField("Option 2")
     ans_multi_select_3 = BooleanField("Option 3")
     ans_multi_select_4 = BooleanField("Option 4")
-    subject = RadioField("Subject: ", choices = [
+    subject = RadioField("Subject: ",
+        choices = [
         ("Java", "Java"),
         ("JavaScript", "JavaScript"),
         ("Python", "Python"),
         ("SQL", "SQL"),
         ("Other", "Other"),
         ],
-        coerce = str, validators = [DataRequired()])
+        coerce = str,
+        validators = [DataRequired()])
     marks = IntegerField(validators=[DataRequired(message="Please enter mark")]) 
     feedback = StringField("Feedback:")
     topic = StringField("Topic: ")
     submit = SubmitField("Form Complete")
 
 class FillInTheBlankQuestionForm(FlaskForm):
-    question = StringField(validators = [DataRequired (message = "Please type your question here: ")])
-    answer = StringField(validators = [DataRequired (message = "Please enter the correct answer")])
-    subject = RadioField("Subject: ", choices = [
+    question = StringField(validators = [DataRequired (message = "Please type your question here.")])
+    answer = StringField(validators = [DataRequired (message = "Please enter the correct answer.")])
+    subject = RadioField("Subject: ",  
+        choices = [
         ("Java", "Java"),
         ("JavaScript", "JavaScript"),
         ("Python", "Python"),
         ("SQL", "SQL"),
-        ("Misc", "Misc"),
+        ("Other", "Other"),
         ],
-        coerce = str, validators = [DataRequired()])
-    marks = IntegerField(validators = [DataRequired (message = "Please type your question here: ")])
-    rating = SelectField('Difficulty Rating:',choices=DIFFICULTY_RATING, coerce=int)
+        coerce = str, 
+        validators = [DataRequired (message = "Please choose a subject.")])
+    marks = IntegerField(validators = [DataRequired (message = "Please enter a mark: ")])
+    rating = SelectField('Difficulty Rating:', choices=DIFFICULTY_RATING, coerce=int)
     feedback = StringField ("Feedback: ")
     topic = StringField("Topic: ")
-    submit = SubmitField("Form Complete")
+    submit = SubmitField("Done")
 
 class CreateTestForm(FlaskForm):
     test_type= SelectField('Check to make test summative',choices=[(0,"formative"),(1,"summative")])

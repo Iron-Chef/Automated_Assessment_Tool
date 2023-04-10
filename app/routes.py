@@ -201,7 +201,7 @@ def add_fill_in_the_blank_question():
         flash('Question added!')
         return redirect('/question_list')
 
-    return render_template('add_fill_in_the_blank_question.html', form = form)
+    return render_template('add_fill_in_the_blank_question.html', form = form, title = "Add Fill-in-the-blank questions")
 
 #view list of questions- opportunity to list by different queries
 @app.route("/fill_in_the_blank_question/<int:fill_in_the_blank_question_id>", methods=['GET'])
@@ -247,10 +247,11 @@ def edit_fill_in_the_blank_question(fill_in_the_blank_question_id):
     form.feedback.data = fill_in_the_blank_question.feedback
     form.topic.data = fill_in_the_blank_question.topic_tag
 
-    return render_template('edit_fill_in_the_blank_question.html', fill_in_the_blank_question = fill_in_the_blank_question, form = form)
+    return render_template('edit_fill_in_the_blank_question.html', title = "Edit Question", form = form,fill_in_the_blank_question = fill_in_the_blank_question, fill_in_the_blank_question_id = fill_in_the_blank_question_id)
 
 @app.route("/fill_in_the_blank_question/delete/<int:fill_in_the_blank_question_id>")
 def delete_fill_in_the_blank_question(fill_in_the_blank_question_id):
+     
     fill_in_the_blank_question_to_delete = Multiplechoice.query.get_or_404(fill_in_the_blank_question_id)
 
     try:
@@ -284,7 +285,7 @@ def question_list(order_by):
     elif order_by == "difficulty_desc":
         questions = Multiplechoice.query.order_by(Multiplechoice.rating_num.desc())
     
-    return render_template('question_list.html',questions=questions)
+    return render_template('question_list.html', questions=questions, title = "Previous Questions")
 
 #Individual student answer attempt to test funtionality
 @app.route("/student_answer/<int:question_id>", methods=['GET', 'POST'])

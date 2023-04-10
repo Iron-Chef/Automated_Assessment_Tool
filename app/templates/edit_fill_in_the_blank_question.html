@@ -58,8 +58,11 @@
         <p>
             {{ form.submit(class="btn btn-info ")}}
         </p>
+        
         <!--Clear button-->
-        <input type="reset", class="btn btn-info ">
+        {% with fill_in_the_blank_question_id = fill_in_the_blank_question_id %}
+        <input type="reset", class="btn btn-info", href="{{ url_for('edit_fill_in_the_blank_question', fill_in_the_blank_question_id = fill_in_the_blank_question_id) }}">
+        {% endwith %}
     </form>
 </div>
 

@@ -22,11 +22,14 @@
             </p>
 
             <p>
-            {{ form.subject.label }}
-            {% for choice in form.subject %}
-                {{ choice.label }}
-                {{ choice }}
-            {% endfor %}
+                {{ form.subject.label }}
+                {% for choice in form.subject %}
+                    {{ choice.label }}
+                    {{ choice }}
+                {% endfor %}
+                {% for error in form.subject.errors %} 
+                <span style="color: red;">[{{ error }}]</span>
+                {% endfor %}
             </p>
 
             <p> 
@@ -34,7 +37,7 @@
                 {{ form.marks }}
                 {% for error in form.marks.errors %} 
                <span style="color: red;">[{{ error }}]</span>
-               {% endfor %}
+                {% endfor %}
             </p>
 
             <p>
@@ -59,7 +62,7 @@
                 {{ form.submit(class="btn btn-info ")}}
             </p>
             <!--Clear button-->
-            <input type="reset", class="btn btn-info ">
+            <input type="reset", class="btn btn-info", href="{{ url_for('add_fill_in_the_blank_question') }}">
         </form>
     </div>
 
