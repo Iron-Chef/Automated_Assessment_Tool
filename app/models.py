@@ -17,7 +17,8 @@ class User(UserMixin, db.Model):
     year = db.Column(db.Integer)
     is_lecturer = db.Column(db.Boolean, nullable = False, default = False)
     results_s = db.relationship('Results_sum', backref='user', lazy=True)
-    date = db.Column(db.DateTime, nullable = False, default = datetime.utcnow)
+    testauthor = db.relationship('Formativetest', backref = 'tstathr', lazy=True)
+    #date = db.Column(db.DateTime, nullable = False, default = datetime.utcnow)
 
     def __repr__(self):
         return "Student ID: {}, First name: {}, Surnam: {}, Email: {}, Year: {}".format(self.id, self.forename, self.surname, self.email, self.year)
@@ -33,12 +34,22 @@ class Module(db.Model):
     code=db.Column(db.Text, default="")
     name=db.Column(db.Text, default="")
     credits=db.Column(db.Integer)
+    formtestref = db.relationship('Formativetest', backref = 'mdls', lazy=True)
+
+#formtest to questions many-many realtionship table - rj
+Mc_Ft = db.Table('Mc_Ft',
+    db.Column('Mc_id', db.Integer, db.ForeignKey('multiplechoice.id')),
+    db.Column('Ft_id', db.Integer, db.ForeignKey('formativetest.id'))    
+)
 
 class Test(db.Model):
     test_id=db.Column(db.Integer,primary_key=True)
     creator_id= db.Column(db.Integer,db.ForeignKey('user.id'), nullable=False)
+    title= db.Column(db.Text,nullable=False)
+    module=db.Column(db.Integer, db.ForeignKey('module.id'),nullable=False)
+    rating= db.Column(db.Integer,nullable=False)
     test_type = db.Column(db.Integer, nullable = False)# 0=formative;1=summative
-    question_id_1=db.Column(db.Integer,db.ForeignKey('multiplechoice.id'), nullable=True)
+    question_id_1=db.Column(db.Integer,db.ForeignKey('multiplechoice.id'), nullable=False)
     question_id_2=db.Column(db.Integer,db.ForeignKey('multiplechoice.id'), nullable=True)
     question_id_3=db.Column(db.Integer,db.ForeignKey('multiplechoice.id'), nullable=True)
     question_id_4=db.Column(db.Integer,db.ForeignKey('multiplechoice.id'), nullable=True)
@@ -48,6 +59,17 @@ class Test(db.Model):
     
     def __repr__(self):
         return f"Test('{self.test_id}', '{self.creator_id}', '{self.test_type}', '{self.question_id_1}', '{self.question_id_2}', '{self.question_id_3}', '{self.question_id_4}', '{self.question_id_5}')"
+
+#rj
+class Formativetest(db.Model):
+    id = db.Column(db.Integer, primary_key = True)
+    testtitle = db.Column(db.Text)
+    author = db.Column(db.Text, db.ForeignKey('user.id'))
+    module_code = db.Column(db.Integer, db.ForeignKey('module.id'))
+    test_rating_num = db.Column(db.Integer, nullable=False)
+    available_to_take = db.Column(db.Boolean, nullable=True, default=True)
+    #Test_feedback = db.Column(db.Text)
+    linkedquestions = db.relationship('Multiplechoice', secondary = Mc_Ft, backref=db.backref('linkquestions', lazy=True),lazy='subquery')
 
 class Multiplechoice(db.Model):
     id = db.Column(db.Integer, primary_key = True)
@@ -64,6 +86,8 @@ class Multiplechoice(db.Model):
     ans_choice_4 = db.Column(db.Integer, default=False)
     rating = db.Column(db.Unicode(40))
     rating_num=db.Column(db.Integer)
+    #add tag column
+    #add difficulty column
     #add student answer foreignkey
     subject_tag = db.Column(db.Text, default = "")
     marks=db.Column(db.Integer, default=False)
@@ -98,14 +122,19 @@ class Results_sum(db.Model):
     surname = db.Column(db.String(128))
     # attempt date
     date = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
-    cohort_year = db.Column(db.String(15))
+    # year of study
+    cohort_year = db.Column(db.String(15))    
     # unique test ref
     test_id = db.Column(db.Integer)
+    tag = db.Column(db.String(30))
     # 0 = formative result, 1 = summative result
     form_summ = db.Column(db.Integer)
     # module result relates to
     res_module = db.Column(db.String(128))
+    #########################################
+    # mark for each question
     Q1_mark = db.Column(db.Integer)
+    # reallocated column: new use - correct answer = 1, incorrect answer = 0
     Q1_attempts = db.Column(db.Integer)
     Q2_mark = db.Column(db.Integer)
     Q2_attempts = db.Column(db.Integer)
@@ -115,18 +144,19 @@ class Results_sum(db.Model):
     Q4_attempts = db.Column(db.Integer)
     Q5_mark = db.Column(db.Integer)
     Q5_attempts = db.Column(db.Integer)
+    #########################################
     # test total mark (%)
     total_mark = db.Column(db.Integer)
     # difficulty (total)
     test_rating = db.Column(db.Integer)
-    # test contribution to total module credit
+    # reallocated column: new use - completed test = 1 
     test_weighting = db.Column(db.Integer)
 
     def __repr__(self):
-        return f"Results_sum('{self.user_id}','{self.username}', '{self.forename}', '{self.surname}', '{self.test_id}','{self.total_mark}','{self.cohort_year}','{self.res_module}' ,'{self.Q1_mark}','{self.Q1_attempts}' ,'{self.Q2_mark}','{self.Q2_attempts}','{self.Q3_mark}','{self.Q3_attempts}','{self.Q4_mark}','{self. Q4_attempts}','{self.Q5_mark}','{self.Q5_attempts}','{self.test_rating}','{self.form_summ}','{self.test_weighting}','{self.date}')"
+        return f"Results_sum('{self.user_id}','{self.username}', '{self.forename}', '{self.surname}', '{self.test_id}','{self.total_mark}','{self.cohort_year}','{self.res_module}' ,'{self.Q1_mark}','{self.Q1_attempts}' ,'{self.Q2_mark}','{self.Q2_attempts}','{self.Q3_mark}','{self.Q3_attempts}','{self.Q4_mark}','{self. Q4_attempts}','{self.Q5_mark}','{self.Q5_attempts}','{self.test_rating}','{self.form_summ}','{self.test_weighting}','{self.date}', '{self.date}')"
 
 
-
+# This is not redundant I am leaving it here for now so other code that relies on it doesnt break but I am now writing summative tests to result_sum-DD
 class FormativeAttempt(db.Model):
     attempt_id=db.Column(db.Integer(),primary_key=True)
     test_id=db.Column(db.Integer(),db.ForeignKey('test.test_id'),nullable=False)

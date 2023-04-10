@@ -15,10 +15,10 @@
   </ul>
 </div>
 
-
 <!--JAVA COLLAPSIBLE-->
 <button type="button" class="collapsible">Java</button>
 <div class="content" id = "collapsible_java">
+
   {% for question in questions %}
   {% if question.subject_tag == "Java" %}
 
@@ -35,6 +35,7 @@
   {% endif %}
   {% endif %} <!--This is for subject_tag-->
   {% endfor %}
+
 </div>
 
 <!--JavaScript COLLAPSIBLE-->
@@ -43,7 +44,6 @@
 
   {% for question in questions %}
   {% if question.subject_tag == "JavaScript" %}
-
   {% if question.question_type == "fill_in_the_blank" %}
   {% with fill_in_the_blank_question = question %}
     {% include "fill_in_the_blank_question.html" %}
@@ -179,10 +179,10 @@
 </div>
 
 <!--Other COLLAPSIBLE-->
-<button type="button" class="collapsible">Other</button>
+<button type="button" class="collapsible">Miscellaneous</button>
 <div class="content" id = "collapsible_misc">
   {% for question in questions %}
-  {% if question.subject_tag == "Other" or question.subject_tag == Null %}
+  {% if question.subject_tag == "Other" %}
 
   {% if question.question_type == "fill_in_the_blank" %}
   {% with fill_in_the_blank_question = question %}
@@ -201,21 +201,24 @@
 
 
 <!--Script for collapsible sections-->
+
 <script>
   
-    var coll = document.getElementsByClassName("collapsible");
-    var i;
-    
-    for (i = 0; i < coll.length; i++) {
-      coll[i].addEventListener("click", function() {
-        this.classList.toggle("active");
-        var content = this.nextElementSibling;
-        if (content.style.maxHeight){
-          content.style.maxHeight = null;
-        } else {
-          content.style.maxHeight = content.scrollHeight + "px";
-        }
-      });
-    }
+  var coll = document.getElementsByClassName("collapsible");
+  var i;
+  
+  for (i = 0; i < coll.length; i++) {
+    coll[i].addEventListener("click", function() {
+      this.classList.toggle("active");
+      var content = this.nextElementSibling;
+      if (content.style.maxHeight){
+        content.style.maxHeight = null;
+      } else {
+        content.style.maxHeight = content.scrollHeight + "px";
+      }
+    });
+  }
 </script>
+
+
 {% endblock %}
