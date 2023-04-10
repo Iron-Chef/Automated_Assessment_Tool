@@ -22,12 +22,16 @@
             </p>
 
             <p>
-            {{ form.subject.label }}
-            {% for choice in form.subject %}
-                {{ choice.label }}
-                {{ choice }}
-            {% endfor %}
+                {{ form.subject.label }}
+                {% for choice in form.subject %}
+                    {{ choice.label }}
+                    {{ choice }}
+                {% endfor %}
+                {% for error in form.subject.errors %} 
+                <span style="color: red;">[{{ error }}]</span>
+                {% endfor %}
             </p>
+
 
             <p> 
                 {{ form.marks.label }}
@@ -58,7 +62,5 @@
             <input type="reset", class="btn btn-info ">
         </form>
     </div>
-
-
 
 {% endblock %}

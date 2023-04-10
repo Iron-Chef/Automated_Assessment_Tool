@@ -60,6 +60,7 @@ class QuestionFormFormField(FlaskForm):
     topic = StringField("topic",[validators.Optional()])
     marks=IntegerField("marks",[validators.Optional()]) 
     feedback=StringField("Feedback:",[validators.Optional()])
+
 #allows fill in the gap questions to be written when filling in the gap - rj
 class FillInTheBlankQuestionFormFormField(FlaskForm):
     question = StringField("question",[validators.Optional()])
@@ -76,14 +77,17 @@ class FillInTheBlankQuestionFormFormField(FlaskForm):
     topic = StringField("topic",[validators.Optional()])
     marks = IntegerField("marks",[validators.Optional()])
     feedback = StringField ("Feedback: ", [validators.Optional()])
+
 #to choose which path to go down Sum/form - RJ
 class TestChoice(FlaskForm):
     question_module = SelectField('module', choices=[])
     test_type = SelectField('Test Type', choices=['Summative', 'Formative'])
     test_title = StringField('Test Title')
-#this is needed for queryselectfeild to work - RJ
+
+#this is needed for queryselectfield to work - RJ
 def Q_query():
     return Multiplechoice.query
+
 #form for create formative test page - RJ
 class QChoiceForm(FlaskForm):
     question_1 = QuerySelectField(query_factory=Q_query, allow_blank=False, get_label='question')
@@ -154,7 +158,6 @@ class FinishFormTestForm(FlaskForm):
     finished = BooleanField("Yes")
     submitF = SubmitField('Finish')
 
-
 class StudentAnswerForm(FlaskForm):
     ans_multi_select_1 = BooleanField("Option 1")
     ans_multi_select_2 = BooleanField("Option 2")
@@ -172,20 +175,22 @@ class StudentAnswerForm(FlaskForm):
     marks = IntegerField(validators=[DataRequired(message="Please enter mark")]) 
     feedback = StringField("Feedback:")
     topic = StringField("Topic: ")
-    submit = SubmitField("Form Complete")
+    submit = SubmitField("Done")
 
 class FillInTheBlankQuestionForm(FlaskForm):
-    question = StringField(validators = [DataRequired (message = "Please type your question here: ")])
-    answer = StringField(validators = [DataRequired (message = "Please enter the correct answer")])
-    subject = RadioField("Subject: ", choices = [
+    question = StringField(validators = [DataRequired (message = "Please type a question. ")])
+    answer = StringField(validators = [DataRequired (message = "Please provide an answer. ")])
+    subject = RadioField("Subject: ", 
+        choices = [
         ("Java", "Java"),
         ("JavaScript", "JavaScript"),
         ("Python", "Python"),
         ("SQL", "SQL"),
         ("Misc", "Misc"),
         ],
-        coerce = str, validators = [DataRequired()])
-    marks = IntegerField(validators = [DataRequired (message = "Please type your question here: ")])
+        coerce = str, 
+        validators = [DataRequired (message = "Please select a subject. ")])
+    marks = IntegerField(validators = [DataRequired (message = "Please enter a mark. ")])
     rating = SelectField('Difficulty Rating:',choices=DIFFICULTY_RATING, coerce=int)
     feedback = StringField ("Feedback: ")
     topic = StringField("Topic: ")
