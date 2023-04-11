@@ -516,7 +516,7 @@ def results_s():
     #######################################################################
     
     results3 = db.session.query(Results_sum.cohort_year,func.min(Results_sum.total_mark).label('min'), func.max(Results_sum.total_mark).label('max'),
-    func.avg(Results_sum.total_mark).label('avg')).group_by(Results_sum.cohort_year).all()
+    func.avg(Results_sum.total_mark).label('avg')).filter(Results_sum.form_summ == 1).group_by(Results_sum.cohort_year).all()
     
     fig3 = px.box(results3, x='cohort_year', y=['min', 'max', 'avg'], labels={'value': 'Total Mark', 'cohort_year': 'Cohort Year'},
     title='Total Mark Distribution by Cohort Year')
@@ -530,27 +530,27 @@ def results_s():
     # adapted from https://stackoverflow.com/questions/63197693/avg-min-max-chart-in-plotly
     # accessed 31-03-2023
 
-    results4 = Results_sum.query.with_entities(Results_sum.total_mark, Results_sum.cohort_year).all()
+    results4 = Results_sum.query.filter(Results_sum.form_summ==1).with_entities(Results_sum.total_mark, Results_sum.cohort_year).all()
     df4 = pd.DataFrame(results4, columns=['total_mark', 'cohort_year'])
     grouped_df = df4.groupby('cohort_year').agg({'total_mark': ['min', 'max', 'mean']})
     fig4 = go.Figure()
 
     fig4.add_trace(go.Scatter(
-        x=grouped_df.index,
+        x=grouped_df.index.tolist(),
         y=grouped_df['total_mark']['min'],
         mode="markers", showlegend=False, marker=dict(color="blue", size=10), 
         name='Min'
     ))
 
     fig4.add_trace(go.Scatter(
-        x=grouped_df.index,
+        x=grouped_df.index.tolist(),
         y=grouped_df['total_mark']['max'],
         mode="markers", showlegend=False, marker=dict(color="blue", size=10),
         name='Max'
     ))
 
     fig4.add_trace(go.Scatter(
-        x=grouped_df.index,
+        x=grouped_df.index.tolist(),
         y=grouped_df['total_mark']['mean'],
         mode="markers", showlegend=False, marker=dict(color="blue", size=15),
         name='Average'
@@ -558,24 +558,24 @@ def results_s():
 
     # Add a line trace for min and max
     fig4.add_trace(go.Scatter(
-        x=grouped_df.index,
+        x=grouped_df.index.tolist(),
         y=[(min_val+max_val)/2 for min_val, max_val in zip(grouped_df['total_mark']['min'], grouped_df['total_mark']['max'])],
         mode="lines", showlegend=False, line=dict(color="red", width=2),
         name='Min-Max Line'
     ))
 
-    # Add a vertical line between the min and max values for each cohort year
-    for i, row in grouped_df.iterrows():
-        fig4.add_shape(
-            type="line",
-            xref="x",
-            yref="y",
-            x0=i,
-            y0=row['total_mark']['min'],
-            x1=i,
-            y1=row['total_mark']['max'],
-            line=dict(color='cornflowerblue', width=2)
-        )
+    # # # Add a vertical line between the min and max values for each cohort year
+    # for i, row in grouped_df.iterrows():
+    #     fig4.add_shape(
+    #         type="line",
+    #         xref="x",
+    #         yref="y",
+    #         x0=i,
+    #         y0=row['total_mark']['min'],
+    #         x1=i,
+    #         y1=row['total_mark']['max'],
+    #         line=dict(color='cornflowerblue', width=2)
+    #     )
 
     fig4.update_layout(
         title='Total Mark vs Cohort Year',
@@ -770,9 +770,12 @@ def results_form():
     for data in plot15_data:
         if data[1] not in plot15_dict:
             plot15_dict[data[1]] = {}
-        if data[2] not in plot15_dict[data[1]]:
-            plot15_dict[data[1]][data[2]] = []
-        plot15_dict[data[1]][data[2]].append(data[0])
+        total_count = data[2]
+        for count in range(1, total_count+1):
+            if count not in plot15_dict[data[1]]:
+                plot15_dict[data[1]][count] = []
+            if count <= total_count:
+                plot15_dict[data[1]][count].append(data[0])
 
 
     return render_template('results_form.html', title='Results', entries=entries, unique_user_ids=unique_user_ids, unique_test_ids=unique_test_ids, 
