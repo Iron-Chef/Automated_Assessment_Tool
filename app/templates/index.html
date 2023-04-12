@@ -1,13 +1,17 @@
 {% extends "base.html" %}
 
 {% block content %}
-
-    <h1>Home</h1>
-
-    <h1>Hi, {{ current_user.forename }} {{ current_user.surname }}!</h1>
-
-    {% if current_user.is_lecturer == 1 %}
+    <h1>Welcome, {{ current_user.forename }} {{ current_user.surname }}</h1>
     <hr>
+    </br>
+    
+<!--EMMA -->
+    {% if current_user.is_authenticated and current_user.is_lecturer == 0 %} 
+    <h1 class = student><bold>Your details</bold></h1>
+    <h1 class = student><small>Student username: {{ current_user.username }}</small></h1>
+    <h1 class = student><small>University email: {{ current_user.email }}</small></h1>
+
+    {% elif current_user.is_lecturer == 1 %}
     <h2>Questions</h2>
     <a href="{{ url_for('question_list', order_by = 'question_type') }}" class="btn btn-outline-primary btn-sm">Question List</a>
     <a href="{{ url_for('add_mc_question') }}" class="btn btn-outline-primary btn-sm">Add Multiple Choice Question</a>

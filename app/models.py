@@ -21,7 +21,7 @@ class User(UserMixin, db.Model):
     #date = db.Column(db.DateTime, nullable = False, default = datetime.utcnow)
 
     def __repr__(self):
-        return "Student ID: {}, First name: {}, Surnam: {}, Email: {}, Year: {}".format(self.id, self.forename, self.surname, self.email, self.year)
+        return "Student ID: {}, First name: {}, Surnam: {}, Email: {}, Year: {}".format(self.id, self.forename, self.surname, self.email, self.intake_year)
 
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
@@ -126,7 +126,7 @@ class Results_sum(db.Model):
     cohort_year = db.Column(db.String(15))    
     # unique test ref
     test_id = db.Column(db.Integer)
-    tag = db.Column(db.String(30))
+    # tag = db.Column(db.String(30))
     # 0 = formative result, 1 = summative result
     form_summ = db.Column(db.Integer)
     # module result relates to

@@ -11,27 +11,20 @@
         </button>
       
         <div class="collapse navbar-collapse" id="navbarNavDropdown">
-            <!-- <ul class="navbar-nav">
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ url_for('login') }}">login</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="">placeholder</a>
-                </li>
-            </ul> -->
             <ul class="navbar-nav">
-                {% if current_user.is_authenticated %}
-                    
+             <!--EMMA -->   
+                {% if current_user.is_authenticated and current_user.is_lecturer == 0 %}  
                     <li class="nav-item">
-                        <a class="nav-link" href="">placeholder (e.g. take test)</a>
+                        <a class="nav-link" href="">Take Test</a>
                     </li>
-
                     <li class="nav-item">
-                        <a class="nav-link" href="">placeholder</a>
+                        <a class="nav-link" href="{{ url_for('your_results') }}">Your Results</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{{ url_for('logout') }}">Logout</a>
                     </li>
+
+                    {% elif current_user.is_authenticated and current_user.is_lecturer == 1 %}
                     <li class="nav-item">
                         <a class="nav-link" href="{{ url_for('choose_create_test') }}">Create Test</a>
                     </li>
@@ -42,16 +35,20 @@
                         <a class="nav-link" href="{{ url_for('test_list') }}">Summative test list</a>
                     </li>
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Results</a>
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Student Results</a>
                           <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                             <li><a class="dropdown-item" href="{{ url_for('results_s') }}">Summative</a></li>
                             <li><a class="dropdown-item" href="{{ url_for('results_form') }}">Formative</a></li>
                           </ul>
-                        <!-- <a class="nav-link" href="{{ url_for('results_s') }}">Results</a> -->
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('logout') }}">Logout</a>
+                    </li>
+
                 {% else %}
                     <li class="nav-item">
-                        <a class="nav-link" href="">placeholder</a>
+                <!--Possibly a 'Help' or 'Contact IT' tab? -->
+                        <a class="nav-link" href="">Placeholder</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{{ url_for('login') }}">Login</a>
