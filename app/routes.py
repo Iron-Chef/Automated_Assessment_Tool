@@ -1250,3 +1250,12 @@ def release_formtest(Form_test_id):
         test.available_to_take = True
     db.session.commit()
     return redirect('/Formative_test_list')
+
+#EMMA
+@app.route("/your_results", methods=['GET'])
+@login_required
+def your_results():
+
+    user_id = session.get('user_id')
+    individ_results=Results_sum.query.filter_by(user_id=user_id).all()
+    return render_template('your_results.html', title = 'Your Results', individ_results = individ_results)
