@@ -8,7 +8,7 @@
 <!--EMMA -->
     {% if current_user.is_authenticated and current_user.is_lecturer == 0 %} 
     <h1 class = student><bold>Your details</bold></h1>
-    <h1 class = student><small>Student username: {{ current_user.username }}</small></h1>
+    <h1 class = student><small>Username: {{ current_user.username }}</small></h1>
     <h1 class = student><small>University email: {{ current_user.email }}</small></h1>
 
     {% elif current_user.is_lecturer == 1 %}
