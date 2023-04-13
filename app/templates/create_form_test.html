@@ -7,14 +7,22 @@
         <h2>Question 1</h2>
         <div><h3>Select exsting question</h3>{{ QCform.question_1 }}</div>
         <br>
-        <div><h3>Or write new multiple choice question</h3>{{ QCform.WriteMCquestion_1}}</div>
+
+        <!--Trying something different here - AC-->
+        <a onclick = "showQuestionForm('Add_MC_question_1')" class = "btn btn-outline-danger btn-sm question_button">Add Multiple Choice question</a>
+        <div id = "Add_MC_question_1"  class = "MC_question_form">
+            {{ QCform.WriteMCquestion_1}}
+        </div>
         <br>
-        <div><h3>Or write new written answer question</h3>{{ QCform.WriteFTGquestion_1 }}</div>
-        <ul>
-            {% for error in QCform.errors %}
-            <li style="color:red;">{{ error }}</li>
-            {% endfor %}
-        </ul>
+        <a onclick = "showQuestionForm('Add_FITB_question_1')" class = "btn btn-outline-danger btn-sm question_button">Add Fill-in-the-blank question</a>
+        <div id = "Add_FITB_question_1" class = "MC_question_form">
+            {% with form = QCform.WriteFTGquestion_1 %}
+            {% include "add_fill_in_the_blank_question_(test_window).html" %}
+            {% endwith %}
+        </div>
+        <br>
+        <!--End of trying something different-->
+
         
         <h2>Question 2</h2>
         <div><h3>Select exsting question</h3>{{ QCform.question_2 }}</div>
@@ -65,4 +73,18 @@
     <form  action="{{ url_for('random_formtest')}}" method="POST">
         <input type="submit" value="Generate Random test" >
     </form>
+
+<!--Script for displaying create question forms-->
+<script>
+    function showQuestionForm(divID) {
+        var x = document.getElementById(divID)
+        if (x.style.display === "none" || x.style.display === "") {
+            x.style.display = "block";
+        } 
+        else {
+            x.style.display = "none";
+        }
+    }
+</script>
+    
 {% endblock %}

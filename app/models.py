@@ -55,8 +55,6 @@ class Test(db.Model):
     question_id_3=db.Column(db.Integer,db.ForeignKey('multiplechoice.id'), nullable=True)
     question_id_4=db.Column(db.Integer,db.ForeignKey('multiplechoice.id'), nullable=True)
     question_id_5=db.Column(db.Integer,db.ForeignKey('multiplechoice.id'), nullable=True)
-    attempt = db.relationship('FormativeAttempt', backref='test_to_attempt', lazy=True)
-    
     
     def __repr__(self):
         return f"Test('{self.test_id}', '{self.creator_id}', '{self.test_type}', '{self.question_id_1}', '{self.question_id_2}', '{self.question_id_3}', '{self.question_id_4}', '{self.question_id_5}')"
@@ -76,23 +74,21 @@ class Multiplechoice(db.Model):
     id = db.Column(db.Integer, primary_key = True)
     user_id=db.Column(db.Text, db.ForeignKey('user.id'))
     # add foreignkey to summative and formative or vice versa
-    question= db.Column(db.Text, default="")
-    answer_1= db.Column(db.Text, default="")
-    ans_choice_1 = db.Column(db.Integer, default=False)
-    answer_2= db.Column(db.Text, default="")
-    ans_choice_2 = db.Column(db.Integer, default=False)
-    answer_3= db.Column(db.Text, nullable=True)
-    ans_choice_3 = db.Column(db.Integer, default=False)
-    answer_4= db.Column(db.Text, nullable=True)
-    ans_choice_4 = db.Column(db.Integer, default=False)
+    question = db.Column(db.Text, default = "")
+    answer_1 = db.Column(db.Text, default = "")
+    ans_choice_1 = db.Column(db.Integer, default = False)
+    answer_2 = db.Column(db.Text, default = "")
+    ans_choice_2 = db.Column(db.Integer, default = False)
+    answer_3 = db.Column(db.Text, nullable = True)
+    ans_choice_3 = db.Column(db.Integer, default = False)
+    answer_4 = db.Column(db.Text, nullable = True)
+    ans_choice_4 = db.Column(db.Integer, default = False)
     rating = db.Column(db.Unicode(40))
-    rating_num=db.Column(db.Integer)
-    #add tag column
-    #add difficulty column
+    rating_num = db.Column(db.Integer)
     #add student answer foreignkey
     subject_tag = db.Column(db.Text, default = "")
-    marks=db.Column(db.Integer, default=False)
-    feedback = db.Column(db.Text, default="")
+    marks = db.Column(db.Integer, default = False)
+    feedback = db.Column(db.Text, default = "")
     topic_tag = db.Column(db.Text, default = "")
     question_type = db.Column(db.Text, nullable = False)
     
@@ -155,25 +151,7 @@ class Results_sum(db.Model):
 
     def __repr__(self):
         return f"Results_sum('{self.user_id}','{self.username}', '{self.forename}', '{self.surname}', '{self.test_id}','{self.total_mark}','{self.cohort_year}','{self.res_module}' ,'{self.Q1_mark}','{self.Q1_attempts}' ,'{self.Q2_mark}','{self.Q2_attempts}','{self.Q3_mark}','{self.Q3_attempts}','{self.Q4_mark}','{self. Q4_attempts}','{self.Q5_mark}','{self.Q5_attempts}','{self.test_rating}','{self.form_summ}','{self.test_weighting}','{self.date}', '{self.date}')"
-
-
-# This is not redundant I am leaving it here for now so other code that relies on it doesnt break but I am now writing summative tests to result_sum-DD
-class FormativeAttempt(db.Model):
-    attempt_id=db.Column(db.Integer(),primary_key=True)
-    test_id=db.Column(db.Integer(),db.ForeignKey('test.test_id'),nullable=False)
-    user_id= db.Column(db.Integer,db.ForeignKey('user.id'), nullable=False)
-    question_id_1=db.Column(db.Integer,db.ForeignKey('multiplechoice.id'), nullable=True)
-    question_id_2=db.Column(db.Integer,db.ForeignKey('multiplechoice.id'), nullable=True)
-    question_id_3=db.Column(db.Integer,db.ForeignKey('multiplechoice.id'), nullable=True)
-    question_id_4=db.Column(db.Integer,db.ForeignKey('multiplechoice.id'), nullable=True)
-    question_id_5=db.Column(db.Integer,db.ForeignKey('multiplechoice.id'), nullable=True)
-    answer_1=db.Column(db.Integer,nullable=True)
-    answer_2=db.Column(db.Integer,nullable=True)
-    answer_3=db.Column(db.Integer,nullable=True)
-    answer_4=db.Column(db.Integer,nullable=True)
-    answer_5=db.Column(db.Integer,nullable=True)
-    marks=db.Column(db.Integer,nullable=False)
-    
+            
 class Result(db.Model):
     id=db.Column(db.Integer,primary_key=True)
     attempt=db.Column(db.Integer,db.ForeignKey('formative_attempt.attempt_id'),nullable=False)

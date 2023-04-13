@@ -1,21 +1,16 @@
-{% extends "base.html" %}
-{% block content %}
-
-<h1>Edit Fill-in-the-blank-questions</h1>
 <div>
     <form action="", method="post" novalidate>
         {{ form.hidden_tag() }}
 
-        <p> Question: 
-            {{ form.question(class="form-control form-control-lg")}}
+        <p> 
+            {{ form.question.label }} {{ form.question(class="form-control form-control-lg")}}
             {% for error in form.question.errors %} 
            <span style="color: red;">[{{ error }}]</span>
            {% endfor %}
         </p>
         
         <p>
-            {{ form.answer.label }}
-            {{ form.answer }}
+            {{ form.answer.label }} {{ form.answer }}
             {% for error in form.answer.errors %} 
             <span style="color: red;">[{{ error }}]</span>
             {% endfor %}
@@ -56,17 +51,8 @@
             <span style="color: red;">[{{ error }}]</span>
             {% endfor %}
         </p>
-
-
-        <p>
-            {{ form.submit(class="btn btn-info ")}}
-        </p>
         
         <!--Clear button-->
-        {% with fill_in_the_blank_question_id = fill_in_the_blank_question_id %}
-        <input type="reset", class="btn btn-info", href="{{ url_for('edit_fill_in_the_blank_question', fill_in_the_blank_question_id = fill_in_the_blank_question_id) }}">
-        {% endwith %}
+        <input type="reset", class="btn btn-info ">
     </form>
 </div>
-
-{% endblock %}

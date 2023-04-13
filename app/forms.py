@@ -61,22 +61,24 @@ class QuestionFormFormField(FlaskForm):
     marks=IntegerField("marks",[validators.Optional()]) 
     feedback=StringField("Feedback:",[validators.Optional()])
 
-#allows fill in the gap questions to be written when filling in the gap - rj
+#allows fill in the gap questions to be written when filling in the gap - rj ??
 class FillInTheBlankQuestionFormFormField(FlaskForm):
-    question = StringField("question",[validators.Optional()])
-    answer = StringField("answer",[validators.Optional()])
-    rating = SelectField('Rating:',choices=DIFFICULTY_RATING, coerce=int, validators = [validators.Optional()])
-    subject = RadioField("Subject: ", choices = [
+    question = StringField("Question: ", validators = [DataRequired (message = "Please type a question.")])
+    answer = StringField("Answer: ", validators = [DataRequired (message = "Please provide an answer.")])
+    subject = RadioField("Subject: ", 
+        choices = [
         ("Java", "Java"),
         ("JavaScript", "JavaScript"),
         ("Python", "Python"),
         ("SQL", "SQL"),
         ("Other", "Other"),
         ],
-        coerce = str, validators = [validators.Optional()])
-    topic = StringField("topic",[validators.Optional()])
-    marks = IntegerField("marks",[validators.Optional()])
-    feedback = StringField ("Feedback: ", [validators.Optional()])
+        coerce = str, 
+        validators = [DataRequired (message = "Please select a subject.")])
+    marks = IntegerField(validators = [DataRequired (message = "Please enter a mark.")])
+    rating = SelectField("Difficulty Rating:",choices = DIFFICULTY_RATING, coerce=int)
+    feedback = StringField ("Feedback: ")
+    topic = StringField("Topic: ")
 
 #to choose which path to go down Sum/form - RJ
 class TestChoice(FlaskForm):
@@ -178,20 +180,20 @@ class StudentAnswerForm(FlaskForm):
     submit = SubmitField("Done")
 
 class FillInTheBlankQuestionForm(FlaskForm):
-    question = StringField(validators = [DataRequired (message = "Please type a question. ")])
-    answer = StringField(validators = [DataRequired (message = "Please provide an answer. ")])
+    question = StringField("Question: ", validators = [DataRequired (message = "Please type a question.")])
+    answer = StringField("Answer: ", validators = [DataRequired (message = "Please provide an answer.")])
     subject = RadioField("Subject: ", 
         choices = [
         ("Java", "Java"),
         ("JavaScript", "JavaScript"),
         ("Python", "Python"),
         ("SQL", "SQL"),
-        ("Misc", "Misc"),
+        ("Other", "Other"),
         ],
         coerce = str, 
-        validators = [DataRequired (message = "Please select a subject. ")])
-    marks = IntegerField(validators = [DataRequired (message = "Please enter a mark. ")])
-    rating = SelectField('Difficulty Rating:',choices=DIFFICULTY_RATING, coerce=int)
+        validators = [DataRequired (message = "Please select a subject.")])
+    marks = IntegerField(validators = [DataRequired (message = "Please enter a mark.")])
+    rating = SelectField("Difficulty Rating:",choices = DIFFICULTY_RATING, coerce=int)
     feedback = StringField ("Feedback: ")
     topic = StringField("Topic: ")
     submit = SubmitField("Form Complete")

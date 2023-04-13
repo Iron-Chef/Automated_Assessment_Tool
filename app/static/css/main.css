@@ -62,11 +62,20 @@
   padding-bottom: 20px;
 }
 
+.MC_question_form{
+  display: none;
+}
+
+.question_button{
+  margin-bottom: 10px;
+}
+
 /* EMMA */
 .student {
  font-size: 20px; 
 
 }
+
 
 
 
