@@ -4,7 +4,6 @@ import plotly.graph_objs as go
 import plotly.offline as opy
 from plotly.subplots import make_subplots
 from collections import Counter
-
 from flask import render_template, flash, redirect, url_for, request, session, jsonify
 from flask_login import current_user, login_user, logout_user, login_required
 from werkzeug.urls import url_parse
@@ -12,8 +11,8 @@ from sqlalchemy import *
 from datetime import datetime
 import random
 from app.functions import *
-from app.models import User,Test, Multiplechoice, FormativeAttempt,Results_sum, Module, Studentanswer, Formativetest
-from app.forms import DIFFICULTY_RATING,LoginForm, CreateTestForm, QuestionForm, SubmitAttemptForm, StudentAnswerForm, ResultsForm, FillInTheBlankQuestionForm, QChoiceForm, TestChoice, TakeFormTestForm, Q1TakeFormTestForm, Q2TakeFormTestForm, Q3TakeFormTestForm, Q4TakeFormTestForm, Q5TakeFormTestForm, FinishFormTestForm
+from app.models import User,Test, Multiplechoice, Results_sum, Module, Studentanswer, Formativetest
+from app.forms import DIFFICULTY_RATING, LoginForm, CreateTestForm, QuestionForm, SubmitAttemptForm, StudentAnswerForm, ResultsForm, FillInTheBlankQuestionForm, QChoiceForm, TestChoice, TakeFormTestForm, Q1TakeFormTestForm, Q2TakeFormTestForm, Q3TakeFormTestForm, Q4TakeFormTestForm, Q5TakeFormTestForm, FinishFormTestForm
 from app import app,db
 from datetime import datetime, timedelta
 import matplotlib.pyplot as plt
@@ -193,7 +192,7 @@ def edit_mc_question(mc_question_id):
     form.feedback.data=mcquestion.feedback
     return render_template('edit_mc_question.html', mcquestion=mcquestion,form=form)
 
-# Add fill-in-the-blank questions
+# Add fill-in-the-blank questions directly
 @app.route("/add_fill_in_the_blank_question", methods = ['GET', 'POST'])
 def add_fill_in_the_blank_question():
 
@@ -220,6 +219,34 @@ def add_fill_in_the_blank_question():
         return redirect('/question_list')
 
     return render_template('add_fill_in_the_blank_question.html', title = "Add Fill-in-the-blank questions", form = form)
+
+# This is to display the above app route, but directly inside creating a test - AC
+@app.route("/add_fill_in_the_blank_question_(test_window)", methods = ['GET', 'POST'])
+def add_fill_in_the_blank_question_inside_test():
+
+    form = FillInTheBlankQuestionForm()
+
+    if form.validate_on_submit():
+
+        question = Multiplechoice(
+        user_id = current_user.id,
+        question = form.question.data, 
+        answer_1 = form.answer.data,
+        subject_tag = form.subject.data,
+        marks = form.marks.data,
+        rating = dict(DIFFICULTY_RATING).get(form.rating.data),
+        rating_num = form.rating.data,
+        feedback = form.feedback.data,
+        topic_tag = form.topic.data,
+        question_type = "fill_in_the_blank"
+        )
+        db.session.add(question)
+        db.session.commit()
+
+        flash('Question added!')
+        return redirect('/create_form_test')
+
+    return render_template('add_fill_in_the_blank_question_(test_window).html', form = form)
 
 #view list of questions- opportunity to list by different queries
 @app.route("/fill_in_the_blank_question/<int:fill_in_the_blank_question_id>", methods=['GET'])
@@ -269,6 +296,7 @@ def edit_fill_in_the_blank_question(fill_in_the_blank_question_id):
 
 @app.route("/fill_in_the_blank_question/delete/<int:fill_in_the_blank_question_id>")
 def delete_fill_in_the_blank_question(fill_in_the_blank_question_id):
+
     fill_in_the_blank_question_to_delete = Multiplechoice.query.get_or_404(fill_in_the_blank_question_id)
 
     try:
@@ -279,7 +307,7 @@ def delete_fill_in_the_blank_question(fill_in_the_blank_question_id):
         return redirect('/question_list')
 
     except:
-        flash("Problem deleting question, please check with Admin!")
+        flash(fill_in_the_blank_question_to_delete.question)
 
         return redirect('/question_list')
 
@@ -829,9 +857,11 @@ def choose_create_test():
 @app.route('/create_form_test', methods=['GET', 'POST'])
 @login_required
 def create_form_test():
+
     test = Formativetest.query.order_by(Formativetest.id.desc()).first()
     test_diff = []
-    QCform = QChoiceForm()
+    QCform = QChoiceForm() 
+
     if QCform.validate_on_submit(): 
         add_question_1()
         questions = test.linkedquestions
