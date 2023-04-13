@@ -17,8 +17,8 @@
                             <div class="card-body">
                                 <h4 class="card-title">{{ individ_results.forename }} {{ individ_results.surname }} </h4>
                                 <br>
-                                <p class="card-text">last log in: {{ user.date.strftime('%d-%b-%Y %H:%M') }} </p>
-                                <p class="card-text">logged in x times (update): {{ user.date.strftime('%d-%b-%Y %H:%M') }} </p>
+                                <p class="card-text">last log in: {{ user.date.strftime('%d-%b-%Y') }} </p>
+                                <p class="card-text">user has logged in {{ user.number_of_log_ins }} times </p>
                             </div>
                         </div>
                     </div>
