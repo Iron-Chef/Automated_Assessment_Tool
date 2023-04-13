@@ -307,7 +307,7 @@ def delete_fill_in_the_blank_question(fill_in_the_blank_question_id):
         return redirect('/question_list')
 
     except:
-        flash(fill_in_the_blank_question_to_delete.question)
+        flash("Problem deleting question")
 
         return redirect('/question_list')
 
