@@ -26,7 +26,7 @@
             </div>
             <div class="col">
                 <div class="card h-100" >
-                    <div class="card-header d-flex justify-content-between">Summary <a href="#" class="btn btn-primary">view</a></div>
+                    <div class="card-header d-flex justify-content-between">Summary <input type="button" class="btn btn-secondary" value="Back" onclick="history.go(-1)"></div>
                     <ul class="list-group">
                         <li class="list-group-item d-flex justify-content-between align-items-center">number marked <span class="list-group-flush"> {{ total_mark_count }} </span>
                         </li>
@@ -49,18 +49,26 @@
         <table id="data2" class="table">
             <thead>
                 <tr>
-                    <th>test id</th> 
-                    <th>test rating</th> 
-                    <th>test date</th>                   
-                    <th>mark</th>
+                    <th>test id</th>
+                    <th>test date</th> 
+                    <th>Q1 Mark</th>
+                    <th>Q2 Mark</th>
+                    <th>Q3 Mark</th>
+                    <th>Q4 Mark</th>
+                    <th>Q5 Mark</th>   
+                    <th>Final Mark</th>
                 </tr>
             </thead>
             <tbody>
                 {% for res in entries %}
                     <tr>
                         <td><a href="#">{{ res.test_id }}</a> </td>
-                        <td><a href="#">{{ res.test_rating }}</a> </td>
-                        <td>{{ res.date.strftime('%d-%b-%Y') }} </td>                        
+                        <td>{{ res.date.strftime('%d-%b-%Y') }} </td>
+                        <td>{{ res.Q1_mark }}</td>
+                        <td>{{ res.Q2_mark }}</td>
+                        <td>{{ res.Q3_mark }}</td>
+                        <td>{{ res.Q4_mark }}</td>
+                        <td>{{ res.Q5_mark }}</td>                                                
                         <td> {{ res.total_mark }} </td>
                     </tr>
                 {% endfor %}
@@ -88,36 +96,6 @@
             </div>
 
 
-            <div class="col">
-                <div class="card h-100">
-                    <div class="card-header d-flex justify-content-between">
-                        <form method="get">
-                            <label for="axis">Select axis:</label>
-                            <select name="axis" id="axis" onchange="this.form.submit()">
-                                {% for option in dropdown_options %}
-                                <option btn btn-secondary dropdown-toggle value="{{ option.value }}" {% if request.args.get('axis') == option.value %}selected{% endif %}>
-                                    {{ option.label }}
-                                </option>
-                                {% endfor %}
-                            </select>
-                        </form>                        
-                    </div>
-
-                    <div id="plot1"></div>
-
-                </div>
-            </div>
-                
-           
-
-            <div class="col">
-                <div class="card h-100" >
-                    <div id="plot2"></div>
-                </div>
-            </div>
-            
-            
-
             
             
         </div>
@@ -138,18 +116,25 @@
 {% block scripts %}
   <script>
     $(document).ready(function () {
-      $('#data2').DataTable({
-        dom: 'Bfrtip',
-        buttons: [
-            'copy', 'csv', 'excel', 'pdf', 'print'
-        ],
-        columns: [
-          null,         
-          null,
-          null,
-          null                   
-          ],
-      });
+        $('#data2').DataTable({
+            dom: '<"float-right"fB><"float-left"l><"clear">rtip',
+            buttons: [
+                'copy', 'csv', 'excel', 'pdf', 'print'
+            ],
+            columns: [
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+            ],
+            initComplete: function() {
+                $('.dt-buttons').insertBefore('.dataTables_filter');
+            }
+        });
     });
 
        

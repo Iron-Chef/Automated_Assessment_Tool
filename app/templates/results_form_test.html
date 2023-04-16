@@ -8,15 +8,14 @@
                 <div class="card h-100">
                     <div class="row g-0">
                         <div class="col-md-3">
-                            <img src="{{ url_for('static', filename='form.jpg' ) }}"  class="img-fluid rounded-start" width="160" height="100" >
+                            <img src="{{ url_for('static', filename='year.jpg' ) }}"  class="img-fluid rounded-start" width="160" height="100" >
                         </div>
                         <div class="col-md-8">
                             <div class="card-body">
-                                <h5 class="card-title">Formative Assessment</h5>
+                                <h4 class="card-title"><strong>Formative Assessment </strong></h4>
                                 <br>
-                                <p class="card-text"> <strong> {{ num_users_with_results }}</strong> students out of a possible <strong> {{ unique_user_ids }} </strong> have completed tests </p>
-                                <p class="card-text"> completion rate: <strong> {{ percentage_users_with_results }}%</strong>  </p>
-                                <p class="card-text"><small class="text-muted">space for small words</small></p>
+                                <h4 class="card-text">  breakdown of test {{ test_id }} by year </h4>
+                                
                             </div>
                         </div>
                     </div>
@@ -24,7 +23,7 @@
             </div>
             <div class="col">
                 <div class="card h-100" >
-                    <div class="card-header d-flex justify-content-between">Stats for all marks <a href="#" class="btn btn-primary">view</a></div>
+                    <div class="card-header d-flex justify-content-between">Stats for all marks <input type="button" class="btn btn-secondary" value="Back" onclick="history.go(-1)"></div>
                     <ul class="list-group">
                         <li class="list-group-item d-flex justify-content-between align-items-center">number marked <span class="list-group-flush"> {{ total_mark_count }} </span>
                         </li>
@@ -43,10 +42,12 @@
 
         <!-- Table:  summary of formative results -->
 
+        
+
         <table id="data_form" class="table">
             <thead>
                 <tr>
-                    <th>test id</th>
+                    <th>cohort year</th>
                     <th>Num of Students</th>
                     <th>total Num attempts</th>
                     <th>Q1: Num Corrrect, % Correct</th>
@@ -60,7 +61,7 @@
             <tbody>
                 {% for res in test_results %}
                     <tr>
-                        <td><a href="{{ url_for('results_form_test', test_id=res.test_id) }}">{{ res.test_id }} </a> </td>
+                        <td><a href="#">{{ res.cohort_year }} </a> </td>
                         <td> <strong> {{ res.unique_user_count }} </strong> </td>
                         <td> <strong> {{ res.q1_attempts_count }} </strong> </td>
                         <td> <strong> {{ res.q1_attempts_sum }} </strong> ({{ res.q1_percent }}%)</td>
@@ -94,10 +95,10 @@
                
                         <form>
                             <div class="form-group">
-                            <label for="plot1_dropdown">Select Test ID:</label>
+                            <label for="plot1_dropdown">Select Cohort Year:</label>
                             <select class="form-control" id="plot1_dropdown">
                                 {% for test_result in test_results %}
-                                <option value="{{ test_result.test_id }}">{{ test_result.test_id }}</option>
+                                <option value="{{ test_result.cohort_year }}">{{ test_result.cohort_year }}</option>
                                 {% endfor %}
                             </select>
                             </div>
@@ -124,10 +125,10 @@
                   <div class="card-body">
                     <form>
                       <div class="form-group">
-                      <label for="plot2_dropdown">Select Test ID:</label>
+                      <label for="plot2_dropdown">Select Cohort Year:</label>
                       <select class="form-control" id="plot2_dropdown">                    
-                        {% for test_id in plot15_dict.keys() %}
-                          <option value="{{ test_id }}">{{ test_id }}</option>
+                        {% for cohort_year in plot15_dict.keys() %}
+                          <option value="{{ cohort_year }}">{{ cohort_year }}</option>
                         {% endfor %}
                     </select>
                     </div>
@@ -197,12 +198,12 @@
     var questions_test_results = {{ questions_test_results|tojson }};
     var plot1_data = [];
 
-    function updateChart1(test_id) {
+    function updateChart1(cohort_year) {
       var correct = [];
       var wrong = [];
 
       for (var i = 0; i < questions_test_results.length; i++) {
-        if (questions_test_results[i].test_id == test_id) {
+        if (questions_test_results[i].cohort_year == cohort_year) {
           correct.push(questions_test_results[i].q1_attempts_sum);
           correct.push(questions_test_results[i].q2_attempts_sum);
           correct.push(questions_test_results[i].q3_attempts_sum);
@@ -249,9 +250,9 @@
         
         yaxis: {
           title: 'Attempts', 
-          range: [0, 200.5],
+          range: [0, 100.5],
           linecolor: 'grey',
-          dtick: 20, // set tick marks on whole numbers
+          dtick: 10, // set tick marks on whole numbers
           }
         
         
@@ -261,13 +262,13 @@
     }
 
     $(document).ready(function() {
-      // initialize chart with first test_id on page load
-      updateChart1('{{ test_results[0].test_id }}');
+      // initialize chart with first cohort_year on page load
+      updateChart1('{{ test_results[0].cohort_year }}');
 
-      // update chart when test_id is selected from dropdown
+      // update chart when cohort_year is selected from dropdown
       $('#plot1_dropdown').on('change', function() {
-        var selected_test_id = $(this).val();
-        updateChart1(selected_test_id);
+        var selected_cohort_year = $(this).val();
+        updateChart1(selected_cohort_year);
       });
     });
 
@@ -278,8 +279,8 @@
 
     var plot15_data = {{ plot15_dict | tojson }};
 
-    function updateChart2(test_id) {
-      var innerDict = plot15_data[test_id];
+    function updateChart2(cohort_year) {
+      var innerDict = plot15_data[cohort_year];
       var countVals = Object.values(innerDict);
       var countKeys = Object.keys(innerDict);
       var trace = {
@@ -296,8 +297,8 @@
         },
         yaxis: { 
           title: 'Number of students',
-          range: [0, 120.5], // set the x-axis range to 1-10 (needs updating to range(max)+1 )
-          dtick: 20, // set tick marks on whole numbers
+          range: [0, 60.5], // set the x-axis range to 1-10 (needs updating to range(max)+1 )
+          dtick: 10, // set tick marks on whole numbers
           linecolor: 'grey'
         }
       };
@@ -308,12 +309,12 @@
 
     $(document).ready(function() {
       // initialize chart with first test_id on page load
-      updateChart2('{{ test_results[0].test_id }}');
+      updateChart2('{{ test_results[0].cohort_year }}');
 
       // update chart when test_id is selected from dropdown
       $('#plot2_dropdown').on('change', function() {
-        var selected_test_id = $(this).val();
-        updateChart2(selected_test_id);
+        var selected_cohort_year = $(this).val();
+        updateChart2(selected_cohort_year);
       });
     });
 
