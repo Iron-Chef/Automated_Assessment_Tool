@@ -61,8 +61,6 @@
                         <td>{{ res.test_rating }}</td>
                         <td>{{ res.cohort_year }}</td>
                         <td>{{ res.total_mark }}</td>
-                        
-                                               
                     </tr>
                 {% endfor %}
             </tbody>
@@ -101,19 +99,27 @@
 
 {% block scripts %}
   <script>
-    $(document).ready(function () {
-      $('#data').DataTable({
-        columns: [
-          null,
-          null,
-          null,
-          null,
-          null,
-          null
-        ],
-      });
-    });
 
+    // JS for datatable  
+    $(document).ready(function () {
+        $('#data').DataTable({
+            dom: '<"float-right"fB><"float-left"l><"clear">rtip',
+            buttons: [
+                'copy', 'csv', 'excel', 'pdf', 'print'
+            ],
+            columns: [
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+            ],
+            initComplete: function() {
+                $('.dt-buttons').insertBefore('.dataTables_filter');
+            }
+        });
+    });
 
     
     var plot3 = {{ fig3.to_json()|safe }};
