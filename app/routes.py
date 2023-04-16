@@ -550,6 +550,7 @@ def results_s():
     title='Total Mark Distribution by Cohort Year')
     fig3.update_layout(xaxis=dict(tickangle=45, linecolor='grey'), yaxis=dict(linecolor='grey',gridcolor='lightgrey'), plot_bgcolor='rgba(0,0,0,0)', paper_bgcolor='rgba(0,0,0,0)', font=dict(color='black'))
     fig3.update_yaxes(range=[0, 100])
+    fig3.update_layout(yaxis_title='Total Mark (%)')
 
     #######################################################################
     # scatter plot showing min, max and average Total Marks per cohort year
@@ -615,6 +616,7 @@ def results_s():
     )
 
     fig4.update_yaxes(range=[0, 100])
+    fig4.update_layout(yaxis_title='Total Mark (%)')
 
     plot_div = opy.plot(fig4, auto_open=False, output_type='div')
   

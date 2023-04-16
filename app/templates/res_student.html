@@ -139,6 +139,10 @@
   <script>
     $(document).ready(function () {
       $('#data2').DataTable({
+        dom: 'Bfrtip',
+        buttons: [
+            'copy', 'csv', 'excel', 'pdf', 'print'
+        ],
         columns: [
           null,         
           null,
