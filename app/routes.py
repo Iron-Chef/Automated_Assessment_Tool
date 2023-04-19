@@ -550,6 +550,7 @@ def results_s():
     title='Total Mark Distribution by Cohort Year')
     fig3.update_layout(xaxis=dict(tickangle=45, linecolor='grey'), yaxis=dict(linecolor='grey',gridcolor='lightgrey'), plot_bgcolor='rgba(0,0,0,0)', paper_bgcolor='rgba(0,0,0,0)', font=dict(color='black'))
     fig3.update_yaxes(range=[0, 100])
+    fig3.update_layout(yaxis_title='Total Mark (%)')
 
     #######################################################################
     # scatter plot showing min, max and average Total Marks per cohort year
@@ -615,6 +616,7 @@ def results_s():
     )
 
     fig4.update_yaxes(range=[0, 100])
+    fig4.update_layout(yaxis_title='Total Mark (%)')
 
     plot_div = opy.plot(fig4, auto_open=False, output_type='div')
   
@@ -791,6 +793,8 @@ def results_form():
     ########################################
 
     plot15_data = db.session.query(Results_sum.user_id, Results_sum.test_id, func.count(Results_sum.id)).filter(Results_sum.form_summ == 0).group_by(Results_sum.user_id, Results_sum.test_id).all()
+    
+    
     # Convert the Rows to a list of tuples
     plot15_results = [tuple(row) for row in plot15_data]
 
@@ -810,6 +814,148 @@ def results_form():
         test_results=test_results, questions_test_results=questions_test_results, num_users_with_results=num_users_with_results, 
         percentage_users_with_results=percentage_users_with_results, selected_test_id=selected_test_id,plot15_dict=plot15_dict)
     
+
+# SP - lecturer Stats - FORMATIVE results page 
+@app.route("/results_form/<int:test_id>", methods=['GET'])
+@login_required
+def results_form_test(test_id):
+    
+    # count of students  
+    unique_user_ids = User.query.distinct(User.id).count()
+
+     # get all formative results
+    entries = Results_sum.query.filter_by(form_summ=0, test_id=test_id).group_by(Results_sum.cohort_year).all()
+    
+
+    # create a list to store the calculated results for each test
+    test_results = []
+    questions_test_results = []
+    
+    
+    for entry in entries:
+        # get the count of unique users who attempted the test
+        unique_user_count = Results_sum.query.filter_by(form_summ=0,  test_id=test_id, cohort_year=entry.cohort_year).with_entities(func.count(distinct(Results_sum.user_id))).scalar()
+
+        # get the count of each question attempted for each unique cohort_year
+        q1_attempts_count = Results_sum.query.filter_by(form_summ=0, test_id=test_id, cohort_year=entry.cohort_year).with_entities(func.count(Results_sum.Q1_attempts)).scalar()
+        q2_attempts_count = Results_sum.query.filter_by(form_summ=0, test_id=test_id, cohort_year=entry.cohort_year).with_entities(func.count(Results_sum.Q2_attempts)).scalar()
+        q3_attempts_count = Results_sum.query.filter_by(form_summ=0, test_id=test_id, cohort_year=entry.cohort_year).with_entities(func.count(Results_sum.Q3_attempts)).scalar()
+        q4_attempts_count = Results_sum.query.filter_by(form_summ=0, test_id=test_id, cohort_year=entry.cohort_year).with_entities(func.count(Results_sum.Q4_attempts)).scalar()
+        q5_attempts_count = Results_sum.query.filter_by(form_summ=0, test_id=test_id, cohort_year=entry.cohort_year).with_entities(func.count(Results_sum.Q5_attempts)).scalar()
+
+        # get the number to times each question answered correctly for each unique test_id
+        q1_attempts_sum = Results_sum.query.filter_by(form_summ=0, test_id=test_id, cohort_year=entry.cohort_year).with_entities(func.sum(Results_sum.Q1_attempts)).scalar()
+        q2_attempts_sum = Results_sum.query.filter_by(form_summ=0, test_id=test_id, cohort_year=entry.cohort_year).with_entities(func.sum(Results_sum.Q2_attempts)).scalar()
+        q3_attempts_sum = Results_sum.query.filter_by(form_summ=0, test_id=test_id, cohort_year=entry.cohort_year).with_entities(func.sum(Results_sum.Q3_attempts)).scalar()
+        q4_attempts_sum = Results_sum.query.filter_by(form_summ=0, test_id=test_id, cohort_year=entry.cohort_year).with_entities(func.sum(Results_sum.Q4_attempts)).scalar()
+        q5_attempts_sum = Results_sum.query.filter_by(form_summ=0, test_id=test_id, cohort_year=entry.cohort_year).with_entities(func.sum(Results_sum.Q5_attempts)).scalar()
+
+        # get the number to times each question answered correctly for each unique test_id
+        q1_attempts_wrong = q1_attempts_count - q1_attempts_sum
+        q2_attempts_wrong = q2_attempts_count - q2_attempts_sum
+        q3_attempts_wrong = q3_attempts_count - q3_attempts_sum
+        q4_attempts_wrong = q4_attempts_count - q4_attempts_sum
+        q5_attempts_wrong = q5_attempts_count - q5_attempts_sum
+
+        # calculate the percentage of question attempts answered correctly for each unique test_id
+        q1_percent = round((q1_attempts_sum / q1_attempts_count) * 100, 2) if q1_attempts_count else 0
+        q2_percent = round((q2_attempts_sum / q2_attempts_count) * 100, 2) if q2_attempts_count else 0
+        q3_percent = round((q3_attempts_sum / q3_attempts_count) * 100, 2) if q3_attempts_count else 0
+        q4_percent = round((q4_attempts_sum / q4_attempts_count) * 100, 2) if q4_attempts_count else 0
+        q5_percent = round((q5_attempts_sum / q5_attempts_count) * 100, 2) if q5_attempts_count else 0
+
+        # store the results in the test_results list
+        test_results.append({
+            'cohort_year': entry.cohort_year,
+            'unique_user_count': unique_user_count,
+            'q1_attempts_count': q1_attempts_count,
+            'q2_attempts_count': q2_attempts_count,
+            'q3_attempts_count': q3_attempts_count,
+            'q4_attempts_count': q4_attempts_count,
+            'q5_attempts_count': q5_attempts_count,
+            'q1_attempts_sum': q1_attempts_sum,
+            'q2_attempts_sum': q2_attempts_sum,
+            'q3_attempts_sum': q3_attempts_sum,
+            'q4_attempts_sum': q4_attempts_sum,
+            'q5_attempts_sum': q5_attempts_sum,
+            'q1_attempts_wrong': q1_attempts_wrong,
+            'q2_attempts_wrong': q2_attempts_wrong,
+            'q3_attempts_wrong': q3_attempts_wrong,
+            'q4_attempts_wrong': q4_attempts_wrong,
+            'q5_attempts_wrong': q5_attempts_wrong,
+            'q1_percent': q1_percent,
+            'q2_percent': q2_percent,
+            'q3_percent': q3_percent,
+            'q4_percent': q4_percent,
+            'q5_percent': q5_percent
+        })
+
+        # store the results in the test_results list (for each question)
+        questions_test_results.append({
+            'cohort_year': entry.cohort_year,
+            'unique_user_count': unique_user_count,
+            'q1_attempts_sum': q1_attempts_sum,
+            'q1_attempts_wrong': q1_attempts_wrong,
+            'q2_attempts_sum': q2_attempts_sum,
+            'q2_attempts_wrong': q2_attempts_wrong,
+            'q3_attempts_sum': q3_attempts_sum,
+            'q3_attempts_wrong': q3_attempts_wrong,
+            'q4_attempts_sum': q4_attempts_sum,
+            'q4_attempts_wrong': q4_attempts_wrong,
+            'q5_attempts_sum': q5_attempts_sum,
+            'q5_attempts_wrong': q5_attempts_wrong
+        })
+
+    # count the unique test_ids (where form_summ = 0) appearing in DB
+    num_test_ids = len(test_results)
+
+    # num of students completing summ test
+    num_users_with_results = Results_sum.query.filter(Results_sum.form_summ == 0).with_entities(func.count(Results_sum.user_id.distinct())).scalar()
+
+    # calculate the percentage of users with results
+    percentage_users_with_results = round((num_users_with_results / unique_user_ids) * 100, 2)
+
+
+    # Create a list of unique test ids
+    unique_test_ids = [entry.test_id for entry in entries]
+
+
+    # get selected cohort_year from query string parameter, default to '2019' if not specified
+    selected_test_id = request.args.get('cohort_year', '2019')
+
+    
+    ########################################
+    # number of times students have completed test (for given test ID) for cohort_year
+    ########################################
+
+    plot15_data = db.session.query(Results_sum.user_id, Results_sum.cohort_year, func.count(Results_sum.id)).filter(Results_sum.form_summ == 0).filter(Results_sum.test_id == test_id).group_by(Results_sum.user_id, Results_sum.cohort_year).all()
+    
+    # Convert the Rows to a list of tuples
+    plot15_results = [tuple(row) for row in plot15_data]
+
+    plot15_dict = {}
+    for data in plot15_data:
+        if data[1] not in plot15_dict:
+            plot15_dict[data[1]] = {}
+        total_count = data[2]
+        for count in range(1, total_count+1):
+            if count not in plot15_dict[data[1]]:
+                plot15_dict[data[1]][count] = []
+            if count <= total_count:
+                plot15_dict[data[1]][count].append(data[0])
+
+
+    return render_template('results_form_test.html', title='Results', entries=entries, unique_user_ids=unique_user_ids, unique_test_ids=unique_test_ids, 
+        test_results=test_results, questions_test_results=questions_test_results, num_users_with_results=num_users_with_results, 
+        percentage_users_with_results=percentage_users_with_results, selected_test_id=selected_test_id,plot15_dict=plot15_dict, test_id=test_id)
+    
+
+
+
+
+
+
+
 
 
     if form.validate_on_submit():
@@ -1282,10 +1428,10 @@ def release_formtest(Form_test_id):
     return redirect('/Formative_test_list')
 
 #EMMA
-''' @app.route("/your_results", methods=['GET'])
+@app.route("/your_results", methods=['GET'])
 @login_required
 def your_results():
 
     user_id = session.get('user_id')
     individ_results=Results_sum.query.filter_by(user_id=user_id).all()
-    return render_template('your_results.html', title = 'Your Results', individ_results = individ_results)'''
+    return render_template('your_results.html', title = 'Your Results', individ_results = individ_results)
