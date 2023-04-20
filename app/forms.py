@@ -193,10 +193,10 @@ class FillInTheBlankQuestionForm(FlaskForm):
         coerce = str, 
         validators = [DataRequired (message = "Please select a subject.")])
     marks = IntegerField(validators = [DataRequired (message = "Please enter a mark.")])
-    rating = SelectField("Difficulty Rating:",choices = DIFFICULTY_RATING, coerce=int)
+    rating = SelectField("Difficulty Rating:", choices = DIFFICULTY_RATING, coerce=int)
     feedback = StringField ("Feedback: ")
     topic = StringField("Topic: ")
-    submit = SubmitField("Form Complete")
+    submit = SubmitField("Done")
 
 class CreateTestForm(FlaskForm):
     test_type= SelectField('Check to make test summative',choices=[(0,"formative"),(1,"summative")])

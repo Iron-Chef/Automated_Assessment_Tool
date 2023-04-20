@@ -3,15 +3,40 @@
 
 <h1>Previous Questions</h1>
 
+
 <div class="btn-group order_by_button">
   <button class="btn btn-secondary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">Order By</button>
   <ul class="dropdown-menu">
+    {% if order_by == "question_type" %}
+    <li><a class="dropdown-item active" href="{{ url_for('question_list', order_by = 'question_type') }}">Question Type</a></li>
+    {% else %}
     <li><a class="dropdown-item" href="{{ url_for('question_list', order_by = 'question_type') }}">Question Type</a></li>
+    {% endif %}
+    {% if order_by == "topic" %}
+    <li><a class="dropdown-item active" href="{{ url_for('question_list', order_by = 'topic') }}">Tags</a></li>
+    {% else %}
     <li><a class="dropdown-item" href="{{ url_for('question_list', order_by = 'topic') }}">Tags</a></li>
+    {% endif %}
+    {% if order_by == "marks_asc" %}
+    <li><a class="dropdown-item active" href="{{ url_for('question_list', order_by = 'marks_asc') }}">Marks (Asc)</a></li>
+    {% else %}
     <li><a class="dropdown-item" href="{{ url_for('question_list', order_by = 'marks_asc') }}">Marks (Asc)</a></li>
+    {% endif %}
+    {% if order_by == "marks_desc" %}
+    <li><a class="dropdown-item active" href="{{ url_for('question_list', order_by = 'marks_desc') }}">Marks (Desc)</a></li>
+    {% else %}
     <li><a class="dropdown-item" href="{{ url_for('question_list', order_by = 'marks_desc') }}">Marks (Desc)</a></li>
+    {% endif %}
+    {% if order_by == "difficulty_asc" %}
+    <li><a class="dropdown-item active" href="{{ url_for('question_list', order_by = 'difficulty_asc') }}">Difficulty (Asc)</a></li>
+    {% else %}
     <li><a class="dropdown-item" href="{{ url_for('question_list', order_by = 'difficulty_asc') }}">Difficulty (Asc)</a></li>
+    {% endif %}
+    {% if order_by == "difficulty_desc" %}
+    <li><a class="dropdown-item active" href="{{ url_for('question_list', order_by = 'difficulty_desc') }}">Difficulty (Desc)</a></li>
+    {% else %}
     <li><a class="dropdown-item" href="{{ url_for('question_list', order_by = 'difficulty_desc') }}">Difficulty (Desc)</a></li>
+    {% endif %}
   </ul>
 </div>
 
@@ -209,7 +234,7 @@
   
   for (i = 0; i < coll.length; i++) {
     coll[i].addEventListener("click", function() {
-      this.classList.toggle("active");
+      this.classList.toggle("active_collapsible");
       var content = this.nextElementSibling;
       if (content.style.maxHeight){
         content.style.maxHeight = null;
