@@ -58,6 +58,9 @@
 
 <form method="POST" action="" enctype="multipart/form-data">
 {{ form.csrf_token }}
+<p>Please select the module you would like to create a test for? {{  form.module }}</p>
+<p>What would you like to call your test?  {{  form.title  }}</p>
+
 <p>Please select your first question {{ form.question_id_1 }}</p>
 
 <p>Please select your second question {{ form.question_id_2 }}</p>
@@ -66,7 +69,9 @@
 
 <p>Please select your fourth question {{ form.question_id_4 }}</p>
 
-<p>Please select your fifth question {{ form.question_id_5 }}</p>
+<p>Please select your fifth question {{ form.question_id_5 }}</p>   
+
+<p>What rating would you like to give the test {{  form.rating  }}</p>
 
 <p>What type of test would you like to create ? {{ form.test_type }} </p>
 <div class="form-group">
