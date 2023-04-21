@@ -34,7 +34,7 @@
     margin-left: 5px;
   }
   
-.active:after {
+.active_collapsible:after {
     content: "\2796"; /* Unicode character for "minus" sign (-) */
     color: white;
   }
