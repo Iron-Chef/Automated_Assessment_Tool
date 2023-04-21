@@ -2,72 +2,225 @@
 
 
 {% block content %}
-<div class="form">
+<h1>Questions</h1>
 
-    {{ total }}
-
-    {% for question in questions %} 
-    
-    <h2 class="question_title">{{loop.index}}. {{ question.question }}</h2>
-    
-    {% if question.marks == 1 %}
-    {{ question.question }}
-    <p>This Question is worth {{ question.marks}} mark.</p>
-    {% else %} 
-    <p>This Question is worth {{ question.marks}} marks.</p>
-    {% endif %}
-    
-    {% if question.question_type == "fill_in_the_blank" %}
-    <p id="correct"><b>Correct Answer</b></p>
-    {{question.answer_1}}
-    
-    {% else %}
-    <p>(a) {{ question.answer_1}} 
-        {% if question.ans_choice_1==1 %}
-        <p id="correct"><b>Correct Answer</b></p>
-        {% else %} 
-        <p id="incorrect">Incorrect Answer</p>
-        {% endif %}
-    </p>
-    
-    <p>(b) {{ question.answer_2}} 
-        {% if question.ans_choice_2==1 %}
-        <p id="correct"><b>Correct Answer</b></p>
-        {% else %} 
-        <p id="incorrect">Incorrect Answer</p>
-        {% endif %}
-    </p>
-    
-    {% if question.answer_3 %}
-    <p>(c) {{ question.answer_3}} 
-        {% if question.ans_choice_3==1 %}
-        <p id="correct"><b>Correct Answer</b></p>
-        {% else %} 
-        <p id="incorrect">Incorrect Answer</p>
-        {% endif %}
-    </p>
-    {% endif %}
-    
-    {% if question.answer_4 %}
-    <p>(d) {{ question.answer_4}} 
-        {% if question.ans_choice_4==1 %}
-        <p id="correct"><b>Correct Answer</b></p>
-        {% else %} 
-        <p id="incorrect">Incorrect Answer</p>
-        {% endif %}
-    </p>
-    {% endif %}
-    {% endif %} <!--This one is for checking question type-->
-    
-    {% if question.feedback%}
-    <h3>Feedback:</h3> <p id="feedback">{{ question.feedback}}</p>
-    {% endif %}
-    
-    <a href="{{ url_for('edit_mc_question', mc_question_id=question.id)}}" class="btn btn-outline-secondary btn-sm">Edit Question</a>
-    <a href="{{ url_for('delete_mcquestion', mc_question_id=question.id)}}" class="btn btn-outline-danger btn-sm">Delete Question</a>
-    <hr>
-    {% endfor %}
+<div class="btn-group order_by_button">
+  <button class="btn btn-secondary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">Order By</button>
+  <ul class="dropdown-menu">
+    <li><a class="dropdown-item" href="{{ url_for('question_list', order_by = 'question_type') }}">Question Type</a></li>
+    <li><a class="dropdown-item" href="{{ url_for('question_list', order_by = 'topic') }}">Tags</a></li>
+    <li><a class="dropdown-item" href="{{ url_for('question_list', order_by = 'marks_asc') }}">Marks (Asc)</a></li>
+    <li><a class="dropdown-item" href="{{ url_for('question_list', order_by = 'marks_desc') }}">Marks (Desc)</a></li>
+    <li><a class="dropdown-item" href="{{ url_for('question_list', order_by = 'difficulty_asc') }}">Difficulty (Asc)</a></li>
+    <li><a class="dropdown-item" href="{{ url_for('question_list', order_by = 'difficulty_desc') }}">Difficulty (Desc)</a></li>
+  </ul>
 </div>
+
+<!--JAVA COLLAPSIBLE-->
+<button type="button" class="collapsible">Java</button>
+<div class="content" id = "collapsible_java">
+
+  {% for question in questions %}
+  {% if question.subject_tag == "Java" %}
+
+  {% if question.question_type == "fill_in_the_blank" %}
+  {% with fill_in_the_blank_question = question %}
+    {% include "fill_in_the_blank_question.html" %}
+  {% endwith %}
+
+  {% else %}
+  {% with mcquestion = question %}
+    {% include "mc_question.html" %}
+  {% endwith %}
+
+  {% endif %}
+  {% endif %} <!--This is for subject_tag-->
+  {% endfor %}
+
+</div>
+
+<!--JavaScript COLLAPSIBLE-->
+<button type="button" class="collapsible">JavaScript</button>
+<div class="content" id = "collapsible_javascript">
+
+  {% for question in questions %}
+  {% if question.subject_tag == "JavaScript" %}
+  {% if question.question_type == "fill_in_the_blank" %}
+  {% with fill_in_the_blank_question = question %}
+    {% include "fill_in_the_blank_question.html" %}
+  {% endwith %}
+
+  {% else %}
+
+  <style type="text/css">
+    .tg  {border-collapse:collapse;border-spacing:0;}
+    .tg td{border-color:black;border-style:solid;border-width:1px;font-family:Arial, sans-serif;font-size:14px;
+      overflow:hidden;padding:10px 5px;word-break:normal;}
+    .tg th{border-color:black;border-style:solid;border-width:1px;font-family:Arial, sans-serif;font-size:14px;
+      font-weight:normal;overflow:hidden;padding:10px 5px;word-break:normal;}
+    .tg .tg-0pky{border-color:inherit;text-align:left;vertical-align:top}
+  </style>
+
+  <div class="tg-wrap"><table class="tg">
+    <tbody>
+      <tr>
+        <td class="tg-0pky" colspan="2"><h2 class="question_title">Question {{loop.index}}. </h2></td>
+        <td class="tg-0pky" colspan="4"><h2 class="question_title">{{question.question }}</h2></td>
+      </tr>
+      <tr>
+        <td class="tg-0pky" colspan="2">Option A.</td>
+        <td class="tg-0pky" colspan="2">{{ question.answer_1}}</td>
+        <td class="tg-0pky" colspan="2">
+            {% if question.ans_choice_1==1 %}
+            <p id="correct"><b>Correct Answer</b></p>
+            {% else %} 
+            <p id="incorrect">Incorrect Answer</p>
+            {% endif %}</td>
+      </tr>
+      <tr>
+        <td class="tg-0pky" colspan="2">Option B.</td>
+        <td class="tg-0pky" colspan="2">{{ question.answer_2}}</td>
+        <td class="tg-0pky" colspan="2">
+            {% if question.ans_choice_2==1 %}
+            <p id="correct"><b>Correct Answer</b></p>
+            {% else %} 
+            <p id="incorrect">Incorrect Answer</p>
+            {% endif %}</td>
+      </tr>
+      {% if question.answer_3 %}
+      <tr>
+        <td class="tg-0pky" colspan="2">Option C.</td>
+        <td class="tg-0pky" colspan="2">{{ question.answer_3}}</td>
+        <td class="tg-0pky" colspan="2">
+            {% if question.ans_choice_3==1 %}
+            <p id="correct"><b>Correct Answer</b></p>
+            {% else %} 
+            <p id="incorrect">Incorrect Answer</p>
+            {% endif %}</td>
+      </tr>
+      {% endif %}
+      {% if question.answer_4 %}
+      <tr>
+        <td class="tg-0pky" colspan="2">Option D.</td>
+        <td class="tg-0pky" colspan="2">{{ question.answer_4}}</td>
+        <td class="tg-0pky" colspan="2">
+            {% if question.ans_choice_4==1 %}
+            <p id="correct"><b>Correct Answer</b></p>
+            {% else %} 
+            <p id="incorrect">Incorrect Answer</p>
+            {% endif %}</td>
+      </tr>
+      {% endif %}
+      {% if question.feedback%}
+      <tr>
+        <td class="tg-0pky" colspan="2">Feedback: </td>
+        <td class="tg-0pky" colspan="4">{{ question.feedback}}</td>
+      </tr>
+      {% endif %}
+      
+      <tr>
+        <td class="tg-0pky" colspan="2">Tags:</td>
+        <td class="tg-0pky" colspan="4">Need to add this feature!</td>
+      </tr>
+      <tr>
+        <td class="tg-0pky" colspan="2">Available Marks:</td>
+        <td class="tg-0pky">{{ question.marks}}</td>
+        <td class="tg-0pky" colspan="2">Difficulty Rating:</td>
+        <td class="tg-0pky">{{ question.rating }}</td>
+      </tr>
+    </tbody>
+    </table>
+  </div>
+
+  {% endif %}
+  {% endif %} <!--This is for subject_tag-->
+  {% endfor %}
+</div>
+
+<!--PYTHON COLLAPSIBLE-->
+<button type="button" class="collapsible">Python</button>
+<div class="content" id = "collapsible_python">
+  {% for question in questions %}
+  {% if question.subject_tag == "Python" %}
+
+  {% if question.question_type == "fill_in_the_blank" %}
+  {% with fill_in_the_blank_question = question %}
+    {% include "fill_in_the_blank_question.html" %}
+  {% endwith %}
+
+  {% else %}
+  {% with mcquestion = question %}
+    {% include "mc_question.html" %}
+  {% endwith %}
+
+  {% endif %}
+  {% endif %} <!--This is for subject_tag-->
+  {% endfor %}
+</div>
+
+<!--SQL COLLAPSIBLE-->
+<button type="button" class="collapsible">SQL</button>
+<div class="content" id = "collapsible_sql">
+  {% for question in questions %}
+  {% if question.subject_tag == "SQL" %}
+
+  {% if question.question_type == "fill_in_the_blank" %}
+  {% with fill_in_the_blank_question = question %}
+    {% include "fill_in_the_blank_question.html" %}
+  {% endwith %}
+
+  {% else %}
+  {% with mcquestion = question %}
+    {% include "mc_question.html" %}
+  {% endwith %}
+
+  {% endif %}
+  {% endif %} <!--This is for subject_tag-->
+  {% endfor %}
+</div>
+
+<!--Other COLLAPSIBLE-->
+<button type="button" class="collapsible">Miscellaneous</button>
+<div class="content" id = "collapsible_misc">
+  {% for question in questions %}
+  {% if question.subject_tag == "Other" %}
+
+  {% if question.question_type == "fill_in_the_blank" %}
+  {% with fill_in_the_blank_question = question %}
+    {% include "fill_in_the_blank_question.html" %}
+  {% endwith %}
+
+  {% else %}
+  {% with mcquestion = question %}
+    {% include "mc_question.html" %}
+  {% endwith %}
+
+  {% endif %}
+  {% endif %} <!--This is for subject_tag-->
+  {% endfor %}
+</div>
+
+
+<!--Script for collapsible sections-->
+
+<script>
+  
+  var coll = document.getElementsByClassName("collapsible");
+  var i;
+  
+  for (i = 0; i < coll.length; i++) {
+    coll[i].addEventListener("click", function() {
+      this.classList.toggle("active");
+      var content = this.nextElementSibling;
+      if (content.style.maxHeight){
+        content.style.maxHeight = null;
+      } else {
+        content.style.maxHeight = content.scrollHeight + "px";
+      }
+    });
+  }
+</script>
+
 
 <div class = "form">
     <form method="POST" action="" enctype="multipart/form-data">
@@ -84,7 +237,7 @@
     
     <p>Please select your fifth question {{ form.question_id_5 }}</p>
 
-    <p>Please give this test a difficulty rating {{  form.rating  }}</p>
+    <p>What rating would you like to give the test {{  form.rating  }}</p>
 
     <p>What type of test would you like to create ? {{ form.test_type }} </p>
     

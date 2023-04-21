@@ -58,27 +58,6 @@ def index():
     user = User.query.all()
     return render_template('index.html',user=user, title = 'Home')
 
-@app.route("/create_test",methods=['GET','POST'])
-@login_required
-def create_test():
-  form = CreateTestForm() 
-  questions=Multiplechoice.query.all()
-  modules=Module.query.all()
-  form.module.choices=[(module.id,module.name) for module in modules]
-  form.rating.choices=[(question.rating_num,question.rating_num) for question in questions]
-  form.question_id_1.choices = [(question.id,question.id) for question in questions]
-  form.question_id_2.choices = [(question.id,question.id) for question in questions]
-  form.question_id_3.choices = [(question.id,question.id) for question in questions]
-  form.question_id_4.choices = [(question.id,question.id) for question in questions]
-  form.question_id_5.choices = [(question.id,question.id) for question in questions]
-  rating=0
-  if form.validate_on_submit():
-    test=Test(test_type=form.test_type.data,creator_id=current_user.id,question_id_1=form.question_id_1.data,question_id_2=form.question_id_2.data,question_id_3=form.question_id_3.data,question_id_4=form.question_id_4.data,question_id_5=form.question_id_5.data, module=form.module.data, title=form.title.data, rating=form.rating.data)
-    db.session.add(test)
-    db.session.commit()
-    flash('Test Creation Succesful!')
-    return redirect(url_for('index'))
-  return render_template('create_test.html',title='Create Test',form=form,questions=questions, modules=modules)
 
 # Add multiple choice questions
 @app.route('/add_mc_questions', methods=['GET', 'POST'])
@@ -368,6 +347,35 @@ def student_answer_result(question_id):
     
     return render_template('student_answer_result.html', mc_question=mc_question,answers=answers, user_id=user_id)
 
+@app.route("/create_test",methods=['GET','POST'])
+@login_required
+def create_test():
+  form = CreateTestForm() 
+  questions=Multiplechoice.query.all()
+  modules=Module.query.all()
+  form.module.choices=[(module.id,module.name) for module in modules]
+  form.question_id_1.choices = [(question.id,question.id) for question in questions]
+  form.question_id_2.choices = [(question.id,question.id) for question in questions]
+  form.question_id_3.choices = [(question.id,question.id) for question in questions]
+  form.question_id_4.choices = [(question.id,question.id) for question in questions]
+  form.question_id_5.choices = [(question.id,question.id) for question in questions]
+  rating=0
+  if form.validate_on_submit():
+    test=Test(test_type=form.test_type.data,
+    creator_id=current_user.id,
+    question_id_1=form.question_id_1.data,
+    question_id_2=form.question_id_2.data,
+    question_id_3=form.question_id_3.data,
+    question_id_4=form.question_id_4.data,
+    question_id_5=form.question_id_5.data, 
+    module=form.module.data, 
+    title=form.title.data, 
+    rating=form.rating.data)
+    db.session.add(test)
+    db.session.commit()
+    flash('Test Creation Succesful!')
+    return redirect(url_for('test_list'))
+  return render_template('create_test.html',title='Create Test',form=form,questions=questions, modules=modules)
 
 @app.route("/test_list",methods=['GET'])
 def test_list():
@@ -409,6 +417,8 @@ def edit_test(test_id):
     form=CreateTestForm()
     test=Test.query.get_or_404(test_id)
     questions=Multiplechoice.query.all()
+    modules=Module.query.all()
+    form.module.choices=[(module.id,module.name) for module in modules]
     form.question_id_1.choices = [(question.id,question.id) for question in questions]
     form.question_id_2.choices = [(question.id,question.id) for question in questions]
     form.question_id_3.choices = [(question.id,question.id) for question in questions]
@@ -417,6 +427,8 @@ def edit_test(test_id):
 
     if form.validate_on_submit():
         test.test_type=form.test_type.data
+        test.rating=form.rating.data
+        test.module=form.module.data
         test.question_id_1=form.question_id_1.data
         test.question_id_2=form.question_id_2.data
         test.question_id_3=form.question_id_3.data
@@ -428,12 +440,14 @@ def edit_test(test_id):
         return redirect('/test_list')
 
     form.test_type.data=test.test_type
+    form.rating.data=test.rating
+    form.module.data=test.module
     form.question_id_1.data=test.question_id_1
     form.question_id_2.data=test.question_id_2
     form.question_id_3.data=test.question_id_3
     form.question_id_4.data=test.question_id_4
     form.question_id_5.data=test.question_id_5
-    return render_template('edit_test.html', test=test,form=form,questions=questions)
+    return render_template('edit_test.html', test=test,form=form,questions=questions, )
 
 @app.route("/attempt_test/<int:test_id>",methods=['GET','POST'])
 @login_required
@@ -1428,10 +1442,11 @@ def release_formtest(Form_test_id):
     return redirect('/Formative_test_list')
 
 #EMMA
-''' @app.route("/your_results", methods=['GET'])
+
+@app.route("/your_results", methods=['GET'])
 @login_required
 def your_results():
 
     user_id = session.get('user_id')
     individ_results=Results_sum.query.filter_by(user_id=user_id).all()
-    return render_template('your_results.html', title = 'Your Results', individ_results = individ_results)'''
+    return render_template('your_results.html', title = 'Your Results', individ_results = individ_results)

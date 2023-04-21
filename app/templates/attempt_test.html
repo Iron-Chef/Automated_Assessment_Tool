@@ -1,8 +1,12 @@
 {% extends "base.html" %}
 {% block content %}
 <form method="POST" action="" enctype="multipart/form-data">
+
+<h1>{{  test.title  }}</h1>
+
 {{ form.csrf_token }}
-<h1>{{question_1.question}}</h1>
+<h2>{{question_1.question}}</h2>
+<h6>This question is worth {{question_1.marks}} marks</h6>
 <h3>1) {{question_1.answer_1}}</h2>
 <h3>1) {{question_1.answer_2}}</h2>
 <h3>1) {{question_1.answer_3}}</h2>
@@ -12,7 +16,8 @@
 
 
 
-<h1>{{question_2.question}}</h1>
+<h2>{{question_2.question}}</h2>
+<h6>This question is worth {{question_2.marks}} marks</h6>
 <h3>1) {{question_2.answer_1}}</h2>
 <h3>1) {{question_2.answer_2}}</h2>
 <h3>1) {{question_2.answer_3}}</h2>
@@ -23,7 +28,8 @@
 <p>Please select your answer {{ form.answer_2 }}</p>
 
 
-<h1>{{question_3.question}}</h1>
+<h2>{{question_3.question}}</h2>
+<h6>This question is worth {{question_3.marks}} marks</h6>
 <h3>1) {{question_3.answer_1}}</h2>
 <h3>1) {{question_3.answer_2}}</h2>
 <h3>1) {{question_3.answer_3}}</h2>
@@ -32,7 +38,8 @@
     <p>Please select your answer {{ form.answer_3 }}</p>
 
 
-<h1>{{question_4.question}}</h1>
+<h2>{{question_4.question}}</h2>
+<h6>This question is worth {{question_4.marks}} marks</h6>
 <h3>1) {{question_4.answer_1}}</h2>
 <h3>1) {{question_4.answer_2}}</h2>
 <h3>1) {{question_4.answer_3}}</h2>
@@ -42,7 +49,8 @@
 
 
 
-<h1>{{question_5.question}}</h1>
+<h2>{{question_5.question}}</h5>
+<h6>This question is worth {{question_5.marks}} marks</h6>
 <h3>1) {{question_5.answer_1}}</h2>
 <h3>1) {{question_5.answer_2}}</h2>
 <h3>1) {{question_5.answer_3}}</h2>

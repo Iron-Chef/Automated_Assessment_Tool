@@ -201,7 +201,7 @@ class FillInTheBlankQuestionForm(FlaskForm):
 class CreateTestForm(FlaskForm):
     test_type= SelectField('Check to make test summative',choices=[(0,"formative"),(1,"summative")])
     title=StringField('Title of test')
-    rating=SelectField('Rate the test', choices=[])
+    rating=SelectField('Rate the test', choices=[(1,"Easy"),(2,"Medium-Easy"),(3,"Medium"),(4,"Medium-Hard"),(5,"Hard")])
     module=SelectField('Module Integer', choices=[])
     question_id_1=SelectField('question',choices=[])
     question_id_2=SelectField('question',choices=[])
