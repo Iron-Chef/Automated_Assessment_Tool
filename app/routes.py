@@ -267,9 +267,10 @@ def edit_fill_in_the_blank_question(fill_in_the_blank_question_id):
     form.answer.data = fill_in_the_blank_question.answer_1
     form.subject.data = fill_in_the_blank_question.subject_tag
     form.marks.data = fill_in_the_blank_question.marks
-    form.rating.data == dict(DIFFICULTY_RATING).get(fill_in_the_blank_question.rating)
+    form.rating.data = dict(DIFFICULTY_RATING).get(fill_in_the_blank_question.rating_num)
     form.feedback.data = fill_in_the_blank_question.feedback
     form.topic.data = fill_in_the_blank_question.topic_tag
+
 
     return render_template('edit_fill_in_the_blank_question.html', title = "Edit Question", form = form,fill_in_the_blank_question = fill_in_the_blank_question, fill_in_the_blank_question_id = fill_in_the_blank_question_id)
 
@@ -286,7 +287,7 @@ def delete_fill_in_the_blank_question(fill_in_the_blank_question_id):
         return redirect('/question_list')
 
     except:
-        flash(fill_in_the_blank_question_to_delete.question)
+        flash("Problem deleting question")
 
         return redirect('/question_list')
 
@@ -309,7 +310,7 @@ def question_list(order_by):
     elif order_by == "difficulty_desc":
         questions = Multiplechoice.query.order_by(Multiplechoice.rating_num.desc())
     
-    return render_template('question_list.html', title = "Previous Questions", questions = questions)
+    return render_template('question_list.html', title = "Previous Questions", questions = questions, order_by = order_by)
 
 #Individual student answer attempt to test funtionality
 @app.route("/student_answer/<int:question_id>", methods=['GET', 'POST'])
@@ -1442,7 +1443,6 @@ def release_formtest(Form_test_id):
     return redirect('/Formative_test_list')
 
 #EMMA
-
 @app.route("/your_results", methods=['GET'])
 @login_required
 def your_results():
