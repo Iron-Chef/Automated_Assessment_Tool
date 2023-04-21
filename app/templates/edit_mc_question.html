@@ -51,8 +51,14 @@
        {% endfor %}
     </p>
     <p>
-        {{ form.rating }}
+      Rating:  {{ form.rating }}
     </p>
+    <p>
+       Topic:  {{ form.topic }}
+    </p>
+    <p>
+        Subject:  {{ form.subject }}
+     </p>
     <p> 
         {{ form.feedback.label }}
         {{ form.feedback(size=100) }}

@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, BooleanField, SubmitField, IntegerField, SelectField, RadioField, FormField, validators
-from wtforms.validators import DataRequired, Optional
+from wtforms.validators import DataRequired, Optional, NumberRange
 from wtforms_sqlalchemy.fields import QuerySelectField
 from wtforms.widgets import TextArea
 from app.models import Multiplechoice
@@ -11,7 +11,7 @@ class LoginForm(FlaskForm):
     password = PasswordField('Password', validators = [DataRequired()])
     submit = SubmitField('Sign in')
 
-DIFFICULTY_RATING =[(5,u'★★★★★'), (4,u'★★★★'),(3,u'★★★'),(2,'★★'),(1,u'★')]
+DIFFICULTY_RATING =[(0,u' '), (5,u'★★★★★'), (4,u'★★★★'),(3,u'★★★'),(2,'★★'),(1,u'★')]
 
 class QuestionForm(FlaskForm):
     question=StringField(validators=[DataRequired(message="Question is required")])
@@ -33,7 +33,7 @@ class QuestionForm(FlaskForm):
         ],
         coerce = str, validators = [DataRequired()])
     topic = StringField(validators = [DataRequired (message = "Please enter the topic of the question: ")])
-    marks=IntegerField(validators=[DataRequired(message="Please enter mark")]) 
+    marks=IntegerField(validators=[DataRequired(message="Please enter mark"),NumberRange(min=1)]) 
     feedback=StringField("Feedback:")
     submit = SubmitField("Add Question")
 
