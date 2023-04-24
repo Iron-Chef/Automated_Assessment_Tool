@@ -1,13 +1,13 @@
 {% extends "base.html" %}
 {% block content %}
 
-<p>Test Title: {{ test.testtitle }}</p>
+<H1>Test Title: {{ test.testtitle }}</H1>
 
 <form action="/Start_Formative_test/{{test.id}}" method="POST">
     {{ start.csrf_token }}
     <p>You are about to start taking a test. This test does not count towards your final grade and your lecturers wont be able to see the results. You can attempt the questions as many times as you like. When you are done click the finish button. Are you ready to proceed?</p>
-    <p>Yes {{ start.ready }}</p>
-    {{start.submitS}}
+    <p>Yes {{ start.ready(class="form-check-input") }}</p>
+    {{start.submitS(class="btn btn-info ") }}
 
 </form>
 

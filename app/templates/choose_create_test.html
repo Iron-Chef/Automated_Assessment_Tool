@@ -1,18 +1,22 @@
 {% extends "base.html" %}
 
+
 {% block content %}
 
     <h1>Choose test</h1>
 
     <form action="/choose_create_test" method="POST">
         {{ form.csrf_token }}
-        <h2>Test type</h2>
-        {{ form.test_type }}
-        {{ form.question_module }}
-        {{ form.test_title }}
-        
-        <input type="submit">
-
+        <div class="form-group">
+            <h2>Test type</h2>
+            {{ form.test_type (class="form-control") }}
+            <br>
+            {{ form.question_module (class="form-control") }}
+            <br>
+            {{ form.test_title (class="form-control") }}
+            <br>
+            <input type="submit" class="btn btn-info">
+        </div>
     </form>
 
 

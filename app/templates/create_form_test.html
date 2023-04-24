@@ -2,89 +2,74 @@
 
 {% block content %}
     <h1>Create Formative Test</h1>
-    <form action="/create_form_test" method="POST">
-        {{ QCform.csrf_token }}
-        <h2>Question 1</h2>
-        <div><h3>Select exsting question</h3>{{ QCform.question_1 }}</div>
-        <br>
-
-        <!--Trying something different here - AC-->
-        <a onclick = "showQuestionForm('Add_MC_question_1')" class = "btn btn-outline-danger btn-sm question_button">Add Multiple Choice question</a>
-        <div id = "Add_MC_question_1"  class = "MC_question_form">
-            {{ QCform.WriteMCquestion_1}}
+    <hr>
+    <div >
+        <form action="/create_form_test" method="POST" class = "CFTgrid">
+            {{ QCform.csrf_token }}
+            <h2 id="FQ1T">Question 1</h2>
+            <div id = "FQ1dd"><h3>Select existing question</h3>{{ QCform.question_1 (class="form-control") }}</div>
+            <br>
+            <div id = "FQ1MC"><h3>Or write new multiple choice question</h3>{{ QCform.WriteMCquestion_1}}
+            </div>
+            <br>
+            <div id = "FQ1FTG"><h3>Or write new written answer question</h3>{{ QCform.WriteFTGquestion_1 }}</div>
+            <ul>
+                {% for error in QCform.errors %}
+                <li style="color:red;">{{ error }}</li>
+                {% endfor %}
+            </ul>      
+            <h2 id="FQ2T" >Question 2</h2>
+            <div id="FQ2dd"><h3>Select existing question</h3>{{ QCform.question_2 }}</div>
+            <br>
+            <div id="FQ2MC"><h3>Or write new multiple choice question</h3>{{ QCform.WriteMCquestion_2}}</div>
+            <br>
+            <div id="FQ2FTG"><h3>Or write new written answer question</h3>{{ QCform.WriteFTGquestion_2 }}</div>
+            <ul>
+                {% for error in QCform.errors %}
+                <li style="color:red;">{{ error }}</li>
+                {% endfor %}
+            </ul>
+            <h2 id="FQ3T">Question 3</h2>
+            <div id="FQ3dd"><h3>Select existing question</h3>{{ QCform.question_3 }}</div>
+            <br>
+            <div id="FQ3MC"><h3>Or write new multiple choice question</h3>{{ QCform.WriteMCquestion_3}}</div>
+            <br>
+            <div id="FQ3FTG"><h3>Or write new written answer question</h3>{{ QCform.WriteFTGquestion_3 }}</div>
+            <ul>
+                {% for error in QCform.errors %}
+                <li style="color:red;">{{ error }}</li>
+                {% endfor %}
+            </ul>
+            <h2 id="FQ4T">Question 4</h2>
+            <div id="FQ4dd"><h3>Select existing question</h3>{{ QCform.question_4 }}</div>
+            <br>
+            <div id="FQ4MC"><h3>Or write new multiple choice question</h3>{{ QCform.WriteMCquestion_4 }}</div>
+            <br>
+            <div id="FQ4FTG"><h3>Or write new written answer question</h3>{{ QCform.WriteFTGquestion_4 }}</div> 
+            <ul>
+                {% for error in QCform.errors %}
+                <li style="color:red;">{{ error }}</li>
+                {% endfor %}
+            </ul>
+            <h2 id="FQ5T">Question 5</h2>
+            <div id="FQ5dd"><h3>Select existing question</h3>{{ QCform.question_5 }}</div>
+            <br>
+            <div id="FQ5MC"><h3>Or write new multiple choice question</h3>{{ QCform.WriteMCquestion_5 }}</div>
+            <br>
+            <div id="FQ5FTG"><h3>Or write new written answer question</h3>{{ QCform.WriteFTGquestion_5 }}</div>
+            <ul>
+                {% for error in QCform.errors %}
+                <li style="color:red;">{{ error }}</li>
+                {% endfor %}
+            </ul>
         </div>
-        <br>
-        <a onclick = "showQuestionForm('Add_FITB_question_1')" class = "btn btn-outline-danger btn-sm question_button">Add Fill-in-the-blank question</a>
-        <div id = "Add_FITB_question_1" class = "MC_question_form">
-            {% with form = QCform.WriteFTGquestion_1 %}
-            {% include "add_fill_in_the_blank_question_(test_window).html" %}
-            {% endwith %}
-        </div>
-        <br>
-        <!--End of trying something different-->
-
-        
-        <h2>Question 2</h2>
-        <div><h3>Select exsting question</h3>{{ QCform.question_2 }}</div>
-        <br>
-        <div><h3>Or write new multiple choice question</h3>{{ QCform.WriteMCquestion_2}}</div>
-        <br>
-        <div><h3>Or write new written answer question</h3>{{ QCform.WriteFTGquestion_2 }}</div>
-        <ul>
-            {% for error in QCform.errors %}
-            <li style="color:red;">{{ error }}</li>
-            {% endfor %}
-        </ul>
-        <h2>Question 3</h2>
-        <div><h3>Select exsting question</h3>{{ QCform.question_3 }}</div>
-        <br>
-        <div><h3>Or write new multiple choice question</h3>{{ QCform.WriteMCquestion_3}}</div>
-        <br>
-        <div><h3>Or write new written answer question</h3>{{ QCform.WriteFTGquestion_3 }}</div>
-        <ul>
-            {% for error in QCform.errors %}
-            <li style="color:red;">{{ error }}</li>
-            {% endfor %}
-        </ul>
-        <h2>Question 4</h2>
-        <div><h3>Select exsting question</h3>{{ QCform.question_4 }}</div>
-        <br>
-        <div><h3>Or write new multiple choice question</h3>{{ QCform.WriteMCquestion_4 }}</div>
-        <br>
-        <div><h3>Or write new written answer question</h3>{{ QCform.WriteFTGquestion_4 }}</div> 
-        <ul>
-            {% for error in QCform.errors %}
-            <li style="color:red;">{{ error }}</li>
-            {% endfor %}
-        </ul>
-        <h2>Question 5</h2>
-        <div><h3>Select exsting question</h3>{{ QCform.question_5 }}</div>
-        <br>
-        <div><h3>Or write new multiple choice question</h3>{{ QCform.WriteMCquestion_5 }}</div>
-        <br>
-        <div><h3>Or write new written answer question</h3>{{ QCform.WriteFTGquestion_5 }}</div>
-        <ul>
-            {% for error in QCform.errors %}
-            <li style="color:red;">{{ error }}</li>
-            {% endfor %}
-        </ul>
-        <input type="submit">
+        <input type="submit" value="Create Test" class="btn btn-info ">
     </form>
-    <form  action="{{ url_for('random_formtest')}}" method="POST">
-        <input type="submit" value="Generate Random test" >
-    </form>
+    <br>
+        <form  action="{{ url_for('random_formtest')}}" method="POST">
+            <input type="submit" value="Generate Random test" class="btn btn-info " >
+        </form>
+    <br>
 
-<!--Script for displaying create question forms-->
-<script>
-    function showQuestionForm(divID) {
-        var x = document.getElementById(divID)
-        if (x.style.display === "none" || x.style.display === "") {
-            x.style.display = "block";
-        } 
-        else {
-            x.style.display = "none";
-        }
-    }
-</script>
     
 {% endblock %}

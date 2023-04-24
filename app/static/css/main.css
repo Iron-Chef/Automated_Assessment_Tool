@@ -63,7 +63,7 @@
 }
 
 .MC_question_form{
-  display: none;
+  visibility: hidden;
 }
 
 .question_button{
@@ -83,6 +83,150 @@
 .float-right {
   float: right;
 }
+
+.CFTgrid {
+  display: grid;
+  grid-template-columns: 1fr, 1fr;
+  grid-template-rows: 1fr, 1fr, 5fr, 1fr, 1fr, 5fr, 1fr, 1fr, 5fr, 1fr, 1fr, 5fr, 1fr, 1fr, 5fr;
+}
+
+#FQ1T {
+  grid-column-start: 1;
+  grid-row-start: 1;
+  
+}
+
+#FQ1dd {
+  grid-column-start: 1;
+  grid-row-start: 2;
+}
+
+#FQ1MC {
+  grid-column-start: 1;
+  grid-row-start: 3;
+}
+
+#FQ1FTG {
+  grid-column-start: 2;
+  grid-row-start: 3;
+  justify-self: center;
+}
+
+#FQ2T {
+  grid-column-start: 1;
+  grid-row-start: 4;
+}
+
+#FQ2dd {
+  grid-column-start: 1;
+  grid-row-start: 5;
+}
+
+#FQ2MC {
+  grid-column-start: 1;
+  grid-row-start: 6;
+}
+
+#FQ2FTG {
+  grid-column-start: 2;
+  grid-row-start: 6;
+}
+
+#FQ3T {
+  grid-column-start: 1;
+  grid-row-start: 7;
+}
+
+#FQ3dd {
+  grid-column-start: 1;
+  grid-row-start: 8;
+}
+
+#FQ3MC {
+  grid-column-start: 1;
+  grid-row-start: 9;
+}
+
+#FQ3FTG {
+  grid-column-start: 2;
+  grid-row-start: 9;
+}
+
+#FQ4T {
+  grid-column-start: 1;
+  grid-row-start: 10;
+}
+
+#FQ4dd {
+  grid-column-start: 1;
+  grid-row-start: 11;
+}
+
+#FQ4MC {
+  grid-column-start: 1;
+  grid-row-start: 12;
+}
+
+#FQ4FTG {
+  grid-column-start: 2;
+  grid-row-start: 12;
+}
+
+#FQ5T {
+  grid-column-start: 1;
+  grid-row-start: 13;
+}
+
+#FQ5dd {
+  grid-column-start: 1;
+  grid-row-start: 14;
+}
+
+#FQ5MC {
+  grid-column-start: 1;
+  grid-row-start: 15;
+}
+
+#FQ5FTG {
+  grid-column-start: 2;
+  grid-row-start: 15;
+}
+
+.Correct_form_answer {
+  background-color: #1987545c;
+  color: #198754;
+  border-color: #198754;
+  border-radius: 5px;
+  padding: 1%;
+}
+
+.correctanswer {
+  background-color: #1987545c;
+  color: #198754;
+  border-color: #198754;
+  border-radius: 5px;
+  padding-left: 1%;
+  padding-right: 1%;
+}
+
+.alert-danger {
+  margin-top: 1rem;
+}
+
+.finishtestbttn {
+  float: right;
+  margin-bottom: 1rem;
+}
+
+.btn-primary {
+  padding-bottom: 0.01px;
+  margin-bottom: 1rem;
+}
+
+.btn {
+  margin-bottom: 1rem;
+}
+
 
 
 

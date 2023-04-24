@@ -23,8 +23,12 @@
                 
              <!--EMMA -->   
                 {% if current_user.is_authenticated and current_user.is_lecturer == 0 %}  
-                    <li class="nav-item">
-                        <a class="nav-link" href="">Take Test</a>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Take Test</a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <li><a class="dropdown-item" href="{{ url_for('takeformtests') }}">Formative tests to take</a></li>
+                            <li><a class="dropdown-item" href="#">Summative tests to take</a></li>
+                        </ul>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{{ url_for('your_results') }}">Your Results</a>
@@ -44,11 +48,12 @@
                     <li class="nav-item">
                         <a class="nav-link" href="{{ url_for('choose_create_test') }}">Create Test</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('formtests') }}">Formative test list</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('test_list') }}">Summative test list</a>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Test List</a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <li><a class="dropdown-item" href="{{ url_for('formtests') }}">Formative test list</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('test_list') }}">Summative test list</a></li>
+                        </ul>
                     </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Student Results</a>

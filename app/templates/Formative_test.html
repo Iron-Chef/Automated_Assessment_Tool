@@ -1,39 +1,39 @@
 {% extends "base.html" %}
 {% block content %}
-    <p>Test Title: {{ formtest.testtitle }}</p>
-    <p>Test module: {{ formtest.mdls.code }} - {{ formtest.mdls.name }}</p>
-    <p>Test author: {{ formtest.tstathr.forename}} {{ formtest.tstathr.surname}}</p>
-
+    <H1>Test Title: {{ formtest.testtitle }}</H1>
+    <H5>Test module: {{ formtest.mdls.code }} - {{ formtest.mdls.name }}</H5>
+    <H5>Test author: {{ formtest.tstathr.forename}} {{ formtest.tstathr.surname}}</H5>
+<hr>
 {% for question in formtestquestions %}
     {% if question.question != '-' %}
-        <p>{{ loop.index }}.{{ question.question }}</p>
+        <H3>{{ loop.index }}.{{ question.question }}</H3>
         <p>question type:  {{question.question_type}}</p>
 
         {% if question.ans_choice_1==1 and question.question_type == 'Multiplechoice' %}
-            <p>answer: {{question.answer_1}} - correct anwser</p>
+            <p>answer: {{question.answer_1}} <span class = "correctanswer">correct answer</span></p>
         {% else %}
             <p>answer: {{question.answer_1}}</p>
         {% endif %}
 
-        {% if question.answer_2 != '' %}
+        {% if question.answer_2 %}
             {% if question.ans_choice_2==1 and question.question_type == 'Multiplechoice' %}
-                <p>answer: {{question.answer_2}} - correct anwser</p>
+                <p>answer: {{question.answer_2}}<span class = "correctanswer">correct answer</span></p>
             {% else %}
                 <p>answer: {{question.answer_2}}</p>
             {% endif %}
         {% endif %}
 
-        {% if question.answer_3 != ''%}
+        {% if question.answer_3 %}
             {% if question.ans_choice_3==1 and question.question_type == 'Multiplechoice' %}
-                <p>answer: {{question.answer_3}} - correct anwser</p>
+                <p>answer: {{question.answer_3}} <span class = "correctanswer">correct answer</span></p>
             {% else %}
                 <p>answer: {{question.answer_3}}</p>
             {% endif %}
         {% endif %}
 
-        {% if question.answer_4 != ''%}
+        {% if question.answer_4 %}
             {% if question.ans_choice_4==1 and question.question_type == 'Multiplechoice' %}
-            <p>answer: {{question.answer_4}} - correct anwser</p>
+            <p>answer: {{question.answer_4}} <span class = "correctanswer">correct answer</span></p>
             {% else %}
             <p>answer: {{question.answer_4}}</p>
             {% endif %}
@@ -41,6 +41,7 @@
         
         {% endif %}
     {% endif %}
+<hr>
 {% endfor %}
 
 {% endblock %}

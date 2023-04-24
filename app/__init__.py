@@ -8,9 +8,9 @@ import os
 app = Flask(__name__)
 app.config.from_object(Config)
 
-#basedir = os.path.abspath(os.path.dirname(__file__))
+basedir = os.path.abspath(os.path.dirname(__file__))
 #SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://c1123652:Team8Team8@csmysql.cs.cf.ac.uk:3306/c1123652_aat_Team8'
-#SQLALCHEMY_DATABASE_URI= 'sqlite:///' + os.path.join(basedir,'project.db')
+SQLALCHEMY_DATABASE_URI= 'sqlite:///' + os.path.join(basedir,'project.db')
 #SQLALCHEMY_TRACK_MODIFICATIONS = False
 
 db = SQLAlchemy(app)

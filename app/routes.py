@@ -1107,6 +1107,11 @@ def formtests():
     allFormtests = Formativetest.query.all()
     return render_template('Formative_test_list.html', title = 'Formative tests list', allFormtests=allFormtests)
 #rj
+@app.route("/choose_form_test_take", methods=['GET'])
+def takeformtests():
+    allFormtests = Formativetest.query.all()
+    return render_template('choose_form_test_take.html', title = 'Take Formative tests list', allFormtests=allFormtests)
+#rj
 @app.route("/Formative_test/<int:Form_test_id>", methods=['GET'])
 def formtest(Form_test_id):
     formtest = Formativetest.query.get_or_404(Form_test_id)
@@ -1144,7 +1149,6 @@ def startformtest(Form_test_id):
         )
         db.session.add(testres)
         db.session.commit()
-        flash('Your test has started!')
         return redirect(url_for('takeformtest', Form_test_id=Form_test_id))
     
     return render_template('Start_Formative_test.html', title = 'Start: ' + test.testtitle , test=test, start=start)
@@ -1208,21 +1212,21 @@ def takeformtest(Form_test_id):
                 lastres.Q1_attempts = lastres.Q1_attempts + 1
             if question_1.ans_choice_1 == False and q1answers.q1_ans_multi_select_1.data == True:
                 lastres.Q1_mark = 0
-                flash('Incorrect - Try again')
+                flash('Incorrect - Try again','Q_1')
                 lastres.Q1_attempts = lastres.Q1_attempts + 1
             if question_1.ans_choice_2 == True and q1answers.q1_ans_multi_select_2.data == True:
                 lastres.Q1_mark = 100
                 lastres.Q1_attempts = lastres.Q1_attempts + 1
             if question_1.ans_choice_2 == False and q1answers.q1_ans_multi_select_2.data == True:
                 lastres.Q1_mark = 0
-                flash('Incorrect - Try again')
+                flash('Incorrect - Try again','Q_1')
                 lastres.Q1_attempts = lastres.Q1_attempts + 1
             if question_1.ans_choice_3 == True and q1answers.q1_ans_multi_select_3.data == True:
                 lastres.Q1_mark = 100
                 lastres.Q1_attempts = lastres.Q1_attempts + 1
             if question_1.ans_choice_3 == False and q1answers.q1_ans_multi_select_3.data == True:
                 lastres.Q1_mark = 0
-                flash('Incorrect - Try again')
+                flash('Incorrect - Try again','Q_1')
                 lastres.Q1_attempts = lastres.Q1_attempts + 1
             if question_1.ans_choice_4 == True and q1answers.q1_ans_multi_select_4.data == True:
                 lastres.Q1_mark = 100
@@ -1230,7 +1234,7 @@ def takeformtest(Form_test_id):
             if question_1.ans_choice_1 == False and q1answers.q1_ans_multi_select_1.data == True:
                 lastres.Q1_mark = 0
                 lastres.Q1_attempts = lastres.Q1_attempts + 1
-                flash('Incorrect - Try again')
+                flash('Incorrect - Try again','Q_1')
         else:
             if question_1.answer_1 == q1answers.q1_ans_FTG.data:
                 lastres.Q1_mark = 0
@@ -1238,7 +1242,7 @@ def takeformtest(Form_test_id):
             if question_1.answer_1 != q1answers.q1_ans_FTG.data:
                 lastres.Q1_mark = 0
                 lastres.Q1_attempts = lastres.Q1_attempts + 1
-                flash('Incorrect - Try again')
+                flash('Incorrect - Try again','Q_1')
         db.session.commit()
 
     if q2answers.q2_submit.data and q2answers.validate():
@@ -1248,14 +1252,14 @@ def takeformtest(Form_test_id):
                 lastres.Q2_attempts = lastres.Q2_attempts + 1
             if question_2.ans_choice_1 == False and q2answers.q2_ans_multi_select_1.data == True:
                 lastres.Q2_mark = 0
-                flash('Incorrect - Try again')
+                flash('Incorrect - Try again','Q_2')
                 lastres.Q2_attempts = lastres.Q2_attempts + 1
             if question_2.ans_choice_2 == True and q2answers.q2_ans_multi_select_2.data == True:
                 lastres.Q2_mark = 100
                 lastres.Q2_attempts = lastres.Q2_attempts + 1
             if question_2.ans_choice_2 == False and q2answers.q2_ans_multi_select_2.data == True:
                 lastres.Q2_mark = 0
-                flash('Incorrect - Try again')
+                flash('Incorrect - Try again','Q_2')
                 lastres.Q2_attempts = lastres.Q2_attempts + 1
             if question_2.ans_choice_3 == True and q2answers.q2_ans_multi_select_3.data == True:
                 lastres.Q2_mark = 100
@@ -1263,14 +1267,14 @@ def takeformtest(Form_test_id):
             if question_2.ans_choice_3 == False and q2answers.q2_ans_multi_select_3.data == True:
                 lastres.Q2_mark = 0
                 lastres.Q2_attempts = lastres.Q2_attempts + 1
-                flash('Incorrect - Try again')
+                flash('Incorrect - Try again','Q_2')
             if question_2.ans_choice_4 == True and q2answers.q2_ans_multi_select_4.data == True:
                 lastres.Q2_mark = 100
                 lastres.Q2_attempts = lastres.Q2_attempts + 1
             if question_2.ans_choice_1 == False and q2answers.q2_ans_multi_select_1.data == True:
                 lastres.Q2_mark = 0
                 lastres.Q2_attempts = lastres.Q2_attempts + 1
-                flash('Incorrect - Try again')
+                flash('Incorrect - Try again','Q_2')
         else:
             if question_2.answer_1 == q2answers.q2_ans_FTG.data:
                 lastres.Q2_mark = 0
@@ -1278,7 +1282,7 @@ def takeformtest(Form_test_id):
             if question_2.answer_1 != q2answers.q2_ans_FTG.data:
                 lastres.Q2_mark = 0
                 lastres.Q2_attempts = lastres.Q2_attempts + 1
-                flash('Incorrect - Try again')
+                flash('Incorrect - Try again','Q_2')
         db.session.commit()
     
     if q3answers.q3_submit.data and q3answers.validate():
@@ -1288,21 +1292,21 @@ def takeformtest(Form_test_id):
                 lastres.Q3_attempts = lastres.Q3_attempts + 1
             if question_3.ans_choice_1 == False and q3answers.q3_ans_multi_select_1.data == True:
                 lastres.Q3_mark = 0
-                flash('Incorrect - Try again')
+                flash('Incorrect - Try again','Q_3')
                 lastres.Q3_attempts = lastres.Q3_attempts + 1
             if question_3.ans_choice_2 == True and q3answers.q3_ans_multi_select_2.data == True:
                 lastres.Q3_mark = 100
                 lastres.Q3_attempts = lastres.Q3_attempts + 1
             if question_3.ans_choice_2 == False and q3answers.q3_ans_multi_select_2.data == True:
                 lastres.Q3_mark = 0
-                flash('Incorrect - Try again')
+                flash('Incorrect - Try again','Q_3')
                 lastres.Q3_attempts = lastres.Q3_attempts + 1
             if question_3.ans_choice_3 == True and q3answers.q3_ans_multi_select_3.data == True:
                 lastres.Q3_mark = 100
                 lastres.Q3_attempts = lastres.Q3_attempts + 1
             if question_3.ans_choice_3 == False and q3answers.q3_ans_multi_select_3.data == True:
                 lastres.Q3_mark = 0
-                flash('Incorrect - Try again')
+                flash('Incorrect - Try again','Q_3')
                 lastres.Q3_attempts = lastres.Q3_attempts + 1
             if question_3.ans_choice_4 == True and q3answers.q3_ans_multi_select_4.data == True:
                 lastres.Q3_mark = 100
@@ -1310,7 +1314,7 @@ def takeformtest(Form_test_id):
             if question_3.ans_choice_1 == False and q3answers.q3_ans_multi_select_1.data == True:
                 lastres.Q3_mark = 0
                 lastres.Q3_attempts = lastres.Q3_attempts + 1
-                flash('Incorrect - Try again')
+                flash('Incorrect - Try again','Q_3')
         else:
             if question_3.answer_1 == q3answers.q3_ans_FTG.data:
                 lastres.Q3_mark = 0
@@ -1318,7 +1322,7 @@ def takeformtest(Form_test_id):
             if question_3.answer_1 != q3answers.q3_ans_FTG.data:
                 lastres.Q3_mark = 0
                 lastres.Q3_attempts = lastres.Q3_attempts + 1
-                flash('Incorrect - Try again')
+                flash('Incorrect - Try again','Q_3')
         db.session.commit()
     
     if q4answers.q4_submit.data and q4answers.validate():
@@ -1328,21 +1332,21 @@ def takeformtest(Form_test_id):
                 lastres.Q4_attempts = lastres.Q4_attempts + 1
             if question_4.ans_choice_1 == False and q4answers.q4_ans_multi_select_1.data == True:
                 lastres.Q4_mark = 0
-                flash('Incorrect - Try again')
+                flash('Incorrect - Try again','Q_4')
                 lastres.Q4_attempts = lastres.Q4_attempts + 1
             if question_4.ans_choice_2 == True and q4answers.q4_ans_multi_select_2.data == True:
                 lastres.Q4_mark = 100
                 lastres.Q4_attempts = lastres.Q4_attempts + 1
             if question_4.ans_choice_2 == False and q4answers.q4_ans_multi_select_2.data == True:
                 lastres.Q4_mark = 0
-                flash('Incorrect - Try again')
+                flash('Incorrect - Try again','Q_4')
                 lastres.Q4_attempts = lastres.Q4_attempts + 1
             if question_4.ans_choice_3 == True and q4answers.q4_ans_multi_select_3.data == True:
                 lastres.Q4_mark = 100
                 lastres.Q4_attempts = lastres.Q4_attempts + 1
             if question_4.ans_choice_3 == False and q4answers.q4_ans_multi_select_3.data == True:
                 lastres.Q4_mark = 0
-                flash('Incorrect - Try again')
+                flash('Incorrect - Try again','Q_4')
                 lastres.Q4_attempts = lastres.Q4_attempts + 1
             if question_4.ans_choice_4 == True and q4answers.q4_ans_multi_select_4.data == True:
                 lastres.Q4_mark = 100
@@ -1350,7 +1354,7 @@ def takeformtest(Form_test_id):
             if question_4.ans_choice_1 == False and q4answers.q4_ans_multi_select_1.data == True:
                 lastres.Q4_mark = 0
                 lastres.Q4_attempts = lastres.Q4_attempts + 1
-                flash('Incorrect - Try again')
+                flash('Incorrect - Try again','Q_4')
         else:
             if question_4.answer_1 == q4answers.q4_ans_FTG.data:
                 lastres.Q4_mark = 0
@@ -1358,7 +1362,7 @@ def takeformtest(Form_test_id):
             if question_4.answer_1 != q4answers.q4_ans_FTG.data:
                 lastres.Q4_mark = 0
                 lastres.Q4_attempts = lastres.Q4_attempts + 1
-                flash('Incorrect - Try again')
+                flash('Incorrect - Try again','Q_4')
         db.session.commit()
 
     if q5answers.q5_submit.data and q5answers.validate():
@@ -1368,14 +1372,14 @@ def takeformtest(Form_test_id):
                 lastres.Q5_attempts = lastres.Q5_attempts + 1
             if question_5.ans_choice_1 == False and q5answers.q5_ans_multi_select_1.data == True:
                 lastres.Q5_mark = 0
-                flash('Incorrect - Try again')
+                flash('Incorrect - Try again','Q_5')
                 lastres.Q5_attempts = lastres.Q5_attempts + 1
             if question_5.ans_choice_2 == True and q5answers.q5_ans_multi_select_2.data == True:
                 lastres.Q5_mark = 100
                 lastres.Q5_attempts = lastres.Q5_attempts + 1
             if question_5.ans_choice_2 == False and q5answers.q5_ans_multi_select_2.data == True:
                 lastres.Q5_mark = 0
-                flash('Incorrect - Try again')
+                flash('Incorrect - Try again','Q_5')
                 lastres.Q5_attempts = lastres.Q5_attempts + 1
             if question_5.ans_choice_3 == True and q5answers.q5_ans_multi_select_3.data == True:
                 lastres.Q5_mark = 100
@@ -1383,14 +1387,14 @@ def takeformtest(Form_test_id):
             if question_5.ans_choice_3 == False and q5answers.q5_ans_multi_select_3.data == True:
                 lastres.Q5_mark = 0
                 lastres.Q5_attempts = lastres.Q5_attempts + 1
-                flash('Incorrect - Try again')
+                flash('Incorrect - Try again','Q_5')
             if question_5.ans_choice_4 == True and q5answers.q5_ans_multi_select_4.data == True:
                 lastres.Q5_mark = 100
                 lasres.Q5_attempts = lastres.Q5_attempts + 1
             if question_5.ans_choice_1 == False and q5answers.q5_ans_multi_select_1.data == True:
                 lastres.Q5_mark = 0
                 lastres.Q5_attempts = lastres.Q5_attempts + 1
-                flash('Incorrect - Try again')
+                flash('Incorrect - Try again','Q_5')
         else:
             if question_5.answer_1 == q5answers.q5_ans_FTG.data:
                 lastres.Q5_mark = 100
@@ -1398,7 +1402,7 @@ def takeformtest(Form_test_id):
             if question_5.answer_1 != q5answers.q5_ans_FTG.data:
                 lastres.Q5_mark = 0
                 lastres.Q5_attempts = lastres.Q5_attempts + 1
-                flash('Incorrect - Try again')
+                flash('Incorrect - Try again','Q_5')
         db.session.commit()
 
     if finish.submitF.data and finish.validate():
@@ -1430,6 +1434,143 @@ def delete_formtest(Form_test_id):
   db.session.commit()
   flash('Your Post has been deleted')
   return redirect('/Formative_test_list')
+
+@app.route("/Formative_test/<int:Form_test_id>/edit", methods=['GET','POST'])
+@login_required
+def edit_formtest(Form_test_id):
+    test = Formativetest.query.get_or_404(Form_test_id)
+    questions = test.linkedquestions
+    blank = Multiplechoice.query.filter_by(question='-').first()
+
+    if len(questions) == 5:
+        question_1 = questions[0]
+        question_2 = questions[1]
+        question_3 = questions[2]
+        question_4 = questions[3]
+        question_5 = questions[4]
+    if len(questions) == 4:
+        question_1 = questions[0]
+        question_2 = questions[1]
+        question_3 = questions[2]
+        question_4 = questions[3]
+        question_5 = blank
+    if len(questions) == 3:
+        question_1 = questions[0]
+        question_2 = questions[1]
+        question_3 = questions[2]
+        question_4 = blank
+        question_5 = blank
+    if len(questions) == 2:
+        question_1 = questions[0]
+        question_2 = questions[1]
+        question_3 = blank
+        question_4 = blank
+        question_5 = blank
+    if len(questions) == 1:
+        question_1 = questions[0]
+        question_2 = blank
+        question_3 = blank
+        question_4 = blank
+        question_5 = blank
+    if len(questions) == 0:
+        question_1 = blank
+        question_2 = blank
+        question_3 = blank
+        question_4 = blank
+        question_5 = blank
+
+    test_diff = []
+    QCform = QChoiceForm() 
+
+    if QCform.validate_on_submit():
+        if len(questions) == 5:
+            test.linkedquestions.remove(question_1)
+            test.linkedquestions.remove(question_2)
+            test.linkedquestions.remove(question_3)
+            test.linkedquestions.remove(question_4)
+            test.linkedquestions.remove(question_5)
+        if len(questions) == 4:
+            test.linkedquestions.remove(question_1)
+            test.linkedquestions.remove(question_2)
+            test.linkedquestions.remove(question_3)
+            test.linkedquestions.remove(question_4)
+        if len(questions) == 3:
+            test.linkedquestions.remove(question_1)
+            test.linkedquestions.remove(question_2)
+            test.linkedquestions.remove(question_3)
+        if len(questions) == 2:
+            test.linkedquestions.remove(question_1)
+            test.linkedquestions.remove(question_2)
+        if len(questions) == 1:
+            test.linkedquestions.remove(question_1)
+        if QCform.question_1.data.question == '-' and QCform.WriteMCquestion_1.question.data == '' and QCform.WriteFTGquestion_1.question.data == '':
+            test.linkedquestions.append(question_1)
+            current_questions = test.linkedquestions
+            if len(current_questions) == 1:
+                current_question_1 = current_questions[-1]
+                test_diff.append(current_question_1.rating_num)
+        else:
+            add_question_1()
+            current_questions = test.linkedquestions
+            if len(current_questions) == 1:
+                current_question_1 = current_questions[-1]
+                test_diff.append(current_question_1.rating_num)
+        if QCform.question_2.data.question == '-' and QCform.WriteMCquestion_2.question.data == '' and QCform.WriteFTGquestion_2.question.data == '':
+            test.linkedquestions.append(question_2)
+            current_questions = test.linkedquestions
+            if len(current_questions) == 2:
+                current_question_2 = current_questions[-1]
+                test_diff.append(current_question_2.rating_num)
+        else:
+            add_question_2()
+            current_questions = test.linkedquestions 
+            if len(current_questions) == 2:
+                current_question_2 = current_questions[-1]
+                test_diff.append(current_question_2.rating_num)
+        if QCform.question_3.data.question == '-' and QCform.WriteMCquestion_3.question.data == '' and QCform.WriteFTGquestion_3.question.data == '':
+            test.linkedquestions.append(question_3)
+            current_questions = test.linkedquestions
+            if len(current_questions) == 3:
+                current_question_3 = current_questions[-1]
+                test_diff.append(current_question_3.rating_num)
+        else:    
+            add_question_3()
+            current_questions = test.linkedquestions
+            if len(current_questions) == 3:
+                current_question_3 = current_questions[-1]
+                test_diff.append(current_question_3.rating_num)
+        if QCform.question_4.data.question == '-' and QCform.WriteMCquestion_4.question.data == '' and QCform.WriteFTGquestion_4.question.data == '':
+            test.linkedquestions.append(question_4)
+            current_questions = test.linkedquestions
+            if len(current_questions) == 1:
+                current_question_4 = current_questions[-1]
+                test_diff.append(current_question_4.rating_num)
+        else:
+            add_question_4()
+            current_questions = test.linkedquestions
+            if len(current_questions) == 4:
+                current_question_4 = current_questions[-1]
+                test_diff.append(current_question_4.rating_num)
+        if QCform.question_5.data.question == '-' and QCform.WriteMCquestion_5.question.data == '' and QCform.WriteFTGquestion_5.question.data == '':
+            test.linkedquestions.append(question_5)
+            current_questions = test.linkedquestions
+            if len(current_questions) == 5:
+                current_question_5 = current_questions[-1]
+                test_diff.append(current_question_5.rating_num)
+        else:
+            add_question_5()
+            current_questions = test.linkedquestions
+            if len(questions) == 5:
+                current_question_5 = current_questions[-1]
+                test_diff.append(current_question_5.rating_num)  
+
+        tdlisttotal = sum(test_diff)
+        test_rating = tdlisttotal / len(test_diff)
+        test.test_rating_num = test_rating
+        db.session.commit()
+        flash('test added')
+        return redirect('/Formative_test_list')    
+    return render_template('edit_form_test.html', title = 'Edit: ' + test.testtitle, QCform=QCform, test=test, questions=questions, question_1=question_1, question_2=question_2, question_3=question_3, question_4=question_4, question_5=question_5)
 
 @app.route("/Formative_test/<int:Form_test_id>/release", methods=['POST'])
 @login_required

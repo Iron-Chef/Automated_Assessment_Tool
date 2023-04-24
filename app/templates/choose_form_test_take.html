@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h1>Formative Test to take</h1>
+<hr>
+
+{% for test in allFormtests %}
+    {% if test.available_to_take == True %}
+        <p class="btn btn-primary">Test Title: {{ test.testtitle }} | Test module: {{ test.mdls.code }} | {{ test.mdls.name }} | Test author: {{ test.tstathr.forename}} {{ test.tstathr.surname}}</p>
+        <a href="{{ url_for( 'startformtest', Form_test_id=test.id ) }}" type="button" class="btn btn-info">Take Test</a>
+    <hr>
+    {% endif %}   
+{% endfor %}
+
+
+{% endblock %}

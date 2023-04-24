@@ -41,13 +41,13 @@ class QuestionForm(FlaskForm):
 class QuestionFormFormField(FlaskForm):
     question=StringField("question",[validators.Optional()])
     answer1=StringField ("answer 1",[validators.Optional()])
-    ans_multi_select_1 = BooleanField("Option 1",[validators.Optional()])
+    ans_multi_select_1 = BooleanField("is this the correct answer?",[validators.Optional()])
     answer2=StringField("answer 2",[validators.Optional()])
-    ans_multi_select_2 = BooleanField("Option 2",[validators.Optional()])
+    ans_multi_select_2 = BooleanField("is this the correct answer?",[validators.Optional()])
     answer3=StringField("answer 3",[validators.Optional()])
-    ans_multi_select_3 = BooleanField("Option 3",[validators.Optional()])
+    ans_multi_select_3 = BooleanField("is this the correct answer?",[validators.Optional()])
     answer4=StringField("answer 4",[validators.Optional()])
-    ans_multi_select_4 = BooleanField("Option 4",[validators.Optional()])
+    ans_multi_select_4 = BooleanField("is this the correct answer?",[validators.Optional()])
     rating = SelectField('Rating:',choices=DIFFICULTY_RATING, coerce=int, validators = [validators.Optional()])
     subject = RadioField("Subject: ", choices = [
         ("Java", "Java"),
@@ -61,10 +61,10 @@ class QuestionFormFormField(FlaskForm):
     marks=IntegerField("marks",[validators.Optional()]) 
     feedback=StringField("Feedback:",[validators.Optional()])
 
-#allows fill in the gap questions to be written when filling in the gap - rj ??
+#allows fill in the gap questions to be written when filling in the gap - rj 
 class FillInTheBlankQuestionFormFormField(FlaskForm):
-    question = StringField("Question: ", validators = [DataRequired (message = "Please type a question.")])
-    answer = StringField("Answer: ", validators = [DataRequired (message = "Please provide an answer.")])
+    question = StringField("Question: ", [validators.Optional()])
+    answer = StringField("Answer: ", [validators.Optional()])
     subject = RadioField("Subject: ", 
         choices = [
         ("Java", "Java"),
@@ -74,11 +74,11 @@ class FillInTheBlankQuestionFormFormField(FlaskForm):
         ("Other", "Other"),
         ],
         coerce = str, 
-        validators = [DataRequired (message = "Please select a subject.")])
-    marks = IntegerField(validators = [DataRequired (message = "Please enter a mark.")])
-    rating = SelectField("Difficulty Rating:",choices = DIFFICULTY_RATING, coerce=int)
-    feedback = StringField ("Feedback: ")
-    topic = StringField("Topic: ")
+        validators = [validators.Optional()])
+    marks=IntegerField("marks",[validators.Optional()])
+    rating = SelectField('Rating:',choices=DIFFICULTY_RATING, coerce=int, validators = [validators.Optional()])
+    feedback=StringField("Feedback:",[validators.Optional()])
+    topic = StringField("topic",[validators.Optional()])
 
 #to choose which path to go down Sum/form - RJ
 class TestChoice(FlaskForm):

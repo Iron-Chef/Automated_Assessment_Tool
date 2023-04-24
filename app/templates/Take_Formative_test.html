@@ -1,125 +1,190 @@
 {% extends "base.html" %}
 {% block content %}
-<p>Test Title: {{ test.testtitle }}</p>
+<H1>Test Title: {{ test.testtitle }}</H1>
 
 {% if question_1.question != '-' %}
     <form action="/Take_Formative_test/{{test.id}}" method="POST">
         {{ q1answers.csrf_token }}
-        <p>1.{{ question_1.question }}</p>
+        <H2>1.{{ question_1.question }}</H2>
         {% if question_1.question_type == 'Multiplechoice' %}
-            <p>{{ question_1.answer_1 }}  {{ q1answers.q1_ans_multi_select_1 }}</p>
-            {{ question_1.answer_2 }}  {{ q1answers.q1_ans_multi_select_2 }}</p>
-            {% if question_1.answer_3 != '' %}
-                <p> {{ question_1.answer_3 }}  {{ q1answers.q1_ans_multi_select_3 }}</p>
+            <p>{{ question_1.answer_1 }}  {{ q1answers.q1_ans_multi_select_1(class="form-check-input") }}</p>
+            {{ question_1.answer_2 }}  {{ q1answers.q1_ans_multi_select_2(class="form-check-input") }}</p>
+            {% if question_1.answer_3 %}
+                <p> {{ question_1.answer_3 }}  {{ q1answers.q1_ans_multi_select_3(class="form-check-input") }}</p>
             {% endif %}
-            {% if question_1.answer_4 != '' %}
-                <p>{{ question_1.answer_4 }}  {{ q1answers.q1_ans_multi_select_4 }}</p>
+            {% if question_1.answer_4 %}
+                <p>{{ question_1.answer_4 }}  {{ q1answers.q1_ans_multi_select_4(class="form-check-input") }}</p>
             {% endif %}
         {% else %}
-            <p>{{ q1answers.q1_ans_FTG }} </p>   
+            <p>{{ q1answers.q1_ans_FTG(class="form-control") }} </p>   
         {% endif %} 
         {% if lastres.Q1_mark != 100 %}
-            {{q1answers.q1_submit}}
+            {{q1answers.q1_submit(class="btn btn-info ")}}
         {% else %}
-            <p>You have answered this correctly! Question feeedback: {{question_1.feedback}}</p>
+            <p class ='Correct_form_answer'>You have answered this correctly! Question feeedback: {{question_1.feedback}}</p>
         {% endif %}
+        {% with messages = get_flashed_messages(category_filter=["Q_1"]) %}
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
+                    </button>
+                </div>
+            {% endfor %}
+        {% endif %}    
+        {% endwith %}
 {% endif %}
 
 {% if question_2.question != '-' %}
+<hr>
     <form action="/Take_Formative_test/{{test.id}}" method="POST">
         {{ q2answers.csrf_token }}
-        <p>2.{{ question_2.question }}</p>
+        <H2>2.{{ question_2.question }}</H2>
         {% if question_2.question_type == 'Multiplechoice' %}
-            <p>{{ question_2.answer_1 }}  {{ q2answers.q2_ans_multi_select_1 }}</p>
-            {{ question_2.answer_2 }}  {{ q2answers.q2_ans_multi_select_2 }}</p>
-            {% if question_2.answer_3 != '' %}
-                <p> {{ question_2.answer_3 }}  {{ q2answers.q2_ans_multi_select_3 }}</p>
+            <p>{{ question_2.answer_1 }}  {{ q2answers.q2_ans_multi_select_1(class="form-check-input") }}</p>
+            {{ question_2.answer_2 }}  {{ q2answers.q2_ans_multi_select_2(class="form-check-input") }}</p>
+            {% if question_2.answer_3 %}
+                <p> {{ question_2.answer_3 }}  {{ q2answers.q2_ans_multi_select_3(class="form-check-input") }}</p>
             {% endif %}
-            {% if question_2.answer_4 != '' %}
-                <p>{{ question_2.answer_4 }}  {{ q2answers.q2_ans_multi_select_4 }}</p>
+            {% if question_2.answer_4 %}
+                <p>{{ question_2.answer_4 }}  {{ q2answers.q2_ans_multi_select_4(class="form-check-input") }}</p>
             {% endif %}
         {% else %}
-            <p>{{ q2answers.q2_ans_FTG }} </p>   
+            <p>{{ q2answers.q2_ans_FTG (class="form-control") }} </p>   
         {% endif %} 
         {% if lastres.Q2_mark != 100 %}
-            {{q2answers.q2_submit}}
+            <div class = "spc">
+                {{q2answers.q2_submit(class="btn btn-info ")}}
+            </div>
         {% else %}
-            <p>You have answered this correctly! Question feeedback: {{question_2.feedback}}</p>
-        {% endif %}       
+            <p class ='Correct_form_answer'>You have answered this correctly! Question feeedback: {{question_2.feedback}}</p>
+        {% endif %}
+        {% with messages = get_flashed_messages(category_filter=["Q_2"]) %}
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
+                    </button>
+                </div>
+            {% endfor %}
+        {% endif %}    
+        {% endwith %}      
 {% endif %}
 
 {% if question_3.question != '-' %}
+<hr>
     <form action="/Take_Formative_test/{{test.id}}" method="POST">
         {{ q3answers.csrf_token }}
-        <p>3.{{ question_3.question }}</p>
+        <H2>3.{{ question_3.question }}</H2>
         {% if question_3.question_type == 'Multiplechoice' %}
-            <p>{{ question_3.answer_1 }}  {{ q3answers.q3_ans_multi_select_1 }}</p>
-            {{ question_3.answer_2 }}  {{ q3answers.q3_ans_multi_select_2 }}</p>
-            {% if question_3.answer_3 != '' %}
-                <p> {{ question_3.answer_3 }}  {{ q3answers.q3_ans_multi_select_3 }}</p>
+            <p>{{ question_3.answer_1 }}  {{ q3answers.q3_ans_multi_select_1(class="form-check-input") }}</p>
+            {{ question_3.answer_2 }}  {{ q3answers.q3_ans_multi_select_2(class="form-check-input") }}</p>
+            {% if question_3.answer_3 %}
+                <p> {{ question_3.answer_3 }}  {{ q3answers.q3_ans_multi_select_3(class="form-check-input") }}</p>
             {% endif %}
-            {% if question_3.answer_4 != '' %}
-                <p>{{ question_3.answer_4 }}  {{ q3answers.q3_ans_multi_select_4 }}</p>
+            {% if question_3.answer_4 %}
+                <p>{{ question_3.answer_4 }}  {{ q3answers.q3_ans_multi_select_4(class="form-check-input") }}</p>
             {% endif %}
         {% else %}
-            <p>{{ q3answers.q3_ans_FTG }} </p>   
+            <p>{{ q3answers.q3_ans_FTG(class="form-control") }} </p>   
         {% endif %}  
         {% if lastres.Q3_mark != 100 %}
-            {{q3answers.q3_submit}}
+            {{q3answers.q3_submit(class="btn btn-info ")}}
         {% else %}
-            <p>You have answered this correctly! Question feeedback: {{question_3.feedback}}</p>
-        {% endif %}       
+            <p class ='Correct_form_answer'>You have answered this correctly! Question feeedback: {{question_3.feedback}}</p>
+        {% endif %}
+        {% with messages = get_flashed_messages(category_filter=["Q_3"]) %}
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
+                    </button>
+                </div>
+            {% endfor %}
+        {% endif %}    
+        {% endwith %}           
 {% endif %}
 
 {% if question_4.question != '-' %}
+<hr>
     <form action="/Take_Formative_test/{{test.id}}" method="POST">
         {{ q4answers.csrf_token }}
-        <p>4.{{ question_4.question }}</p>
+        <H2>4.{{ question_4.question }}</H2>
         {% if question_4.question_type == 'Multiplechoice' %}
-            <p>{{ question_4.answer_1 }}  {{ q4answers.q4_ans_multi_select_1 }}</p>
-            {{ question_4.answer_2 }}  {{ q4answers.q4_ans_multi_select_2 }}</p>
-            {% if question_4.answer_3 != '' %}
-                <p> {{ question_4.answer_3 }}  {{ q4answers.q4_ans_multi_select_3 }}</p>
+            <p>{{ question_4.answer_1 }}  {{ q4answers.q4_ans_multi_select_1(class="form-check-input") }}</p>
+            {{ question_4.answer_2 }}  {{ q4answers.q4_ans_multi_select_2(class="form-check-input") }}</p>
+            {% if question_4.answer_3 %}
+                <p> {{ question_4.answer_3 }}  {{ q4answers.q4_ans_multi_select_3(class="form-check-input") }}</p>
             {% endif %}
-            {% if question_4.answer_4 != '' %}
-                <p>{{ question_4.answer_4 }}  {{ q4answers.q4_ans_multi_select_4 }}</p>
+            {% if question_4.answer_4 %}
+                <p>{{ question_4.answer_4 }}  {{ q4answers.q4_ans_multi_select_4(class="form-check-input") }}</p>
             {% endif %}
         {% else %}
-            <p>{{ q4answers.q4_ans_FTG }} </p>   
+            <p>{{ q4answers.q4_ans_FTG(class="form-control") }} </p>   
         {% endif %}
         {% if lastres.Q4_mark != 100 %}
-            {{q4answers.q4_submit}}
+            {{q4answers.q4_submit(class="btn btn-info ")}}
         {% else %}
-            <p>You have answered this correctly! Question feeedback: {{question_4.feedback}}</p>
-        {% endif %}        
+            <p class ='Correct_form_answer'>You have answered this correctly! Question feeedback: {{question_4.feedback}}</p>
+        {% endif %} 
+        {% with messages = get_flashed_messages(category_filter=["Q_4"]) %}
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
+                    </button>
+                </div>
+            {% endfor %}
+        {% endif %}    
+        {% endwith %}             
 {% endif %}
 
 {% if question_5.question != '-' %}
+<hr>
     <form action="/Take_Formative_test/{{test.id}}" method="POST">
         {{ q5answers.csrf_token }}
-        <p>5.{{ question_5.question }}</p>
+        <H2>5.{{ question_5.question }}</H2>
         {% if question_5.question_type == 'Multiplechoice' %}
-            <p>{{ question_5.answer_1 }}  {{ q5answers.q5_ans_multi_select_1 }}</p>
-            {{ question_5.answer_2 }}  {{ q5answers.q5_ans_multi_select_2 }}</p>
-            {% if question_5.answer_3 != '' %}
-                <p> {{ question_5.answer_3 }}  {{ q5answers.q5_ans_multi_select_3 }}</p>
+            <p>{{ question_5.answer_1 }}  {{ q5answers.q5_ans_multi_select_1(class="form-check-input") }}</p>
+            {{ question_5.answer_2 }}  {{ q5answers.q5_ans_multi_select_2 (class="form-check-input")}}</p>
+            {% if question_5.answer_3 %}
+                <p> {{ question_5.answer_3 }}  {{ q5answers.q5_ans_multi_select_3(class="form-check-input") }}</p>
             {% endif %}
-            {% if question_5.answer_4 != '' %}
-                <p>{{ question_5.answer_4 }}  {{ q5answers.q5_ans_multi_select_4 }}</p>
+            {% if question_5.answer_4 %}
+                <p>{{ question_5.answer_4 }}  {{ q5answers.q5_ans_multi_select_4(class="form-check-input") }}</p>
             {% endif %}
         {% else %}
-            <p>{{ q5answers.q5_ans_FTG }} </p>   
+            <p>{{ q5answers.q5_ans_FTG(class="form-control") }} </p>   
         {% endif %} 
         {% if lastres.Q5_mark != 100 %}
-            {{q5answers.q5_submit}}
+            {{q5answers.q5_submit(class="btn btn-info ")}}
         {% else %}
-            <p>You have answered this correctly! Question feeedback: {{question_5.feedback}}</p>
-        {% endif %}       
+            <p class ='Correct_form_answer' >You have answered this correctly! Question feeedback: {{question_5.feedback}}</p>
+        {% endif %} 
+        {% with messages = get_flashed_messages(category_filter=["Q_5"]) %}
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
+                    </button>
+                </div>
+            {% endfor %}
+        {% endif %}    
+        {% endwith %}            
 {% endif %}
 
-<form action="/Take_Formative_test/{{test.id}}" method="POST">
-    {{ finish.csrf_token }}
-    {{finish.submitF}}
-</form>
+<hr>
+<div  class="finishtestbttn">
+    <form action="/Take_Formative_test/{{test.id}}" method="POST">
+        {{ finish.csrf_token }}
+        {{finish.submitF(class="btn btn-info ")}}
+    </form>
+<br>
+</div>
 
 {% endblock %}
