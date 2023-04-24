@@ -146,6 +146,7 @@ def edit_mc_question(mc_question_id):
         mcquestion.answer_4=form.answer4.data 
         mcquestion.ans_choice_4=form.ans_multi_select_4.data
         mcquestion.marks=form.marks.data
+        mcquestion.subject_tag = form.subject.data
         mcquestion.feedback=form.feedback.data
         mcquestion.rating = dict(DIFFICULTY_RATING).get(form.rating.data)
         mcquestion.rating_num= form.rating.data
@@ -166,6 +167,7 @@ def edit_mc_question(mc_question_id):
     form.ans_multi_select_3.data=mcquestion.ans_choice_3
     form.answer4.data=mcquestion.answer_4
     form.ans_multi_select_4.data=mcquestion.ans_choice_4
+    form.subject.data=mcquestion.subject_tag
     form.marks.data=mcquestion.marks
     form.rating.data=mcquestion.rating
     form.feedback.data=mcquestion.feedback

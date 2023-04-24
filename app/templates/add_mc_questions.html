@@ -2,11 +2,11 @@
 
 {% block content %}
     <h1>Add Multiple Choice Questions</h1>
-    <div> <p>Add Multiple Choice Questions</p>
+    <div> <p>Please add question, minimum of 2 answers and mark correct answer.</p>
         <form action="", method="post" novalidate>
             {{ form.hidden_tag() }}
 
-            <p> Question: 
+            <p> <b>Question:</b> 
                 {{ form.question(class="form-control form-control-lg")}}
                 {% for error in form.question.errors %} 
                <span style="color: red;">[{{ error }}]</span>
@@ -14,7 +14,7 @@
             </p>
             
             <p>
-                {{ form.ans_multi_select_1.label }}
+                {{ form.ans_multi_select_1.label }}:
                 {{ form.answer1  }}
                 {{ form.ans_multi_select_1 }}
                 {% for error in form.answer1.errors %} 
@@ -23,7 +23,7 @@
             </p>
             
             <p>
-                {{ form.ans_multi_select_2.label }}
+                {{ form.ans_multi_select_2.label }}:
                 {{ form.answer2 }}
                 {{ form.ans_multi_select_2}} 
                 {% for error in form.answer2.errors %} 
@@ -32,46 +32,68 @@
             </p>
 
             <p>
-                {{ form.ans_multi_select_3.label }}
+                {{ form.ans_multi_select_3.label }}:
                 {{ form.answer3 }}
                 {{ form.ans_multi_select_3}}
             </p>
 
             <p>
-                {{ form.ans_multi_select_4.label }}
+                {{ form.ans_multi_select_4.label }}:
                 {{ form.answer4 }}
                 {{ form.ans_multi_select_4}}
             </p>
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        
+
+        {% for message in messages %}
+            <p style="color: red;"><b>{{ message }}</b></p>
+        {% endfor %}
+
+        
+        {% endif %}
+        {% endwith %} 
 
             <p>
-                {{ form.subject.label }}
+                <b>Subject:</b>
+            </p><p>
+                
+                
                 {% for choice in form.subject %}
-                    {{ choice.label }}
                     {{ choice }}
+                    {{ choice.label }}
+                  
+                <br>
+                {% endfor %}
+                {% for error in form.subject.errors %} 
+                <span style="color: red;">[{{ error }}]</span>
                 {% endfor %}
             </p>
          
             <p> 
-                {{ form.marks.label }}
+                <b>{{ form.marks.label }}:</b>
                 {{ form.marks }}
                 {% for error in form.marks.errors %} 
                <span style="color: red;">[{{ error }}]</span>
                {% endfor %}
             </p>
             <p> 
-                {{ form.feedback.label }}
+                <b>{{ form.feedback.label }}</b>
                 {{ form.feedback(size=100) }}
+                {% for error in form.feedback.errors %} 
+               <span style="color: red;">[{{ error }}]</span>
+               {% endfor %}
             </p>
+            
+           
             <p> 
-                {{ form.rating.label }} {{ form.rating }}
+                <b>{{ form.rating.label }}</b> {{ form.rating }}
             </p>
 
             <p>
-                {{ form.topic.label }}
-                {{ form.topic (size=100) }}
-                {% for error in form.topic.errors %} 
-                <span style="color: red;">[{{ error }}]</span>
-                {% endfor %}
+                <b>{{ form.topic.label }}</b>
+                {{ form.topic }}
+                
             </p>
 
         </div>
@@ -79,8 +101,7 @@
                 
                 {{ form.submit(class="btn btn-info ")}}
             </p>
-            <!--Clear button-->
-            <input type="reset", class="btn btn-info ">
+            
         </form>
 
 
