@@ -15,8 +15,8 @@
                                 <h5 class="card-title">Summative Assessment</h5>
                                 <br>
                                 <p class="card-text"> <strong> {{ num_users_with_results }}</strong> students out of a possible <strong> {{ unique_user_ids }} </strong> have completed tests </p>
-                                <p class="card-text"> completion rate: <strong> {{ percentage_users_with_results }}%</strong>  </p>
-                                <p class="card-text"><small class="text-muted">space for small words</small></p>
+                                <p class="card-text"> Completion rate: <strong> {{ percentage_users_with_results }}%</strong>  </p>
+                                <!-- <p class="card-text"><small class="text-muted">space for small words</small></p> -->
                             </div>
                         </div>
                     </div>
@@ -26,13 +26,13 @@
                 <div class="card h-100" >
                     <div class="card-header d-flex justify-content-between">Stats for all marks <a href="#" class="btn btn-primary">view</a></div>
                     <ul class="list-group">
-                        <li class="list-group-item d-flex justify-content-between align-items-center">number marked <span class="list-group-flush"> {{ total_mark_count }} </span>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">Number Marked <span class="list-group-flush"> {{ total_mark_count }} </span>
                         </li>
-                        <li class="list-group-item d-flex justify-content-between align-items-center">lowest mark (%)<span class="list-group-flush"> {{ total_mark_min }}</span>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">Lowest Mark<span class="list-group-flush"> <strong>{{ total_mark_min }}</strong>%</span>
                         </li>
-                        <li class="list-group-item d-flex justify-content-between align-items-center">higest mark (%)<span class="list-group-flush"> {{ total_mark_max }}</span>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">Higest Mark<span class="list-group-flush"> <strong>{{ total_mark_max }}</strong>%</span>
                         </li>
-                        <li class="list-group-item d-flex justify-content-between align-items-center">average mark (%)<span class="list-group-flush"> {{ total_mark_avg }} </span>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">Average Mark<span class="list-group-flush"> <strong>{{ total_mark_avg }}</strong>% </span>
                         </li>
                 </div>
             </div>
@@ -43,12 +43,13 @@
         <table id="data" class="table">
             <thead>
                 <tr>
-                    <th>username</th>
-                    <th>name</th>
-                    <th>test id</th>
-                    <th>test rating</th>
-                    <th>starting year</th>
-                    <th>mark (%)</th>
+                    <th>Username</th>
+                    <th>Student Name</th>
+                    <th>Module</th>
+                    <th>Test</th>
+                    <th>Test Rating</th>
+                    <th>Cohort Year</th>
+                    <th>Mark</th>
                     
                 </tr>
             </thead>
@@ -57,10 +58,11 @@
                     <tr>
                         <td><a href="{{ url_for('results_student', user_id=res.user_id) }}">{{ res.username }} </a> </td>
                         <td>{{ res.forename }} {{ res.surname }}</td>
+                        <td>{{ res.res_module }}</td>
                         <td>{{ res.test_id }}</td>
                         <td>{{ res.test_rating }}</td>
                         <td>{{ res.cohort_year }}</td>
-                        <td>{{ res.total_mark }}</td>
+                        <td><strong>{{ res.total_mark }}</strong>%</td>
                     </tr>
                 {% endfor %}
             </tbody>
@@ -108,6 +110,7 @@
                 'copy', 'csv', 'excel', 'pdf', 'print'
             ],
             columns: [
+            null,
             null,
             null,
             null,

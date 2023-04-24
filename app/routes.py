@@ -608,18 +608,18 @@ def results_s():
         name='Min-Max Line'
     ))
 
-    # # # Add a vertical line between the min and max values for each cohort year
-    # for i, row in grouped_df.iterrows():
-    #     fig4.add_shape(
-    #         type="line",
-    #         xref="x",
-    #         yref="y",
-    #         x0=i,
-    #         y0=row['total_mark']['min'],
-    #         x1=i,
-    #         y1=row['total_mark']['max'],
-    #         line=dict(color='cornflowerblue', width=2)
-    #     )
+    # # Add a vertical line between the min and max values for each cohort year
+    for i, row in grouped_df.iterrows():
+        fig4.add_shape(
+            type="line",
+            xref="x",
+            yref="y",
+            x0=i,
+            y0=row['total_mark']['min'],
+            x1=i,
+            y1=row['total_mark']['max'],
+            line=dict(color='cornflowerblue', width=2)
+        )
 
     fig4.update_layout(
         title='Total Mark vs Cohort Year',
