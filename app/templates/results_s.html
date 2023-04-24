@@ -44,6 +44,7 @@
             <thead>
                 <tr>
                     <th>Username</th>
+                    <th>Student Name</th>
                     <th>Module</th>
                     <th>Test</th>
                     <th>Test Rating</th>
@@ -56,6 +57,7 @@
                 {% for res in entries %}
                     <tr>
                         <td><a href="{{ url_for('results_student', user_id=res.user_id) }}">{{ res.username }} </a> </td>
+                        <td>{{ res.forename }} {{ res.surname }}</td>
                         <td>{{ res.res_module }}</td>
                         <td>{{ res.test_id }}</td>
                         <td>{{ res.test_rating }}</td>
@@ -108,6 +110,7 @@
                 'copy', 'csv', 'excel', 'pdf', 'print'
             ],
             columns: [
+            null,
             null,
             null,
             null,
