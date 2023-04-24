@@ -69,7 +69,7 @@
                         <td> {{ res.total_mark }} / 25 </td>
                         <td> {{ (res.total_mark / 25) * 100 }}%</td>
                         <td> {{ res.test_rating }} /5 </td>
-                        <td>{{ res.date.strftime('%d-%b-%Y') }}</td>
+                        <td>{{ res.date.strftime('%d %b %Y') }}</td>
                     </tr>
                 {% endfor %}
             </tbody>          
