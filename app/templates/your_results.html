@@ -54,10 +54,10 @@
             <thead>
                 <tr>
                     <th>Module</th>
-                    <th>Test ID</th>
+                    <th>Test</th>
                     <th>Mark</th>
                     <th>Result</th>
-                    <th>Test rating</th>  
+                    <th>Difficulty Rating</th>  
                     <th>Date of Test</th>                   
                 </tr>
             </thead>
@@ -76,22 +76,24 @@
         </table>
 
 {% endblock %}
-
-
-<!-- adapted from Miguel Grinerg 'Beautiful interactive tables for your Flask Templates' -->
-<!-- accessed 18-03-2023  https://blog.miguelgrinberg.com/post/beautiful-interactive-tables-for-your-flask-templates -->
-<!-- 
 {% block scripts %}
-  <script>
-    $(document).ready(function () {
-      $('#data2').DataTable({
-        columns: [
-          null,         
-          null,
-          null,                   
-          ],
-      });
+<script>
+    $(document).ready(function() {
+        $('#data').DataTable({
+            dom: '<"float-right"B>',
+            buttons:['pdf'],
+            columns: [
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            ],
+            initComplete: function() {
+                $('.dt-buttons').insertBefore('.dataTables_filter');
+            }
+        });
     });
   </script>
 {% endblock %}
--->
