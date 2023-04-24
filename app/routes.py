@@ -1589,5 +1589,49 @@ def release_formtest(Form_test_id):
 def your_results():
 
     user_id = session.get('user_id')
-    individ_results=Results_sum.query.filter_by(user_id=user_id).all()
-    return render_template('your_results.html', title = 'Your Results', individ_results = individ_results)
+    user_id = 113
+
+    individ_results = Results_sum.query.filter_by(user_id=user_id).first()
+    if individ_results is None:
+        flash('No results found for this user')
+        return redirect(url_for('index'))
+    
+    entries = Results_sum.query.filter_by(user_id=user_id, form_summ=1).all()
+        
+    # From SP - Total Mark stats for the user
+    user_total_marks = db.session.query(func.avg(Results_sum.total_mark).label('average_mark'), 
+                            func.min(Results_sum.total_mark).label('min_mark'), 
+                            func.max(Results_sum.total_mark).label('max_mark'), 
+                            func.count(Results_sum.total_mark).label('count_mark')
+                            ).filter(Results_sum.user_id == user_id, Results_sum.form_summ == 1).first()
+
+    total_mark_avg = user_total_marks.average_mark
+    total_mark_min = user_total_marks.min_mark
+    total_mark_max = user_total_marks.max_mark
+    total_mark_count = user_total_marks.count_mark
+
+    results = Results_sum.query.filter_by(user_id=user_id, form_summ=1).order_by(Results_sum.date.desc()).limit(10).all()
+    dates = [result.date.strftime('%Y-%m-%d') for result in results]
+    marks = [result.total_mark for result in results]
+
+    data = Results_sum.query.filter_by(user_id=user_id, form_summ=1).all()
+    
+    df = pd.DataFrame([(d.test_id, d.total_mark) for d in data], columns=['test_id', 'total_mark'])
+
+    return render_template('your_results.html', title='Your Results', individ_results=individ_results, entries=entries, 
+        user_id=user_id, total_mark_min=total_mark_min, total_mark_max=total_mark_max, total_mark_avg=total_mark_avg, total_mark_count=total_mark_count, results=results, dates=dates, marks=marks)
+
+
+@app.route("/your_test_id/<user_id>/<test_id>", methods=['GET'])
+@login_required
+def your_test_id(user_id, test_id):
+
+    individ_results = Results_sum.query.filter_by(user_id=user_id, test_id=test_id).first()
+    if individ_results is None:
+        flash('No results found for this user')
+        return redirect(url_for('index'))
+
+    entries = Results_sum.query.filter_by(user_id=user_id, test_id=test_id, form_summ=1).all()
+
+    return render_template('your_test_id.html', title='Test Results', individ_results=individ_results, entries=entries, 
+        user_id=user_id, test_id=test_id)
