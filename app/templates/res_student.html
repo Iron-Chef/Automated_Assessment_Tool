@@ -3,7 +3,7 @@
 {% block content %}
     <div class="container">
 
-        <h1>Individual results:  {{ individ_results.username }} </h1>
+        <h1>Individual Results:  {{ individ_results.username }} </h1>
         <br>
 
         <div class="row row-cols-1 row-cols-md-2 g-4">
@@ -17,8 +17,8 @@
                             <div class="card-body">
                                 <h4 class="card-title">{{ individ_results.forename }} {{ individ_results.surname }} </h4>
                                 <br>
-                                <p class="card-text">last log in: {{ user.date.strftime('%d-%b-%Y') }} </p>
-                                <p class="card-text">user has logged in {{ user.number_of_log_ins }} times </p>
+                                <p class="card-text">Last og in: <strong>{{ user.date.strftime('%d %b %Y') }}</strong> </p>
+                                <p class="card-text">User has logged in <strong>{{ user.number_of_log_ins }}</strong> times </p>
                             </div>
                         </div>
                     </div>
@@ -28,13 +28,13 @@
                 <div class="card h-100" >
                     <div class="card-header d-flex justify-content-between">Summary <input type="button" class="btn btn-secondary" value="Back" onclick="history.go(-1)"></div>
                     <ul class="list-group">
-                        <li class="list-group-item d-flex justify-content-between align-items-center">number marked <span class="list-group-flush"> {{ total_mark_count }} </span>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">Number Marked <span class="list-group-flush"> <strong>{{ total_mark_count }}</strong> </span>
                         </li>
-                        <li class="list-group-item d-flex justify-content-between align-items-center">lowest mark <span class="list-group-flush"> {{ total_mark_min }}</span>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">Lowest Mark <span class="list-group-flush"> <strong>{{ total_mark_min }}</strong>%</span>
                         </li>
-                        <li class="list-group-item d-flex justify-content-between align-items-center">higest mark <span class="list-group-flush"> {{ total_mark_max }}</span>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">Higest Mark <span class="list-group-flush"> <strong>{{ total_mark_max }}</strong>%</span>
                         </li>
-                        <li class="list-group-item d-flex justify-content-between align-items-center">average mark <span class="list-group-flush"> {{ total_mark_avg }} </span>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">Average Mark <span class="list-group-flush"> <strong>{{ total_mark_avg }}</strong>%</span>
                         </li>
                     </ul>
                 </div>
@@ -49,8 +49,8 @@
         <table id="data2" class="table">
             <thead>
                 <tr>
-                    <th>test id</th>
-                    <th>test date</th> 
+                    <th>Test</th>
+                    <th>Test Date</th> 
                     <th>Q1 Mark</th>
                     <th>Q2 Mark</th>
                     <th>Q3 Mark</th>
@@ -63,13 +63,13 @@
                 {% for res in entries %}
                     <tr>
                         <td><a href="#">{{ res.test_id }}</a> </td>
-                        <td>{{ res.date.strftime('%d-%b-%Y') }} </td>
-                        <td>{{ res.Q1_mark }}</td>
-                        <td>{{ res.Q2_mark }}</td>
-                        <td>{{ res.Q3_mark }}</td>
-                        <td>{{ res.Q4_mark }}</td>
-                        <td>{{ res.Q5_mark }}</td>                                                
-                        <td> {{ res.total_mark }} </td>
+                        <td>{{ res.date.strftime('%d %b %Y') }} </td>
+                        <td>{{ res.Q1_mark }}/5</td>
+                        <td>{{ res.Q2_mark }}/5</td>
+                        <td>{{ res.Q3_mark }}/5</td>
+                        <td>{{ res.Q4_mark }}/5</td>
+                        <td>{{ res.Q5_mark }}/5</td>                                                
+                        <td> <strong>{{ res.total_mark }}</strong>% </td>
                     </tr>
                 {% endfor %}
             </tbody>          
