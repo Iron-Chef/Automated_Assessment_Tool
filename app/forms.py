@@ -192,7 +192,7 @@ class FillInTheBlankQuestionForm(FlaskForm):
         ],
         coerce = str, 
         validators = [DataRequired (message = "Please select a subject.")])
-    marks = IntegerField(validators = [DataRequired (message = "Please enter a mark.")])
+    marks = IntegerField(validators = [DataRequired( message="Please enter mark" ), NumberRange(min = 1)]) 
     rating = SelectField("Difficulty Rating:", choices = DIFFICULTY_RATING, coerce=int)
     feedback = StringField ("Feedback: ")
     topic = StringField("Topic: ")
