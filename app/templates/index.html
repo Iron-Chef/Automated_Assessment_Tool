@@ -9,7 +9,7 @@
     <h1 class = student><bold>Your details</bold></h1>
     <h1 class = student><small>Username: {{ current_user.username }}</small></h1>
     <h1 class = student><small>University email: {{ current_user.email }}</small></h1>
-    <p class="card-text"><small>Last log in: {{ current_user.date.strftime('%d-%b-%Y') }}</small></p>
+    <p class="card-text"><small>Last log in: {{ current_user.date.strftime('%d %b %Y') }}</small></p>
 
     {% elif current_user.is_lecturer == 1 %}
     <hr>
