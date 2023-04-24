@@ -2,7 +2,7 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
 from app.config import Config
-import pymysql
+#import pymysql
 import os
 
 app = Flask(__name__)

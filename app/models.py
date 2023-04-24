@@ -154,7 +154,7 @@ class Results_sum(db.Model):
             
 class Result(db.Model):
     id=db.Column(db.Integer,primary_key=True)
-    attempt=db.Column(db.Integer,db.ForeignKey('formative_attempt.attempt_id'),nullable=False)
+    #attempt=db.Column(db.Integer,db.ForeignKey('formative_attempt.attempt_id'),nullable=False)
     marks=db.Column(db.Integer)
     
     
