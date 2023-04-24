@@ -555,17 +555,18 @@ def results_s():
     percentage_users_with_results = round((num_users_with_results / unique_user_ids) * 100, 2)
 
     #######################################################################
-    # box plot showing min, max and average Total Marks per cohort year
+    # box plot showing min, max and average Marks per test
     #######################################################################
     
-    results3 = db.session.query(Results_sum.cohort_year,func.min(Results_sum.total_mark).label('min'), func.max(Results_sum.total_mark).label('max'),
-    func.avg(Results_sum.total_mark).label('avg')).filter(Results_sum.form_summ == 1).group_by(Results_sum.cohort_year).all()
+    results3 = db.session.query(Results_sum.test_id,func.min(Results_sum.total_mark).label('min'), func.max(Results_sum.total_mark).label('max'),
+    func.avg(Results_sum.total_mark).label('avg')).filter(Results_sum.form_summ == 1).group_by(Results_sum.test_id).all()
     
-    fig3 = px.box(results3, x='cohort_year', y=['min', 'max', 'avg'], labels={'value': 'Total Mark', 'cohort_year': 'Cohort Year'},
-    title='Total Mark Distribution by Cohort Year')
+    fig3 = px.box(results3, x='test_id', y=['min', 'max', 'avg'], labels={'value': 'Total Mark', 'cohort_year': 'Cohort Year'},
+    title='Mark Distribution by Test')
     fig3.update_layout(xaxis=dict(tickangle=45, linecolor='grey'), yaxis=dict(linecolor='grey',gridcolor='lightgrey'), plot_bgcolor='rgba(0,0,0,0)', paper_bgcolor='rgba(0,0,0,0)', font=dict(color='black'))
-    fig3.update_yaxes(range=[0, 100])
+    fig3.update_yaxes(range=[0, 110])
     fig3.update_layout(yaxis_title='Total Mark (%)')
+    fig3.update_layout(xaxis_title='Test')
 
     #######################################################################
     # scatter plot showing min, max and average Total Marks per cohort year
@@ -622,7 +623,7 @@ def results_s():
         )
 
     fig4.update_layout(
-        title='Total Mark vs Cohort Year',
+        title='Mark Distribution by Cohort Year',
         xaxis_title='Cohort Year',
         yaxis_title='Total Mark', 
         plot_bgcolor='rgba(0,0,0,0)', paper_bgcolor='rgba(0,0,0,0)',
@@ -630,7 +631,7 @@ def results_s():
         yaxis=dict(linecolor='grey', gridcolor='lightgray')
     )
 
-    fig4.update_yaxes(range=[0, 100])
+    fig4.update_yaxes(range=[0, 110])
     fig4.update_layout(yaxis_title='Total Mark (%)')
 
     plot_div = opy.plot(fig4, auto_open=False, output_type='div')

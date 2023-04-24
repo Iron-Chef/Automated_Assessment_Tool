@@ -17,7 +17,7 @@
                             <div class="card-body">
                                 <h4 class="card-title">{{ individ_results.forename }} {{ individ_results.surname }} </h4>
                                 <br>
-                                <p class="card-text">Last og in: <strong>{{ user.date.strftime('%d %b %Y') }}</strong> </p>
+                                <p class="card-text">Last log in: <strong>{{ user.date.strftime('%d %b %Y') }}</strong> </p>
                                 <p class="card-text">User has logged in <strong>{{ user.number_of_log_ins }}</strong> times </p>
                             </div>
                         </div>
@@ -26,7 +26,7 @@
             </div>
             <div class="col">
                 <div class="card h-100" >
-                    <div class="card-header d-flex justify-content-between">Summary <input type="button" class="btn btn-secondary" value="Back" onclick="history.go(-1)"></div>
+                    <div class="card-header d-flex justify-content-between"><strong> Summary</strong> <input type="button" class="btn btn-secondary" value="Back" onclick="history.go(-1)"></div>
                     <ul class="list-group">
                         <li class="list-group-item d-flex justify-content-between align-items-center">Number Marked <span class="list-group-flush"> <strong>{{ total_mark_count }}</strong> </span>
                         </li>
@@ -78,22 +78,22 @@
         <br>
         <br>
 
-
+<!-- 
         <div class="row row-cols-1 row-cols-md-2 g-4">
             <div class="col">
                 <div class="card h-100">
-                    <div class="card-header d-flex justify-content-between">Summary <a href="#" class="btn btn-primary">view</a></div>
+                    <div class="card-header d-flex justify-content-between">Summary <a href="#" class="btn btn-primary">view</a></div> -->
                     <!-- plotting mark v date -->
-                    <div id="chart"></div>
+                    <!-- <div id="chart"></div>
                    
                 </div>
-            </div>
+            </div> -->
 
             <!-- empty - SPARE -->
-            <div class="col">
+            <!-- <div class="col">
                 <div class="card h-100" >
                 </div>
-            </div>
+            </div> -->
 
 
             
