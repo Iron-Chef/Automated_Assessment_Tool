@@ -64,11 +64,11 @@
                     <tr>
                         <td><a href="#">{{ res.test_id }}</a> </td>
                         <td>{{ res.date.strftime('%d %b %Y') }} </td>
-                        <td>{{ res.Q1_mark }}/5</td>
-                        <td>{{ res.Q2_mark }}/5</td>
-                        <td>{{ res.Q3_mark }}/5</td>
-                        <td>{{ res.Q4_mark }}/5</td>
-                        <td>{{ res.Q5_mark }}/5</td>                                                
+                        <td><strong>{{ res.Q1_mark }}</strong>/5</td>
+                        <td><strong>{{ res.Q2_mark }}</strong>/5</td>
+                        <td><strong>{{ res.Q3_mark }}</strong>/5</td>
+                        <td><strong>{{ res.Q4_mark }}</strong>/5</td>
+                        <td><strong>{{ res.Q5_mark }}</strong>/5</td>                                                
                         <td> <strong>{{ res.total_mark }}</strong>% </td>
                     </tr>
                 {% endfor %}
