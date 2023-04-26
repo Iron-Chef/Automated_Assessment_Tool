@@ -150,6 +150,7 @@ def edit_mc_question(mc_question_id):
         mcquestion.feedback=form.feedback.data
         mcquestion.rating = dict(DIFFICULTY_RATING).get(form.rating.data)
         mcquestion.rating_num= form.rating.data
+        mcquestion.topic_tag = form.topic.data
         db.session.add(mcquestion)
         if mcquestion.ans_choice_1 + mcquestion.ans_choice_2 + mcquestion.ans_choice_3 + mcquestion.ans_choice_4 == 1:
             db.session.commit()
@@ -169,7 +170,9 @@ def edit_mc_question(mc_question_id):
     form.ans_multi_select_4.data=mcquestion.ans_choice_4
     form.subject.data=mcquestion.subject_tag
     form.marks.data=mcquestion.marks
-    form.rating.data=mcquestion.rating
+    form.rating.data=mcquestion.rating_num
+    
+    form.topic.data=mcquestion.topic_tag 
     form.feedback.data=mcquestion.feedback
     return render_template('edit_mc_question.html', mcquestion=mcquestion,form=form)
 

@@ -40,6 +40,21 @@
   </ul>
 </div>
 
+ {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        
+
+        {% for message in messages %}
+        <div class="alert alert-success" role="alert">
+
+            <p><b>{{ message }}</b></p>
+        </div>
+        {% endfor %}
+
+        
+        {% endif %}
+        {% endwith %}
+
 <!--JAVA COLLAPSIBLE-->
 <button type="button" class="collapsible">Java</button>
 <div class="content" id = "collapsible_java">
