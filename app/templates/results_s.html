@@ -12,10 +12,10 @@
                         </div>
                         <div class="col-md-8">
                             <div class="card-body">
-                                <h5 class="card-title">Summative Assessment</h5>
+                                <h4 class="card-title"><strong>Summative Assessment</strong></h4>
                                 <br>
-                                <p class="card-text"> <strong> {{ num_users_with_results }}</strong> students out of a possible <strong> {{ unique_user_ids }} </strong> have completed tests </p>
-                                <p class="card-text"> Completion rate: <strong> {{ percentage_users_with_results }}%</strong>  </p>
+                                <p class="card-text"> <strong> {{ num_users_with_results }}</strong> students out of a <strong> {{ unique_user_ids }} </strong> have completed tests </p>
+                                <p class="card-text"> Student Engagement: <strong> {{ percentage_users_with_results }}%</strong>  </p>
                                 <!-- <p class="card-text"><small class="text-muted">space for small words</small></p> -->
                             </div>
                         </div>
@@ -74,15 +74,17 @@
         <div class="row row-cols-1 row-cols-md-2 g-4">
             <div class="col">
                 <div class="card h-100">
+                    {{ plot_div|safe }}
+                </div>
+            </div>
+            
+            <div class="col">
+                <div class="card h-100">
                     <div id="plot3"></div>
                 </div>
             </div>
 
-            <div class="col">
-                <div class="card h-100">
-                    {{ plot_div|safe }}
-                </div>
-            </div>
+            
         </div>
 
 
