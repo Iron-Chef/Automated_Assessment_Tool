@@ -260,7 +260,7 @@ def edit_fill_in_the_blank_question(fill_in_the_blank_question_id):
         db.session.add(fill_in_the_blank_question)
         db.session.commit()
 
-        flash("Question amended")
+        flash("Question edited")
         return redirect('/question_list')
 
     form.question.data = fill_in_the_blank_question.question

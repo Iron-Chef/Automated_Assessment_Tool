@@ -1,8 +1,19 @@
 {% extends "base.html" %}
 {% block content %}
 
-<h1>Previous Questions</h1>
+{% with messages = get_flashed_messages() %}
+  {% if messages %}
+    <ul>
+      {% for message in messages %}
+      <div class="alert alert-primary" role="alert">
+        {{ message }}
+      </div>
+      {% endfor %}
+    </ul>
+  {% endif %}
+{% endwith %}
 
+<h1>Previous Questions</h1>
 
 <div class="btn-group order_by_button">
   <button class="btn btn-secondary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">Order By</button>
