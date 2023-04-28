@@ -4,6 +4,7 @@ from wtforms.validators import DataRequired, Optional, NumberRange
 from wtforms_sqlalchemy.fields import QuerySelectField
 from wtforms.widgets import TextArea
 from app.models import Multiplechoice
+from sqlalchemy import or_
 
 
 class LoginForm(FlaskForm):
@@ -88,23 +89,32 @@ class TestChoice(FlaskForm):
 
 #this is needed for queryselectfield to work - RJ
 def Q_query():
-    return Multiplechoice.query
+    return Multiplechoice.query.filter(or_(Multiplechoice.question_type == 'Multiplechoice', Multiplechoice.question == '-'))
+
+#this is needed for queryselectfield to work - RJ
+def FTB_query():
+    return Multiplechoice.query.filter(or_(Multiplechoice.question_type == 'fill_in_the_blank', Multiplechoice.question == '-'))
 
 #form for create formative test page - RJ
 class QChoiceForm(FlaskForm):
     question_1 = QuerySelectField(query_factory=Q_query, allow_blank=False, get_label='question')
+    FTBquestion_1 = QuerySelectField(query_factory=FTB_query, allow_blank=False, get_label='question')
     WriteMCquestion_1 = FormField(QuestionFormFormField)
     WriteFTGquestion_1 = FormField(FillInTheBlankQuestionFormFormField)
     question_2 = QuerySelectField(query_factory=Q_query, allow_blank=False, get_label='question')
+    FTBquestion_2 = QuerySelectField(query_factory=FTB_query, allow_blank=False, get_label='question')
     WriteMCquestion_2 = FormField(QuestionFormFormField)
     WriteFTGquestion_2 = FormField(FillInTheBlankQuestionFormFormField)
     question_3 = QuerySelectField(query_factory=Q_query, allow_blank=False, get_label='question')
+    FTBquestion_3 = QuerySelectField(query_factory=FTB_query, allow_blank=False, get_label='question')
     WriteMCquestion_3 = FormField(QuestionFormFormField)
     WriteFTGquestion_3 = FormField(FillInTheBlankQuestionFormFormField)
     question_4 = QuerySelectField(query_factory=Q_query, allow_blank=False, get_label='question')
+    FTBquestion_4 = QuerySelectField(query_factory=FTB_query, allow_blank=False, get_label='question')
     WriteMCquestion_4 = FormField(QuestionFormFormField)
     WriteFTGquestion_4 = FormField(FillInTheBlankQuestionFormFormField)
     question_5 = QuerySelectField(query_factory=Q_query, allow_blank=False, get_label='question')
+    FTBquestion_5 = QuerySelectField(query_factory=FTB_query, allow_blank=False, get_label='question')
     WriteMCquestion_5 = FormField(QuestionFormFormField)
     WriteFTGquestion_5 = FormField(FillInTheBlankQuestionFormFormField)
     Test_feedback=StringField("Test Feedback:")

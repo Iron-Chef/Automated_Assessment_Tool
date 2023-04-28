@@ -8,7 +8,10 @@ def add_question_1():
         test = Formativetest.query.order_by(Formativetest.id.desc()).first()
         if QCform.question_1.data.question != '-':
             question_1 = QCform.question_1.data
-            test.linkedquestions.append(question_1)            
+            test.linkedquestions.append(question_1)
+        if QCform.FTBquestion_1.data.question != '-':
+            question_1 = QCform.FTBquestion_1.data
+            test.linkedquestions.append(question_1)           
         if QCform.WriteMCquestion_1.question.data !='':
             Q1multi= Multiplechoice(
             user_id=current_user.id,
@@ -53,6 +56,9 @@ def add_question_2():
         test = Formativetest.query.order_by(Formativetest.id.desc()).first()
         if QCform.question_2.data.question != '-':
             question_2 = QCform.question_2.data
+            test.linkedquestions.append(question_2)
+        if QCform.FTBquestion_2.data.question != '-':
+            question_2 = QCform.FTBquestion_2.data
             test.linkedquestions.append(question_2)
         if QCform.WriteMCquestion_2.question.data !='':
             Q2multi= Multiplechoice(
@@ -99,6 +105,9 @@ def add_question_3():
         if QCform.question_3.data.question != '-':
             question_3 = QCform.question_3.data
             test.linkedquestions.append(question_3)
+        if QCform.FTBquestion_3.data.question != '-':
+            question_3 = QCform.FTBquestion_3.data
+            test.linkedquestions.append(question_3)
         if QCform.WriteMCquestion_3.question.data !='':
             Q3multi= Multiplechoice(
             user_id=current_user.id,
@@ -144,6 +153,9 @@ def add_question_4():
         if QCform.question_4.data.question != '-':
             question_4 = QCform.question_4.data
             test.linkedquestions.append(question_4)
+        if QCform.FTBquestion_4.data.question != '-':
+            question_4 = QCform.FTBquestion_4.data
+            test.linkedquestions.append(question_4)
         if QCform.WriteMCquestion_4.question.data !='':
             Q4multi= Multiplechoice(
             user_id=current_user.id,
@@ -188,6 +200,9 @@ def add_question_5():
         test = Formativetest.query.order_by(Formativetest.id.desc()).first()    
         if QCform.question_5.data.question != '-':
             question_5 = QCform.question_5.data
+            test.linkedquestions.append(question_5)
+        if QCform.FTBquestion_5.data.question != '-':
+            question_5 = QCform.FTBquestion_5.data
             test.linkedquestions.append(question_5)
         if QCform.WriteMCquestion_5.question.data !='':
             Q5multi= Multiplechoice(

@@ -2,68 +2,346 @@
 
 {% block content %}
     <h1>Edit {{ test.testtitle }}</h1>
-    <form action="/create_form_test" method="POST">
+    <hr>
+    <form action="" method="POST">
         {{ QCform.csrf_token }}
-        <h2>Question 1 - {{ question_1.question }}</h2>
-        <div><h3>Select exsting question</h3>{{ QCform.question_1 }}</div>
-        <br>
-        <div><h3>Or write new multiple choice question</h3>{{ QCform.WriteMCquestion_1}}</div>
-        <br>
-        <div><h3>Or write new written answer question</h3>{{ QCform.WriteFTGquestion_1 }}</div>
-        <ul>
-            {% for error in QCform.errors %}
-            <li style="color:red;">{{ error }}</li>
-            {% endfor %}
-        </ul>       
-        <h2>Question 2 - {{ question_2.question }}</h2>
-        <div><h3>Select exsting question</h3>{{ QCform.question_2 }}</div>
-        <br>
-        <div><h3>Or write new multiple choice question</h3>{{ QCform.WriteMCquestion_2}}</div>
-        <br>
-        <div><h3>Or write new written answer question</h3>{{ QCform.WriteFTGquestion_2 }}</div>
-        <ul>
-            {% for error in QCform.errors %}
-            <li style="color:red;">{{ error }}</li>
-            {% endfor %}
-        </ul>
-        <h2>Question 3 - {{ question_3.question }}</h2>
-        <div><h3>Select exsting question</h3>{{ QCform.question_3 }}</div>
-        <br>
-        <div><h3>Or write new multiple choice question</h3>{{ QCform.WriteMCquestion_3}}</div>
-        <br>
-        <div><h3>Or write new written answer question</h3>{{ QCform.WriteFTGquestion_3 }}</div>
-        <ul>
-            {% for error in QCform.errors %}
-            <li style="color:red;">{{ error }}</li>
-            {% endfor %}
-        </ul>
-        <h2>Question 4 - {{ question_4.question }}</h2>
-        <div><h3>Select exsting question</h3>{{ QCform.question_4 }}</div>
-        <br>
-        <div><h3>Or write new multiple choice question</h3>{{ QCform.WriteMCquestion_4 }}</div>
-        <br>
-        <div><h3>Or write new written answer question</h3>{{ QCform.WriteFTGquestion_4 }}</div> 
-        <ul>
-            {% for error in QCform.errors %}
-            <li style="color:red;">{{ error }}</li>
-            {% endfor %}
-        </ul>
-        <h2>Question 5 - {{ question_5.question }}</h2>
-        <div><h3>Select exsting question</h3>{{ QCform.question_5 }}</div>
-        <br>
-        <div><h3>Or write new multiple choice question</h3>{{ QCform.WriteMCquestion_5 }}</div>
-        <br>
-        <div><h3>Or write new written answer question</h3>{{ QCform.WriteFTGquestion_5 }}</div>
-        <ul>
-            {% for error in QCform.errors %}
-            <li style="color:red;">{{ error }}</li>
-            {% endfor %}
-        </ul>
-        <input type="submit">
-    </form>
-    <form  action="{{ url_for('random_formtest')}}" method="POST">
-        <input type="submit" value="Generate Random test" >
-    </form>
+        <h2>Question 1: {{ question_1.question }}</h2>
+        <button onclick="exq1()" class="btn btn-info" type="button">Select existing Multiplechoice question</button>
+        <button onclick="exFTBq1()" class="btn btn-info" type="button">Select existing Fill in the blank question</button>
+        <button onclick="mcq1()" class="btn btn-info" type="button">New multiple choice question</button>
+        <button onclick="ftgq1()" class="btn btn-info" type="button">New fill in the blank question </button>
+        <div id = "exq1" ><h3>Existing Multiplechoice question</h3>{{ QCform.question_1 (class="form-control") }}</div>
+        <div id = "exFTBq1" ><h3>Select existing Fill in the blank question</h3>{{ QCform.FTBquestion_1 (class="form-control") }}</div>
+        <div id = "mcq1"><h3>Write new multiple choice question</h3>{{ QCform.WriteMCquestion_1}}</div>
+        <div id = "ftgq1"><h3>Write new Fill in the blank question</h3>{{ QCform.WriteFTGquestion_1 }}</div>
+        
+        <h2>Question 2: {{ question_2.question }}</h2>
+        <button onclick="exq2()" class="btn btn-info" type="button">Select existing Multiplechoice question</button>
+        <button onclick="exFTBq2()" class="btn btn-info" type="button">Select existing Fill in the blank question</button>
+        <button onclick="mcq2()" class="btn btn-info" type="button">New multiple choice question</button>
+        <button onclick="ftgq2()" class="btn btn-info" type="button">New fill in the blank question</button>    
+        <div id="exq2"><h3>Existing Multiplechoice question</h3>{{ QCform.question_2(class="form-control") }}</div>
+        <div id = "exFTBq2" ><h3>Select existing Fill in the blank question</h3>{{ QCform.FTBquestion_2 (class="form-control") }}</div>
+        <div id="mcq2"><h3>Write new multiple choice question</h3>{{ QCform.WriteMCquestion_2}}</div>
+        <div id="ftgq2"><h3>Write new Fill in the blank question</h3>{{ QCform.WriteFTGquestion_2 }}</div>
 
+        <h2>Question 3: {{ question_3.question }}</h2>
+        <button onclick="exq3()" class="btn btn-info" type="button">Select existing Multiplechoice question</button>
+        <button onclick="exFTBq3()" class="btn btn-info" type="button">Select existing Fill in the blank question</button>
+        <button onclick="mcq3()" class="btn btn-info" type="button">New multiple choice question</button>
+        <button onclick="ftgq3()" class="btn btn-info" type="button">New fill in the blank question </button>
+        <div id="exq3"><h3>Existing Multiplechoice question</h3>{{ QCform.question_3 (class="form-control") }}</div>
+        <div id = "exFTBq3" ><h3>Select existing Fill in the blank question</h3>{{ QCform.FTBquestion_3 (class="form-control") }}</div>
+        <div id="mcq3"><h3>Write new multiple choice question</h3>{{ QCform.WriteMCquestion_3}}</div>
+        <div id="ftgq3"><h3>Write new Fill in the blank question</h3>{{ QCform.WriteFTGquestion_3 }}</div>
+    
+        <h2>Question 4: {{ question_4.question }}</h2>
+        <button onclick="exq4()" class="btn btn-info" type="button">Select existing Multiplechoice question</button>
+        <button onclick="exFTBq4()" class="btn btn-info" type="button">Select existing Fill in the blank question</button>
+        <button onclick="mcq4()" class="btn btn-info" type="button">New multiple choice question</button>
+        <button onclick="ftgq4()" class="btn btn-info" type="button">New fill in the blank question</button>
+        <div id="exq4"><h3>Existing Multiplechoice question</h3>{{ QCform.question_4 (class="form-control") }}</div>
+        <div id = "exFTBq4" ><h3>Select existing Fill in the blank question</h3>{{ QCform.FTBquestion_4 (class="form-control") }}</div>
+        <div id="mcq4"><h3>Write new multiple choice question</h3>{{ QCform.WriteMCquestion_4 }}</div>
+        <div id="ftgq4"><h3>Write new Fill in the blank question</h3>{{ QCform.WriteFTGquestion_4 }}</div> 
+   
+        <h2 >Question 5: {{ question_5.question }}</h2>
+        <button onclick="exq5()" class="btn btn-info" type="button">Select existing Multiplechoice question</button>
+        <button onclick="exFTBq5()" class="btn btn-info" type="button">Select existing Fill in the blank question</button>
+        <button onclick="mcq5()" class="btn btn-info"type="button">New multiple choice question</button>
+        <button onclick="ftgq()" class="btn btn-info"type="button">New fill in the blank question</button>
+        <div id="exq5"><h3>Existing Multiplechoice question</h3>{{ QCform.question_5(class="form-control") }}</div>
+        <div id = "exFTBq5" ><h3>Select existing Fill in the blank question</h3>{{ QCform.FTBquestion_5 (class="form-control") }}</div>
+        <div id="mcq5"><h3>Write new multiple choice question</h3>{{ QCform.WriteMCquestion_5 }}</div>
+        <div id="ftgq5"><h3>Write new Fill in the blank question</h3>{{ QCform.WriteFTGquestion_5 }}</div>
+        
+        <input type="submit" value="Save Changes" class="btn btn-info ">
+    </form>
+    <br>
+ 
+
+<script>
+    function exq1() {
+  var x = document.getElementById("exq1");
+  var y = document.getElementById("exFTBq1");
+  var a = document.getElementById("mcq1");
+  var b = document.getElementById("ftgq1");
+  if (x.style.display === "none") {
+    x.style.display = "block";
+    a.style.display = "none";
+    b.style.display = "none";
+    y.style.display = "none";
+  } else {
+    x.style.display = "none";
+  }
+}
+function exFTBq1() {
+  var x = document.getElementById("exq1");
+  var y = document.getElementById("exFTBq1");
+  var a = document.getElementById("mcq1");
+  var b = document.getElementById("ftgq1");
+  if (y.style.display === "none") {
+    y.style.display = "block";
+    a.style.display = "none";
+    b.style.display = "none";
+    x.style.display = "none";
+  } else {
+    y.style.display = "none";
+  }
+}
+
+function mcq1() {
+  var a = document.getElementById("mcq1");
+  var x = document.getElementById("exq1");
+  var b = document.getElementById("ftgq1");
+  var y = document.getElementById("exFTBq1");
+  if (a.style.display === "none") {
+    a.style.display = "block";
+    x.style.display = "none";
+    b.style.display = "none";
+    y.style.display = "none";
+  } else {
+    a.style.display = "none";
+  }
+}
+function ftgq1() {
+  var b = document.getElementById("ftgq1");
+  var x = document.getElementById("exq1");
+  var a = document.getElementById("mcq1");
+  var y = document.getElementById("exFTBq1");
+  if (b.style.display === "none") {
+    b.style.display = "block";
+    x.style.display = "none";
+    a.style.display = "none";
+    y.style.display = "none";
+  } else {
+    b.style.display = "none";
+  }
+}
+function exq2() {
+  var x = document.getElementById("exq2");
+  var a = document.getElementById("mcq2");
+  var b = document.getElementById("ftgq2");
+  var y = document.getElementById("exFTBq2");
+  if (x.style.display === "none") {
+    x.style.display = "block";
+    a.style.display = "none";
+    b.style.display = "none";
+    y.style.display = "none";
+  } else {
+    x.style.display = "none";
+  }
+}
+function exFTBq2() {
+  var x = document.getElementById("exq2");
+  var a = document.getElementById("mcq2");
+  var b = document.getElementById("ftgq2");
+  var y = document.getElementById("exFTBq2");
+  if (y.style.display === "none") {
+    y.style.display = "block";
+    a.style.display = "none";
+    b.style.display = "none";
+    x.style.display = "none";
+  } else {
+    y.style.display = "none";
+  }
+}
+function mcq2() {
+  var a = document.getElementById("mcq2");
+  var x = document.getElementById("exq2");
+  var b = document.getElementById("ftgq2");
+  var y = document.getElementById("exFTBq2");
+  if (a.style.display === "none") {
+    a.style.display = "block";
+    x.style.display = "none";
+    b.style.display = "none";
+    y.style.display = "none";
+  } else {
+    a.style.display = "none";
+  }
+}
+function ftgq2() {
+  var b = document.getElementById("ftgq2");
+  var x = document.getElementById("exq2");
+  var a = document.getElementById("mcq2");
+  var y = document.getElementById("exFTBq2");
+  if (b.style.display === "none") {
+    b.style.display = "block";
+    x.style.display = "none";
+    a.style.display = "none";
+    y.style.display = "none";
+  } else {
+    b.style.display = "none";
+  }
+}
+function exq3() {
+  var x = document.getElementById("exq3");
+  var a = document.getElementById("mcq3");
+  var b = document.getElementById("ftgq3");
+  var y = document.getElementById("exFTBq3");
+  if (x.style.display === "none") {
+    x.style.display = "block";
+    a.style.display = "none";
+    b.style.display = "none";
+    y.style.display = "none";
+  } else {
+    x.style.display = "none";
+  }
+}
+function exFTBq3() {
+  var x = document.getElementById("exq3");
+  var a = document.getElementById("mcq3");
+  var b = document.getElementById("ftgq3");
+  var y = document.getElementById("exFTBq3");
+  if (y.style.display === "none") {
+    y.style.display = "block";
+    a.style.display = "none";
+    b.style.display = "none";
+    x.style.display = "none";
+  } else {
+    y.style.display = "none";
+  }
+}
+function mcq3() {
+  var a = document.getElementById("mcq3");
+  var x = document.getElementById("exq3");
+  var b = document.getElementById("ftgq3");
+  var y = document.getElementById("exFTBq3");
+  if (a.style.display === "none") {
+    a.style.display = "block";
+    x.style.display = "none";
+    b.style.display = "none";
+    y.style.display = "none";
+  } else {
+    a.style.display = "none";
+  }
+}
+function ftgq3() {
+  var b = document.getElementById("ftgq3");
+  var x = document.getElementById("exq3");
+  var a = document.getElementById("mcq3");
+  var y = document.getElementById("exFTBq3");
+  if (b.style.display === "none") {
+    b.style.display = "block";
+    x.style.display = "none";
+    a.style.display = "none";
+    y.style.display = "none";
+  } else {
+    b.style.display = "none";
+  }
+}
+function exq4() {
+  var x = document.getElementById("exq4");
+  var a = document.getElementById("mcq4");
+  var b = document.getElementById("ftgq4");
+  var y = document.getElementById("exFTBgq4");
+  if (x.style.display === "none") {
+    x.style.display = "block";
+    a.style.display = "none";
+    b.style.display = "none";
+    y.style.display = "none";
+  } else {
+    x.style.display = "none";
+  }
+}
+function exFTBq4() {
+  var x = document.getElementById("exq4");
+  var a = document.getElementById("mcq4");
+  var b = document.getElementById("ftgq4");
+  var y = document.getElementById("exFTBgq4");
+  if (y.style.display === "none") {
+    y.style.display = "block";
+    a.style.display = "none";
+    b.style.display = "none";
+    x.style.display = "none";
+  } else {
+    y.style.display = "none";
+  }
+}
+function mcq4() {
+  var a = document.getElementById("mcq4");
+  var x = document.getElementById("exq4");
+  var b = document.getElementById("ftgq4");
+  var y = document.getElementById("exFTBgq4");
+  if (a.style.display === "none") {
+    a.style.display = "block";
+    x.style.display = "none";
+    b.style.display = "none";
+    y.style.display = "none";
+  } else {
+    a.style.display = "none";
+  }
+}
+function ftgq4() {
+  var b = document.getElementById("ftgq4");
+  var x = document.getElementById("exq4");
+  var a = document.getElementById("mcq4");
+  var y = document.getElementById("exFTBgq4");
+  if (b.style.display === "none") {
+    b.style.display = "block";
+    x.style.display = "none";
+    a.style.display = "none";
+    y.style.display = "none";
+  } else {
+    b.style.display = "none";
+  }
+}
+function exq5() {
+  var x = document.getElementById("exq5");
+  var a = document.getElementById("mcq5");
+  var b = document.getElementById("ftgq5");
+  var x = document.getElementById("exFTBq5");
+  if (x.style.display === "none") {
+    x.style.display = "block";
+    a.style.display = "none";
+    b.style.display = "none";
+    y.style.display = "none";
+  } else {
+    x.style.display = "none";
+  }
+}
+function exFTBq5() {
+  var x = document.getElementById("exq5");
+  var a = document.getElementById("mcq5");
+  var b = document.getElementById("ftgq5");
+  var y = document.getElementById("exFTBq5");
+  if (y.style.display === "none") {
+    y.style.display = "block";
+    a.style.display = "none";
+    b.style.display = "none";
+    x.style.display = "none";
+  } else {
+    y.style.display = "none";
+  }
+}
+function mcq5() {
+  var a = document.getElementById("mcq5");
+  var x = document.getElementById("exq5");
+  var b = document.getElementById("ftgq5");
+  var x = document.getElementById("exFTBq5");
+  if (a.style.display === "none") {
+    a.style.display = "block";
+    x.style.display = "none";
+    b.style.display = "none";
+    y.style.display = "none";
+  } else {
+    a.style.display = "none";
+  }
+}
+function ftgq5() {
+  var b = document.getElementById("ftgq5");
+  var x = document.getElementById("exq5");
+  var a = document.getElementById("mcq5");
+  var x = document.getElementById("exFTBq5");
+  if (b.style.display === "none") {
+    b.style.display = "block";
+    x.style.display = "none";
+    a.style.display = "none";
+    y.style.display = "none";
+  } else {
+    b.style.display = "none";
+  }
+}
+</script>
     
 {% endblock %}
