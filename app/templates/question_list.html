@@ -1,8 +1,19 @@
 {% extends "base.html" %}
 {% block content %}
 
-<h1>Previous Questions</h1>
+{% with messages = get_flashed_messages() %}
+  {% if messages %}
+    <ul>
+      {% for message in messages %}
+      <div class="alert alert-primary" role="alert">
+        {{ message }}
+      </div>
+      {% endfor %}
+    </ul>
+  {% endif %}
+{% endwith %}
 
+<h1>Previous Questions</h1>
 
 <div class="btn-group order_by_button">
   <button class="btn btn-secondary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">Order By</button>
@@ -40,6 +51,21 @@
   </ul>
 </div>
 
+ {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        
+
+        {% for message in messages %}
+        <div class="alert alert-success" role="alert">
+
+            <p><b>{{ message }}</b></p>
+        </div>
+        {% endfor %}
+
+        
+        {% endif %}
+        {% endwith %}
+
 <!--JAVA COLLAPSIBLE-->
 <button type="button" class="collapsible">Java</button>
 <div class="content" id = "collapsible_java">
@@ -76,85 +102,11 @@
 
   {% else %}
 
-  <style type="text/css">
-    .tg  {border-collapse:collapse;border-spacing:0;}
-    .tg td{border-color:black;border-style:solid;border-width:1px;font-family:Arial, sans-serif;font-size:14px;
-      overflow:hidden;padding:10px 5px;word-break:normal;}
-    .tg th{border-color:black;border-style:solid;border-width:1px;font-family:Arial, sans-serif;font-size:14px;
-      font-weight:normal;overflow:hidden;padding:10px 5px;word-break:normal;}
-    .tg .tg-0pky{border-color:inherit;text-align:left;vertical-align:top}
-  </style>
+  {% with mcquestion = question %}
+  {% include "mc_question.html" %}
+  {% endwith %}
 
-  <div class="tg-wrap"><table class="tg">
-    <tbody>
-      <tr>
-        <td class="tg-0pky" colspan="2"><h2 class="question_title">Question {{loop.index}}. </h2></td>
-        <td class="tg-0pky" colspan="4"><h2 class="question_title">{{question.question }}</h2></td>
-      </tr>
-      <tr>
-        <td class="tg-0pky" colspan="2">Option A.</td>
-        <td class="tg-0pky" colspan="2">{{ question.answer_1}}</td>
-        <td class="tg-0pky" colspan="2">
-            {% if question.ans_choice_1==1 %}
-            <p id="correct"><b>Correct Answer</b></p>
-            {% else %} 
-            <p id="incorrect">Incorrect Answer</p>
-            {% endif %}</td>
-      </tr>
-      <tr>
-        <td class="tg-0pky" colspan="2">Option B.</td>
-        <td class="tg-0pky" colspan="2">{{ question.answer_2}}</td>
-        <td class="tg-0pky" colspan="2">
-            {% if question.ans_choice_2==1 %}
-            <p id="correct"><b>Correct Answer</b></p>
-            {% else %} 
-            <p id="incorrect">Incorrect Answer</p>
-            {% endif %}</td>
-      </tr>
-      {% if question.answer_3 %}
-      <tr>
-        <td class="tg-0pky" colspan="2">Option C.</td>
-        <td class="tg-0pky" colspan="2">{{ question.answer_3}}</td>
-        <td class="tg-0pky" colspan="2">
-            {% if question.ans_choice_3==1 %}
-            <p id="correct"><b>Correct Answer</b></p>
-            {% else %} 
-            <p id="incorrect">Incorrect Answer</p>
-            {% endif %}</td>
-      </tr>
-      {% endif %}
-      {% if question.answer_4 %}
-      <tr>
-        <td class="tg-0pky" colspan="2">Option D.</td>
-        <td class="tg-0pky" colspan="2">{{ question.answer_4}}</td>
-        <td class="tg-0pky" colspan="2">
-            {% if question.ans_choice_4==1 %}
-            <p id="correct"><b>Correct Answer</b></p>
-            {% else %} 
-            <p id="incorrect">Incorrect Answer</p>
-            {% endif %}</td>
-      </tr>
-      {% endif %}
-      {% if question.feedback%}
-      <tr>
-        <td class="tg-0pky" colspan="2">Feedback: </td>
-        <td class="tg-0pky" colspan="4">{{ question.feedback}}</td>
-      </tr>
-      {% endif %}
-      
-      <tr>
-        <td class="tg-0pky" colspan="2">Tags:</td>
-        <td class="tg-0pky" colspan="4">Need to add this feature!</td>
-      </tr>
-      <tr>
-        <td class="tg-0pky" colspan="2">Available Marks:</td>
-        <td class="tg-0pky">{{ question.marks}}</td>
-        <td class="tg-0pky" colspan="2">Difficulty Rating:</td>
-        <td class="tg-0pky">{{ question.rating }}</td>
-      </tr>
-    </tbody>
-    </table>
-  </div>
+
 
   {% endif %}
   {% endif %} <!--This is for subject_tag-->

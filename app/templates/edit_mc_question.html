@@ -4,76 +4,126 @@
 
 
 </div>
-<h1>Hi {{ current_user.forename }}, this is question No. {{mcquestion.id}}</h1>
+<h1>Edit Multiple Choice Question</h1>
+<h3>Hi {{ current_user.forename }}, you are editing question No. {{mcquestion.id}}</h3>
     
 <form action="", method="post" novalidate>
     {{ form.hidden_tag() }}
 
-    <p> Question: 
+    <hr>
+    <h5> <b>Question:</b> </h5>
+    <p>
         {{ form.question(class="form-control form-control-lg")}}
         {% for error in form.question.errors %} 
-       <span style="color: red;">[{{ error }}]</span>
+        <div class="alert alert-danger" role="alert"><b>{{ error }}</b></div>
        {% endfor %}
     </p>
     
+
+    <br>
+    <h5><b>Answers:</b></h5>
+    
     <p>
-        {{ form.ans_multi_select_1.label }}
+        {{ form.ans_multi_select_1.label }}:
         {{ form.answer1  }}
         {{ form.ans_multi_select_1 }}
         {% for error in form.answer1.errors %} 
-        <span style="color: red;">[{{ error }}]</span>
+        <div class="alert alert-danger" role="alert"><b>{{ error }}</b></div>
         {% endfor %}
     </p>
+    
     <p>
-        {{ form.ans_multi_select_2.label }}
+        {{ form.ans_multi_select_2.label }}:
         {{ form.answer2 }}
         {{ form.ans_multi_select_2}} 
         {% for error in form.answer2.errors %} 
-        <span style="color: red;">[{{ error }}]</span>
+        <div class="alert alert-danger" role="alert"><b>{{ error }}</b></div>
         {% endfor %}
     </p>
+
     <p>
-        {{ form.ans_multi_select_3.label }}
+        {{ form.ans_multi_select_3.label }}:
         {{ form.answer3 }}
         {{ form.ans_multi_select_3}}
     </p>
+
     <p>
-        {{ form.ans_multi_select_4.label }}
+        {{ form.ans_multi_select_4.label }}:
         {{ form.answer4 }}
         {{ form.ans_multi_select_4}}
     </p>
+{% with messages = get_flashed_messages() %}
+{% if messages %}
+
+
+{% for message in messages %}
+<div class="alert alert-danger" role="alert">
+
+    <p><b>{{ message }}</b></p>
+</div>
+{% endfor %}
+
+
+{% endif %}
+{% endwith %} 
+<br>
+    <h5>
+        <b>Subject:</b>
+    </h5>
+    <p>
+        
+        
+        {% for choice in form.subject %}
+            {{ choice }}
+            {{ choice.label }}
+          
+        <br>
+        {% endfor %}
+        {% for error in form.subject.errors %} 
+        <div class="alert alert-danger" role="alert"><b>{{ error }}</b></div>
+        {% endfor %}
+    </p>
  
     <p> 
-        {{ form.marks.label }}
-        {{ form.marks }}
+        <h5><b>{{ form.marks.label }}:</b></h5>
+        {{ form.marks(class="form-control") }}
         {% for error in form.marks.errors %} 
-       <span style="color: red;">[{{ error }}]</span>
+        <div class="alert alert-danger" role="alert"><b>{{ error }}</b></div>
        {% endfor %}
     </p>
-    <p>
-      Rating:  {{ form.rating }}
-    </p>
-    <p>
-       Topic:  {{ form.topic }}
-    </p>
-    <p>
-        Subject:  {{ form.subject }}
-     </p>
+   
     <p> 
-        {{ form.feedback.label }}
-        {{ form.feedback(size=100) }}
+        
+        <h5><b>{{ form.feedback.label }}</b></h5>
+        {{ form.feedback(class="form-control form-control-lg")}}
+            
+          
+        {% for error in form.feedback.errors %} 
+        <div class="alert alert-danger" role="alert"><b>{{ error }}</b></div>
+       {% endfor %}
+    </p>
+    
+   
+    <p> 
+        <h5><b>{{ form.rating.label }}</b></h5></p>
+        {{ form.rating (class="btn btn-secondary dropdown-toggle") }}
+    </p>
+
+    <p>
+        <h5><b>{{ form.topic.label }}</b></h5>
+        {{ form.topic(class="form-control form-control-lg") }}
         
     </p>
+
 </div>
     <p>
         
         {{ form.submit(class="btn btn-info ")}}
     </p>
-    <!--Clear button-->
-    <input type="reset", class="btn btn-info ">
+    
 </form>
 
-    
+
 
 
 {% endblock %}

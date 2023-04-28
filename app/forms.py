@@ -32,10 +32,10 @@ class QuestionForm(FlaskForm):
         ("SQL", "SQL"),
         ("Other", "Other"),
         ],
-        coerce = str, validators = [DataRequired()])
-    topic = StringField(validators = [DataRequired (message = "Please enter the topic of the question: ")])
+        coerce = str, validators = [DataRequired(message="Please add subject")])
+    topic = StringField("Topic:")
     marks=IntegerField(validators=[DataRequired(message="Please enter mark"),NumberRange(min=1)]) 
-    feedback=StringField("Feedback:")
+    feedback=StringField("Feedback:", validators=[DataRequired(message="Please add feedback")])
     submit = SubmitField("Add Question")
 
 #allows mc questions to be written when creating formative test - RJ

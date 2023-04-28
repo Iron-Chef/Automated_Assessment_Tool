@@ -1,9 +1,7 @@
 
 {% block content %}
-<div class="post_date_form">
+<p><em>Multiple Choice</em></p>
 
-
-</div>
 <h5 class="question_title"> {{ mcquestion.question }}</h5>
 {% if mcquestion.marks == 1 %}
 
@@ -29,18 +27,22 @@
 </div>
 
 <div>
-    {% if question.ans_choice_3==1 %}
+    {% if question.answer_3 %}
+        {% if question.ans_choice_3==1 %}
         <p class = "correct"><b>Correct Answer</b></p> (c) {{ question.answer_3}} 
-    {% else %} 
+        {% else %} 
         <p class = "incorrect"><b>Incorrect Answer</b></p> (c) {{ question.answer_3}} 
+        {% endif %}
     {% endif %}
 </div>
 
 <div>
-    {% if question.ans_choice_4==1 %}
+    {% if question.answer_4 %}
+        {% if question.ans_choice_4==1 %}
         <p class = "correct"><b>Correct Answer</b></p> (d) {{ question.answer_4}} 
-    {% else %} 
+        {% else %} 
         <p class = "incorrect"><b>Incorrect Answer</b></p> (d) {{ question.answer_4}} 
+        {% endif %}
     {% endif %}
 </div>
 
@@ -48,6 +50,17 @@
     {% if question.feedback%}
         <p class = "feedback">Feedback:</p> {{ question.feedback}}
     {% endif %}
+
+<br>
+
+<br>
+    {% if question.rating%}
+        <p class = "feedback">Difficulty Rating: {{ question.rating }}</p>
+    {% endif %}
+<br>
+<br>
+<p class = "topic">Tags: </p> {{ question.topic_tag }}
+<br>
 <br>
 <br>
 

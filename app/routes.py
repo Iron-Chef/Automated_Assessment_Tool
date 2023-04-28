@@ -146,9 +146,11 @@ def edit_mc_question(mc_question_id):
         mcquestion.answer_4=form.answer4.data 
         mcquestion.ans_choice_4=form.ans_multi_select_4.data
         mcquestion.marks=form.marks.data
+        mcquestion.subject_tag = form.subject.data
         mcquestion.feedback=form.feedback.data
         mcquestion.rating = dict(DIFFICULTY_RATING).get(form.rating.data)
         mcquestion.rating_num= form.rating.data
+        mcquestion.topic_tag = form.topic.data
         db.session.add(mcquestion)
         if mcquestion.ans_choice_1 + mcquestion.ans_choice_2 + mcquestion.ans_choice_3 + mcquestion.ans_choice_4 == 1:
             db.session.commit()
@@ -166,8 +168,11 @@ def edit_mc_question(mc_question_id):
     form.ans_multi_select_3.data=mcquestion.ans_choice_3
     form.answer4.data=mcquestion.answer_4
     form.ans_multi_select_4.data=mcquestion.ans_choice_4
+    form.subject.data=mcquestion.subject_tag
     form.marks.data=mcquestion.marks
-    form.rating.data=mcquestion.rating
+    form.rating.data=mcquestion.rating_num
+    
+    form.topic.data=mcquestion.topic_tag 
     form.feedback.data=mcquestion.feedback
     return render_template('edit_mc_question.html', mcquestion=mcquestion,form=form)
 
@@ -260,7 +265,7 @@ def edit_fill_in_the_blank_question(fill_in_the_blank_question_id):
         db.session.add(fill_in_the_blank_question)
         db.session.commit()
 
-        flash("Question amended")
+        flash("Question edited")
         return redirect('/question_list')
 
     form.question.data = fill_in_the_blank_question.question
@@ -555,17 +560,18 @@ def results_s():
     percentage_users_with_results = round((num_users_with_results / unique_user_ids) * 100, 2)
 
     #######################################################################
-    # box plot showing min, max and average Total Marks per cohort year
+    # box plot showing min, max and average Marks per test
     #######################################################################
     
-    results3 = db.session.query(Results_sum.cohort_year,func.min(Results_sum.total_mark).label('min'), func.max(Results_sum.total_mark).label('max'),
-    func.avg(Results_sum.total_mark).label('avg')).filter(Results_sum.form_summ == 1).group_by(Results_sum.cohort_year).all()
+    results3 = db.session.query(Results_sum.test_id,func.min(Results_sum.total_mark).label('min'), func.max(Results_sum.total_mark).label('max'),
+    func.avg(Results_sum.total_mark).label('avg')).filter(Results_sum.form_summ == 1).group_by(Results_sum.test_id).all()
     
-    fig3 = px.box(results3, x='cohort_year', y=['min', 'max', 'avg'], labels={'value': 'Total Mark', 'cohort_year': 'Cohort Year'},
-    title='Total Mark Distribution by Cohort Year')
+    fig3 = px.box(results3, x='test_id', y=['min', 'max', 'avg'], labels={'value': 'Total Mark', 'cohort_year': 'Cohort Year'},
+    title='Mark Distribution by Test')
     fig3.update_layout(xaxis=dict(tickangle=45, linecolor='grey'), yaxis=dict(linecolor='grey',gridcolor='lightgrey'), plot_bgcolor='rgba(0,0,0,0)', paper_bgcolor='rgba(0,0,0,0)', font=dict(color='black'))
-    fig3.update_yaxes(range=[0, 100])
+    fig3.update_yaxes(range=[0, 110])
     fig3.update_layout(yaxis_title='Total Mark (%)')
+    fig3.update_layout(xaxis_title='Test')
 
     #######################################################################
     # scatter plot showing min, max and average Total Marks per cohort year
@@ -608,21 +614,21 @@ def results_s():
         name='Min-Max Line'
     ))
 
-    # # # Add a vertical line between the min and max values for each cohort year
-    # for i, row in grouped_df.iterrows():
-    #     fig4.add_shape(
-    #         type="line",
-    #         xref="x",
-    #         yref="y",
-    #         x0=i,
-    #         y0=row['total_mark']['min'],
-    #         x1=i,
-    #         y1=row['total_mark']['max'],
-    #         line=dict(color='cornflowerblue', width=2)
-    #     )
+    # # Add a vertical line between the min and max values for each cohort year
+    for i, row in grouped_df.iterrows():
+        fig4.add_shape(
+            type="line",
+            xref="x",
+            yref="y",
+            x0=i,
+            y0=row['total_mark']['min'],
+            x1=i,
+            y1=row['total_mark']['max'],
+            line=dict(color='cornflowerblue', width=2)
+        )
 
     fig4.update_layout(
-        title='Total Mark vs Cohort Year',
+        title='Mark Distribution by Cohort Year',
         xaxis_title='Cohort Year',
         yaxis_title='Total Mark', 
         plot_bgcolor='rgba(0,0,0,0)', paper_bgcolor='rgba(0,0,0,0)',
@@ -630,7 +636,7 @@ def results_s():
         yaxis=dict(linecolor='grey', gridcolor='lightgray')
     )
 
-    fig4.update_yaxes(range=[0, 100])
+    fig4.update_yaxes(range=[0, 110])
     fig4.update_layout(yaxis_title='Total Mark (%)')
 
     plot_div = opy.plot(fig4, auto_open=False, output_type='div')
@@ -1805,39 +1811,36 @@ def release_formtest(Form_test_id):
 @login_required
 def your_results():
 
-    user_id = session.get('user_id')
-    user_id = 113
-
+    user_id = current_user.id
     individ_results = Results_sum.query.filter_by(user_id=user_id).first()
     if individ_results is None:
         flash('No results found for this user')
         return redirect(url_for('index'))
     
-    entries = Results_sum.query.filter_by(user_id=user_id, form_summ=1).all()
+    entries = Results_sum.query.filter_by(user_id=current_user.id, form_summ=1).all()
         
     # From SP - Total Mark stats for the user
     user_total_marks = db.session.query(func.avg(Results_sum.total_mark).label('average_mark'), 
                             func.min(Results_sum.total_mark).label('min_mark'), 
                             func.max(Results_sum.total_mark).label('max_mark'), 
                             func.count(Results_sum.total_mark).label('count_mark')
-                            ).filter(Results_sum.user_id == user_id, Results_sum.form_summ == 1).first()
+                            ).filter(Results_sum.user_id == current_user.id, Results_sum.form_summ == 1).first()
 
     total_mark_avg = user_total_marks.average_mark
     total_mark_min = user_total_marks.min_mark
     total_mark_max = user_total_marks.max_mark
     total_mark_count = user_total_marks.count_mark
 
-    results = Results_sum.query.filter_by(user_id=user_id, form_summ=1).order_by(Results_sum.date.desc()).limit(10).all()
+    results = Results_sum.query.filter_by(user_id=current_user.id, form_summ=1).order_by(Results_sum.date.desc()).limit(10).all()
     dates = [result.date.strftime('%Y-%m-%d') for result in results]
     marks = [result.total_mark for result in results]
 
-    data = Results_sum.query.filter_by(user_id=user_id, form_summ=1).all()
+    data = Results_sum.query.filter_by(user_id=current_user.id, form_summ=1).all()
     
     df = pd.DataFrame([(d.test_id, d.total_mark) for d in data], columns=['test_id', 'total_mark'])
 
     return render_template('your_results.html', title='Your Results', individ_results=individ_results, entries=entries, 
-        user_id=user_id, total_mark_min=total_mark_min, total_mark_max=total_mark_max, total_mark_avg=total_mark_avg, total_mark_count=total_mark_count, results=results, dates=dates, marks=marks)
-
+        total_mark_min=total_mark_min, total_mark_max=total_mark_max, total_mark_avg=total_mark_avg, total_mark_count=total_mark_count, results=results, dates=dates, marks=marks)
 
 @app.route("/your_test_id/<user_id>/<test_id>", methods=['GET'])
 @login_required

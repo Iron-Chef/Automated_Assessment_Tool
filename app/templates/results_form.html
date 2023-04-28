@@ -12,11 +12,11 @@
                         </div>
                         <div class="col-md-8">
                             <div class="card-body">
-                                <h5 class="card-title">Formative Assessment</h5>
+                                <h4 class="card-title"><strong>Formative Assessment</strong></h4>
                                 <br>
-                                <p class="card-text"> <strong> {{ num_users_with_results }}</strong> students out of a possible <strong> {{ unique_user_ids }} </strong> have completed tests </p>
-                                <p class="card-text"> completion rate: <strong> {{ percentage_users_with_results }}%</strong>  </p>
-                                <p class="card-text"><small class="text-muted">space for small words</small></p>
+                                <p class="card-text"> <strong> {{ num_users_with_results }}</strong> students out of a <strong> {{ unique_user_ids }} </strong> have completed tests </p>
+                                <p class="card-text"> Student Engagement: <strong> {{ percentage_users_with_results }}%</strong>  </p>
+                                <!-- <p class="card-text"><small class="text-muted">space for small words</small></p> -->
                             </div>
                         </div>
                     </div>
@@ -24,16 +24,16 @@
             </div>
             <div class="col">
                 <div class="card h-100" >
-                    <div class="card-header d-flex justify-content-between">Stats for all marks <a href="#" class="btn btn-primary">view</a></div>
+                    <div class="card-header d-flex justify-content-between"><strong> Module: Software Engineering</strong> <a href="#" class="btn btn-primary">choose Module</a></div>
                     <ul class="list-group">
-                        <li class="list-group-item d-flex justify-content-between align-items-center">number marked <span class="list-group-flush"> {{ total_mark_count }} </span>
+                        <li class="list-group-item d-flex justify-content-between align-items-center border-0"><strong>Table info: </strong> 
                         </li>
-                        <li class="list-group-item d-flex justify-content-between align-items-center">lowest mark (%)<span class="list-group-flush"> {{ total_mark_min }}</span>
+                        <li class="list-group-item d-flex justify-content-between align-items-center border-0">Number of Students, Number of attempts by listed students, Number of times each question was answered correctly and the Percentage of correct answered.
                         </li>
-                        <li class="list-group-item d-flex justify-content-between align-items-center">higest mark (%)<span class="list-group-flush"> {{ total_mark_max }}</span>
+                        <!-- <li class="list-group-item d-flex justify-content-between align-items-center">higest mark (%)<span class="list-group-flush"> {{ total_mark_max }}</span>
                         </li>
                         <li class="list-group-item d-flex justify-content-between align-items-center">average mark (%)<span class="list-group-flush"> {{ total_mark_avg }} </span>
-                        </li>
+                        </li> -->
                 </div>
             </div>
             
@@ -46,9 +46,9 @@
         <table id="data_form" class="table">
             <thead>
                 <tr>
-                    <th>test id</th>
+                    <th>Test</th>
                     <th>Num of Students</th>
-                    <th>total Num attempts</th>
+                    <th>Total Num Attempts</th>
                     <th>Q1: Num Corrrect, % Correct</th>
                     <th>Q2: Num Corrrect, % Correct</th>
                     <th>Q3: Num Corrrect, % Correct</th>
@@ -88,7 +88,7 @@
                 {% if num_users_with_results > 0 %}
                 <div class="card">
                     <div class="card-header">
-                      <h5 class="card-title">Correct and Incorrect Answers by Test</h5>
+                      <h5 class="card-title">Number of Correct and Incorrect Answers for each Question</h5>
                     </div>
                     <div class="card-body">
                
