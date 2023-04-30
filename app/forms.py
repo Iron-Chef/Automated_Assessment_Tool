@@ -216,6 +216,11 @@ class SubmitAttemptForm(FlaskForm):
     answer_3=SelectField('question',choices=[])
     answer_4=SelectField('question',choices=[])
     answer_5=SelectField('question',choices=[])
+    FTG_1= StringField("type your anser")
+    FTG_2= StringField("type your anser")
+    FTG_3= StringField("type your anser")
+    FTG_4= StringField("type your anser")
+    FTG_5= StringField("type your anser")
     marks=IntegerField('score')
     submit= SubmitField('Submit Test Attempt')
 

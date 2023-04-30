@@ -1,34 +1,163 @@
 {% extends "base.html" %}
 {% block content %}
 
+<h1>{{  tests.title }}</h1>
+<h1>By: {{users.forename}} {{users.surname}}</h1>
+
+<!-- Question 1 -->
+<h1>Question 1</h1>
 <h2>{{question_1.question}}</h1>
-<h3>1) {{question_1.ans_choice_1}}</h2>
-<h3>1) {{question_1.ans_choice_2}}</h2>
-<h3>1) {{question_1.ans_choice_3}}</h2>
-<h3>1) {{question_1.ans_choice_4}}</h2>
+{% if question_1.ans_choice_1==1%}
+    <h3>1) {{question_1.answer_1}} - Correct Answer</h2>
+{%else%}
+    <h3>1) {{question_1.answer_1}} - Wrong Answer</h3>
 
+{%endif%}
+
+{% if question_1.ans_choice_2==1%}
+    <h3>2) {{question_1.answer_2}} - Correct Answer</h2>
+{%else%}
+    <h3>1) {{question_1.answer_2}} - Wrong Answer</h3>
+
+{%endif%}
+
+{% if question_1.ans_choice_3==1%}
+    <h3>3) {{question_1.answer_3}} - Correct Answer</h2>
+{%else%}
+    <h3>3) {{question_1.answer_3}} - Wrong Answer</h3>
+
+{%endif%}
+
+{% if question_1.ans_choice_4==1%}
+    <h3>4) {{question_1.answer_4}} - Correct Answer</h2>
+{%else%}
+    <h3>4) {{question_1.answer_4}} - Wrong Answer</h3>
+
+{%endif%}
+
+
+<!-- Question 2 -->
+<h1>Question 2</h1>
 <h2>{{question_2.question}}</h1>
-<h3>1) {{question_2.ans_choice_1}}</h2>
-<h3>1) {{question_2.ans_choice_2}}</h2>
-<h3>1) {{question_2.ans_choice_3}}</h2>
-<h3>1) {{question_2.ans_choice_4}}</h2>
-
+    {% if question_2.ans_choice_1==1%}
+        <h3>1) {{question_2.answer_1}} - Correct Answer</h2>
+    {%else%}
+        <h3>1) {{question_2.answer_1}} - Wrong Answer</h3>
+    
+    {%endif%}
+    
+    {% if question_2.ans_choice_2==1%}
+        <h3>2) {{question_2.answer_2}} - Correct Answer</h2>
+    {%else%}
+        <h3>2) {{question_2.answer_2}} - Wrong Answer</h3>
+    
+    {%endif%}
+    
+    {% if question_2.ans_choice_3==1%}
+        <h3>3) {{question_2.answer_3}} - Correct Answer</h2>
+    {%else%}
+        <h3>3) {{question_2.answer_3}} - Wrong Answer</h3>
+    
+    {%endif%}
+    
+    {% if question_2.ans_choice_4==1%}
+        <h3>4) {{question_2.answer_4}} - Correct Answer</h2>
+    {%else%}
+        <h3>4) {{question_2.answer_4}} - Wrong Answer</h3>
+    
+    {%endif%}
+   
+    <!-- Question 3 -->
+    <h1>Question 3</h1>
 <h2>{{question_3.question}}</h1>
-<h3>1) {{question_3.ans_choice_1}}</h2>
-<h3>1) {{question_3.ans_choice_2}}</h2>
-<h3>1) {{question_3.ans_choice_3}}</h2>
-<h3>1) {{question_3.ans_choice_4}}</h2>
+    {% if question_3.ans_choice_1==1%}
+        <h3>1) {{question_3.answer_1}} - Correct Answer</h2>
+    {%else%}
+        <h3>1) {{question_3.answer_1}} - Wrong Answer</h3>
+    
+    {%endif%}
+    
+    {% if question_3.ans_choice_2==1%}
+        <h3>2) {{question_3.answer_2}} - Correct Answer</h2>
+    {%else%}
+        <h3>2) {{question_3.answer_2}} - Wrong Answer</h3>
+    
+    {%endif%}
+    
+    {% if question_3.ans_choice_3==1%}
+        <h3>3) {{question_3.answer_3}} - Correct Answer</h2>
+    {%else%}
+        <h3>3) {{question_3.answer_3}} - Wrong Answer</h3>
+    
+    {%endif%}
+    
+    {% if question_3.ans_choice_4==1%}
+        <h3>4) {{question_3.answer_4}} - Correct Answer</h2>
+    {%else%}
+        <h3>4) {{question_3.answer_4}} - Wrong Answer</h3>
+    
+    {%endif%}
 
+<!-- Question 4 -->
+<h1>Question 4</h1>
 <h2>{{question_4.question}}</h1>
-<h3>1) {{question_4.ans_choice_1}}</h2>
-<h3>1) {{question_4.ans_choice_2}}</h2>
-<h3>1) {{question_4.ans_choice_3}}</h2>
-<h3>1) {{question_4.ans_choice_4}}</h2>
+    {% if question_4.ans_choice_1==1%}
+        <h3>1) {{question_4.answer_1}} - Correct Answer</h2>
+    {%else%}
+        <h3>1) {{question_4.answer_1}} - Wrong Answer</h3>
+    
+    {%endif%}
+    
+    {% if question_4.ans_choice_2==1%}
+        <h3>2) {{question_4.answer_2}} - Correct Answer</h2>
+    {%else%}
+        <h3>2) {{question_4.answer_2}} - Wrong Answer</h3>
+    
+    {%endif%}
+    
+    {% if question_4.ans_choice_3==1%}
+        <h3>3) {{question_4.answer_3}} - Correct Answer</h2>
+    {%else%}
+        <h3>3) {{question_4.answer_3}} - Wrong Answer</h3>
+    
+    {%endif%}
+    
+    {% if question_4.ans_choice_4==1%}
+        <h3>4) {{question_4.answer_4}} - Correct Answer</h2>
+    {%else%}
+        <h3>4) {{question_4.answer_4}} - Wrong Answer</h3>
+    
+    {%endif%}
 
+<!-- Question 5 -->
+<h1>Question 5</h1>
 <h2>{{question_5.question}}</h1>
-<h3>1) {{question_5.ans_choice_1}}</h2>
-<h3>1) {{question_5.ans_choice_2}}</h2>
-<h3>1) {{question_5.ans_choice_3}}</h2>
-<h3>1) {{question_5.ans_choice_4}}</h2>
+    {% if question_5.ans_choice_1==1%}
+        <h3>1) {{question_5.answer_1}} - Correct Answer</h2>
+    {%else%}
+        <h3>1) {{question_5.answer_1}} - Wrong Answer</h3>
+    
+    {%endif%}
+    
+    {% if question_5.ans_choice_2==1%}
+        <h3>2) {{question_5.answer_2}} - Correct Answer</h2>
+    {%else%}
+        <h3>2) {{question_5.answer_2}} - Wrong Answer</h3>
+    
+    {%endif%}
+    
+    {% if question_5.ans_choice_3==1%}
+        <h3>3) {{question_5.answer_3}} - Correct Answer</h2>
+    {%else%}
+        <h3>3) {{question_5.answer_3}} - Wrong Answer</h3>
+    
+    {%endif%}
+    
+    {% if question_5.ans_choice_4==1%}
+        <h3>4) {{question_5.answer_4}} - Correct Answer</h2>
+    {%else%}
+        <h3>4) {{question_5.answer_4}} - Wrong Answer</h3>
+    
+    {%endif%}
 
 {% endblock %}

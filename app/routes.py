@@ -380,19 +380,20 @@ def create_test():
 
 @app.route("/test_list",methods=['GET'])
 def test_list():
-    tests=Test.query.all() 
+    tests=Test.query.all()
     return render_template('test_list.html',tests=tests)
 
 #Generate page for individual tests-DD
 @app.route("/test/<int:test_id>")
 def test(test_id):
   tests=Test.query.get_or_404(test_id)
+  users=User.query.filter_by(id=tests.creator_id).first()
   question_1 = Multiplechoice.query.filter_by(id=tests.question_id_1).first()
   question_2 = Multiplechoice.query.filter_by(id=tests.question_id_2).first()
   question_3 = Multiplechoice.query.filter_by(id=tests.question_id_3).first()
   question_4 = Multiplechoice.query.filter_by(id=tests.question_id_4).first()
   question_5 = Multiplechoice.query.filter_by(id=tests.question_id_5).first()
-  return render_template('test.html',tests=tests,question_1=question_1,question_2=question_2,question_3=question_3,question_4=question_4,question_5=question_5)
+  return render_template('test.html',tests=tests,users=users,question_1=question_1,question_2=question_2,question_3=question_3,question_4=question_4,question_5=question_5)
 
 ## Adapted this from anthonys code above-DD
 @app.route("/test/delete/<int:test_id>")
@@ -450,78 +451,108 @@ def edit_test(test_id):
     form.question_id_5.data=test.question_id_5
     return render_template('edit_test.html', test=test,form=form,questions=questions, )
 
+
+
 @app.route("/attempt_test/<int:test_id>",methods=['GET','POST'])
 @login_required
 def attempt_test(test_id):
-  form = SubmitAttemptForm()
-  test=Test.query.get_or_404(test_id)
-  question_1 = Multiplechoice.query.filter_by(id=test.question_id_1).first()
-  question_2 = Multiplechoice.query.filter_by(id=test.question_id_2).first()
-  question_3 = Multiplechoice.query.filter_by(id=test.question_id_3).first()
-  question_4 = Multiplechoice.query.filter_by(id=test.question_id_4).first()
-  question_5 = Multiplechoice.query.filter_by(id=test.question_id_5).first()
-  form.answer_1.choices = [(question_1.ans_choice_1,question_1.answer_1),(question_1.ans_choice_2,question_1.answer_2),(question_1.ans_choice_3,question_1.answer_3),(question_1.ans_choice_4,question_1.answer_4)]
-  form.answer_2.choices = [(question_2.ans_choice_1,question_2.answer_1),(question_2.ans_choice_2,question_2.answer_2),(question_2.ans_choice_3,question_2.answer_3),(question_2.ans_choice_4,question_2.answer_4)]
-  form.answer_3.choices = [(question_3.ans_choice_1,question_3.answer_1),(question_3.ans_choice_2,question_3.answer_2),(question_3.ans_choice_3,question_3.answer_3),(question_3.ans_choice_4,question_3.answer_4)]
-  form.answer_4.choices = [(question_4.ans_choice_1,question_4.answer_1),(question_4.ans_choice_2,question_4.answer_2),(question_4.ans_choice_3,question_4.answer_3),(question_4.ans_choice_4,question_4.answer_4)]
-  form.answer_5.choices = [(question_5.ans_choice_1,question_5.answer_1),(question_5.ans_choice_2,question_5.answer_2),(question_5.ans_choice_3,question_5.answer_3),(question_5.ans_choice_4,question_5.answer_4)]
-  module= Module.query.filter_by(id=test.module).first()
-  marks=0
-  q1_mark=0
-  q1_attempts=1
-  q2_mark=0
-  q2_attempts=1
-  q3_mark=0
-  q3_attempts=1
-  q4_mark=0
-  q4_attempts=1
-  q5_mark=0
-  q5_attempts=1
-  weight=question_1.marks+question_2.marks+question_3.marks+question_4.marks+question_5.marks
-
-  if form.validate_on_submit():
-    if form.answer_1.data =="1":
-        marks+=question_1.marks
-        q1_mark+=question_1.marks
-    if form.answer_2.data =="1":
-        marks+=question_2.marks
-        q2_mark+=question_2.marks
-    if form.answer_3.data =="1":
-        marks+=question_3.marks
-        q3_mark+=question_3.marks
-    if form.answer_4.data =="1":
-        marks+=question_4.marks
-        q4_mark+=question_4.marks
-    if form.answer_5.data =="1":
-        marks+=question_5.marks
-        q5_mark+=question_5.marks
-    result_sum=Results_sum(test_id=test.test_id,
-    user_id=current_user.id,
-    username=current_user.username,
-    forename=current_user.forename,
-    surname=current_user.surname,
-    date=datetime.now(),
-    cohort_year=current_user.year,
-    form_summ=test.test_type,
-    res_module=module.code, 
-    Q1_mark = q1_mark,
-    Q1_attempts = q1_attempts,
-    Q2_mark = q2_mark,
-    Q2_attempts = q2_attempts,
-    Q3_mark = q3_mark,
-    Q3_attempts = q3_attempts,
-    Q4_mark = q4_mark,
-    Q4_attempts = q4_attempts,
-    Q5_mark = q5_mark,
-    Q5_attempts = q5_attempts,
-    total_mark=marks,
-    test_rating=test.rating,
-    test_weighting=weight)
-    db.session.add(result_sum)
-    db.session.commit()
-    flash('Test Submit Succesful!')
-    return redirect(url_for('index'))
-  return render_template('attempt_test.html',title='Attempt Test',form=form,test=test,question_1=question_1,question_2=question_2,question_3=question_3,question_4=question_4,question_5=question_5, module=module)
+    form = SubmitAttemptForm()
+    test=Test.query.get_or_404(test_id)
+    question_1 = Multiplechoice.query.filter_by(id=test.question_id_1).first()
+    question_2 = Multiplechoice.query.filter_by(id=test.question_id_2).first()
+    question_3 = Multiplechoice.query.filter_by(id=test.question_id_3).first()
+    question_4 = Multiplechoice.query.filter_by(id=test.question_id_4).first()
+    question_5 = Multiplechoice.query.filter_by(id=test.question_id_5).first()
+    form.answer_1.choices = [(question_1.ans_choice_1,question_1.answer_1),(question_1.ans_choice_2,question_1.answer_2),(question_1.ans_choice_3,question_1.answer_3),(question_1.ans_choice_4,question_1.answer_4)]
+    form.answer_2.choices = [(question_2.ans_choice_1,question_2.answer_1),(question_2.ans_choice_2,question_2.answer_2),(question_2.ans_choice_3,question_2.answer_3),(question_2.ans_choice_4,question_2.answer_4)]
+    form.answer_3.choices = [(question_3.ans_choice_1,question_3.answer_1),(question_3.ans_choice_2,question_3.answer_2),(question_3.ans_choice_3,question_3.answer_3),(question_3.ans_choice_4,question_3.answer_4)]
+    form.answer_4.choices = [(question_4.ans_choice_1,question_4.answer_1),(question_4.ans_choice_2,question_4.answer_2),(question_4.ans_choice_3,question_4.answer_3),(question_4.ans_choice_4,question_4.answer_4)]
+    form.answer_5.choices = [(question_5.ans_choice_1,question_5.answer_1),(question_5.ans_choice_2,question_5.answer_2),(question_5.ans_choice_3,question_5.answer_3),(question_5.ans_choice_4,question_5.answer_4)]
+    module= Module.query.filter_by(id=test.module).first()
+    marks=0
+    q1_mark=0
+    q1_attempts=1
+    q2_mark=0
+    q2_attempts=1
+    q3_mark=0
+    q3_attempts=1
+    q4_mark=0
+    q4_attempts=1
+    q5_mark=0
+    q5_attempts=1
+    weight=question_1.marks+question_2.marks+question_3.marks+question_4.marks+question_5.marks
+    
+    
+    if form.validate_on_submit():
+        if question_1.question_type== 'multiple_choice':
+            if form.answer_1.data =="1":
+                marks+=question_1.marks
+                q1_mark+=question_1.marks
+        else:
+            if question_1.answer_1== form.FTG_1.data:
+                marks+=question_1.marks
+                q1_mark+=question_1.marks
+        if question_2.question_type== 'multiple_choice':
+            if form.answer_2.data =="1":
+                marks+=question_2.marks
+                q2_mark+=question_2.marks
+        else:
+            if question_2.answer_1==form.FTG_2.data:
+                marks+=question_2.marks
+                q2_mark+=question_2.marks
+        if question_3.question_type== 'multiple_choice':
+            if form.answer_3.data =="1":
+                marks+=question_3.marks
+                q3_mark+=question_3.marks
+        else:
+            if question_3.answer_1== form.FTG_3.data:
+                marks+=question_3.marks
+                q3_mark+=question_3.marks
+        if question_4.question_type== 'multiple_choice':
+            if form.answer_4.data =="1":
+                marks+=question_4.marks
+                q4_mark+=question_4.marks
+        else:
+            if  question_4.answer_1==form.FTG_4.data:
+                marks+=question_4.marks
+                q4_mark+=question_4.marks
+        if question_5.question_type== 'multiple_choice':
+            if form.answer_5.data =="1":
+                marks+=question_5.marks
+                q5_mark+=question_5.marks
+        else:
+            if  question_5.answer_1==form.FTG_5.data:
+                marks+=question_5.marks
+                q5_mark+=question_5.marks  
+        
+        
+        result_sum=Results_sum(test_id=test.test_id,
+        user_id=current_user.id,
+        username=current_user.username,
+        forename=current_user.forename,
+        surname=current_user.surname,
+        date=datetime.now(),
+        cohort_year=current_user.year,
+        form_summ=test.test_type,
+        res_module=module.name, 
+        Q1_mark = q1_mark,
+        Q1_attempts = q1_attempts,
+        Q2_mark = q2_mark,
+        Q2_attempts = q2_attempts,
+        Q3_mark = q3_mark,
+        Q3_attempts = q3_attempts,
+        Q4_mark = q4_mark,
+        Q4_attempts = q4_attempts,
+        Q5_mark = q5_mark,
+        Q5_attempts = q5_attempts,
+        total_mark=marks,
+        test_rating=test.rating,
+        test_weighting=weight)
+        db.session.add(result_sum)
+        db.session.commit()
+        flash('Test Submit Succesful!')
+        return redirect(url_for('index'))
+    return render_template('attempt_test.html',title='Attempt Test',form=form,test=test,question_1=question_1,question_2=question_2,question_3=question_3,question_4=question_4,question_5=question_5, module=module)
 
 #######################################################################
     # SP - lecturer Stats - Summative results page
